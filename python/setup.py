@@ -18,6 +18,7 @@ setup(
 		],
 	install_requires=[
         'pycrypto',
+        'yamlns',
 	],
 	include_package_data = True,
 	test_suite = 'intercoop_test',
