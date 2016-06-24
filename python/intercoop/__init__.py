@@ -23,7 +23,6 @@ class BadFormat(MessageError):
     "Error while parsing message as YAML: {}"
 
 
-
 class Generator(object):
     def __init__(self, ownKeyPair):
         self.key = ownKeyPair
@@ -48,7 +47,8 @@ class Parser(object):
         valuesYaml = decode(package.payload)
         values = ns.loads(valuesYaml)
         # TODO: Choose key depending on originpeer
-        if not isAuthentic(self.keyring.get('testpeer'), valuesYaml, package.signature):
+        pubkey = self.keyring.get('testpeer')
+        if not isAuthentic(pubkey, valuesYaml, package.signature):
             raise BadSignature()
         return values
         
