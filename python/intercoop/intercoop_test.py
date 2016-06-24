@@ -67,6 +67,11 @@ country: ES
             payload = payload or crypto.encode(yaml),
             ).dump()
 
+    def assertParseRaises(self, parser, message, exception, errorMessage):
+        with self.assertRaises(exception) as ctx:
+            parser.parse(message)
+        self.assertEqual(ctx.exception.args[0], errorMessage)
+
 
     def test_parse(self):
         message = self.setupMessage()
@@ -79,25 +84,21 @@ country: ES
             )
 
     def test_parse_withUnrecognizedPeer(self):
-        message = self.setupMessage(
-            values=ns(self.values, originpeer='badpeer'))
-
         g = intercoop.Parser(keyring = self.keyring)
-
-        with self.assertRaises(intercoop.BadPeer) as ctx:
-            g.parse(message)
-        self.assertEqual(ctx.exception.args[0],
+        message = self.setupMessage(
+            values=ns(self.values, originpeer='badpeer')
+            )
+        self.assertParseRaises(g,message,
+            intercoop.BadPeer,
             "The entity 'badpeer' is not a recognized one")
 
     def test_parse_withInvalidSignature(self):
+        g = intercoop.Parser(keyring = self.keyring)
         message = self.setupMessage(
             signedyaml = self.yaml + "\n",
             )
-
-        g = intercoop.Parser(keyring = self.keyring)
-        with self.assertRaises(intercoop.BadSignature) as ctx:
-            g.parse(message)
-        self.assertEqual(ctx.exception.args[0],
+        self.assertParseRaises(g, message,
+            intercoop.BadSignature,
             "Signature verification failed, untrusted content")
 
 
