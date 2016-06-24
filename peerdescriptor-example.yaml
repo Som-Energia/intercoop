@@ -34,8 +34,14 @@ info:
     Estamos comprometidos a impulsar un cambio do modelo enerxético actual para conseguir un modelo 100% renovable.
 services:
   contract:
-    es: >
-      Puedes contratar luz como si fueras miembro de la cooperativa.
+    es: Contratar luz como si fueras miembro de la cooperativa.
+  generationkwh:
+    es: Participar en los proyectos de autoproducción colectiva.
+  recuperaelsol:
+    es: Participar en rescates de proyectos solares en quiebra.
+  collectivepurchases:
+    es: Participar en compras colectivas para socios/as.
+    ca: Participar en compres col·lectives per a socis/es.
 targetUrl: https://api.somenergia.coop/intercoop/contrataluz
 dataFormat: yaml
 transferredPersonalData:
