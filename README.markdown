@@ -21,6 +21,8 @@ Some intended goals:
 - Role: A set of rights a user might have within an entity (pe. member, worker, different kind of members...)
 - Source entity: The entity a member has rights on.
 - Target entity: The entity whose services are enabled for members of the source entity.
+- Portal: a website for validated users of an entity
+- API: B2B web API
 
 ## Main protocol sequence
 
@@ -46,9 +48,13 @@ Main course scenario:
 
 ## Errors
 
-
-- Bad request
-- Members of source entity has no intercooperation agreement with target entity
+- Portal -> API
+	- Not yaml message
+	- Missing message fields
+	- Not yaml payload
+	- Missing payload fields
+	- Source entity has no intercooperation agreement with target one
+	- Bad signature
 
 
 ## Code examples
