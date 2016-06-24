@@ -6,6 +6,11 @@ from . import crypto
 import os
 from yamlns import namespace as ns
 
+class KeyRingMock(object):
+    def __init__(self, keys):
+        self.keys = keys
+    def get(self, key):
+        return self.keys[key]
 
 class IntercoopMessage_Test(unittest.TestCase):
 
@@ -33,6 +38,9 @@ country: ES
         self.values = ns.loads(self.payload1)
         self.encodedPayload1 = crypto.encode(self.payload1)
         self.signedPayload1 = crypto.sign(self.key, self.payload1)
+        self.keyring = KeyRingMock(dict(
+            testpeer=self.public,
+            ))
 
     def test_produce(self):
         g = intercoop.Generator(ownKeyPair = self.key)
@@ -52,18 +60,12 @@ country: ES
             payload = self.encodedPayload1,
             ).dump()
 
-        g = intercoop.Parser(ownKeyPair = self.key)
+        g = intercoop.Parser(keyring = self.keyring)
         values = g.parse(message)
         self.assertEqual(
             dict(self.values),
             dict(values),
             )
-
-    class KeyRingMock(object):
-        def __init__(self, keys):
-            self.keys = keys
-        def get(self, key):
-            return self.keys[key]
 
     def test_parse_withInvalidSignature(self):
         message = ns(
@@ -72,11 +74,11 @@ country: ES
             payload = self.encodedPayload1,
             ).dump()
 
-        g = intercoop.Parser(ownKeyPair = self.key)
+        g = intercoop.Parser(keyring = self.keyring)
         with self.assertRaises(intercoop.BadSignature) as ctx:
             g.parse(message)
         self.assertEqual(ctx.exception.args[0],
-            "Signature didn't match the content, content modified")
+            "Signature verification failed, untrusted content")
             
 
 unittest.TestCase.__str__ = unittest.TestCase.id
