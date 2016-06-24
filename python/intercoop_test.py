@@ -5,18 +5,6 @@ import intercoop
 import os
 from yamlns import namespace as ns
 
-"""
-TODO:
-- base64 strings
-- Unsafe yamls
-- Review take yaml's as unicode
-- Parser takes key from dictionary and chooses acoording the peer code
-- Error handling: bad peer code
-- Error handling: message is not valid yaml
-- Error handling: payload does not decode as valid yaml
-- Error handling: message has not the required fields
-- Error handling: payload has not the required fields
-"""
 
 class Crypto_Test(unittest.TestCase):
 
@@ -122,6 +110,11 @@ country: ES
             dict(values),
             )
 
+    class KeyRingMock(object):
+        def __init__(self, keys):
+            self.keys = keys
+        def get(self, key):
+            return self.keys[key]
 
     def test_parse_withInvalidSignature(self):
         message = ns(
