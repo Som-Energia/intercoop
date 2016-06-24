@@ -1,0 +1,66 @@
+# This is an example of a descriptor for a peer entity
+# Describes how users of portal can access services of the peer entity
+# and how to present it.
+
+protocolVersion: 1.0
+descriptionVersion: 1
+peerId: somenergia
+name: Som Energia SCCL
+logo: https://www.somenergia.coop/wp-content/uploads/2014/07/logohdmi.png
+description: 
+  es: Contrata la luz con la cooperativa de energía verde
+  ca: Contracta la llum amb la cooperativa de energía verda
+url:
+  es: https://www.somenergia.coop/es
+  ca: https://www.somenergia.coop/ca
+  eu: https://www.somenergia.coop/eu
+  gl: https://www.somenergia.coop/gl
+info:
+  es: >
+    Som Energia es una cooperativa de consumo de energía verde sin ánimo de lucro.
+    Nuestras principales actividades son la comercialización y producción de energía de origen renovable.
+    Estamos comprometidos a impulsar un cambio del modelo energético actual para conseguir un modelo 100% renovable.
+  ca: >
+    Som Energia és una cooperativa de consum d’energia verda sense ànim de lucre.
+    Les nostres activitats principals són la comercialització i la producció d’energia d’origen renovable.
+    Estem compromesos a impulsar un canvi del model energètic actual per assolir un model 100% renovable.
+  eu: >
+    Som Energia irabazi-asmorik gabeko energia berdearen kontsumo-kooperatiba da.
+    Gure funtsezko jarduerak jatorri berriztagarriko energiaren ekoizpena eta komertzializazioa dira.
+    Oraingo eredu energetikoaren aldaketaren alde gaude %100eko eredu guztiz berriztagarria lortzeko.
+  gl: >
+    Som Energia é unha cooperativa de consumo de enerxía verde sen ánimo de lucro.
+    As nosas principais actividades son a comercialización e produción de enerxía de orixe renovable.
+    Estamos comprometidos a impulsar un cambio do modelo enerxético actual para conseguir un modelo 100% renovable.
+services:
+  contract:
+    es: >
+      Puedes contratar luz como si fueras miembro de la cooperativa.
+targetUrl: https://api.somenergia.coop/intercoop/contrataluz
+dataFormat: yaml
+transferredPersonalData:
+- peerserial # serial number within the source entity
+- peerroles # list of roles within the source entity (member, worker, customer...)
+- nif
+- name
+- address
+- postalcode
+- city
+- state
+- country
+- phone
+- email
+- islegalentity: # legal entities require a proxy
+  - proxynif
+  - proxyname
+publickey: >
+  ADSFASDFWQR$DASG$YRSGJFGKUSGFGDSFGSDFGRSGSERGDSFGSDFGSDFG
+  SDFGSDFGSDFGCVXBXCVERGTZXCVJJFGPAKJEMCPEHDKSLQFYGHCJALWER
+  KAKKWPCKWPWKDKAPWKDKKAPSQKQKAPKSJQJEIAKJDKFLSKDFJSFKSKLAS
+  JDKFJAKSLQPQKKCMNKPQEURVALAPXCMKDKEHHXCKJIEKXIELSPAPQKQKJ
+  DJCNVNMSWSPASDMXCVOCMVNSWJASDKFALSKFJASDFQUERIKCPPQWLSNCH
+  PWNCLAPQKDKPWKCHHBMNSSPEMSEMBNSNJSKXOQTRSTGGYSAFHTGSHFQSS
+
+
+
+
