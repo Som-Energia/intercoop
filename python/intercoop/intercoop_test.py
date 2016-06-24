@@ -58,14 +58,20 @@ country: ES
             yaml=None,
             signedyaml=None,
             payload=None,
+            removedFromMessage=[],
+            version=None,
             ):
         values = ns(values or self.values)
         yaml = yaml or values.dump()
-        return ns(
-            intercoopVersion = '1.0',
+        messageValues =  ns(
+            intercoopVersion = version or intercoop.protocolVersion,
             signature = crypto.sign(self.key, signedyaml or yaml),
             payload = payload or crypto.encode(yaml),
-            ).dump()
+            )
+
+        for field in removedFromMessage:
+            del messageValues[field]
+        return messageValues.dump()
 
     def assertParseRaises(self, parser, message, exception, errorMessage):
         with self.assertRaises(exception) as ctx:
@@ -83,7 +89,7 @@ country: ES
             dict(values),
             )
 
-    def test_parse_withUnrecognizedPeer(self):
+    def test_parse_unrecognizedPeer(self):
         g = intercoop.Parser(keyring = self.keyring)
         message = self.setupMessage(
             values=ns(self.values, originpeer='badpeer')
@@ -92,7 +98,7 @@ country: ES
             intercoop.BadPeer,
             "The entity 'badpeer' is not a recognized one")
 
-    def test_parse_withInvalidSignature(self):
+    def test_parse_invalidSignature(self):
         g = intercoop.Parser(keyring = self.keyring)
         message = self.setupMessage(
             signedyaml = self.yaml + "\n",
@@ -101,7 +107,7 @@ country: ES
             intercoop.BadSignature,
             "Signature verification failed, untrusted content")
 
-    def test_parse_withMissingPeerField(self):
+    def test_parse_missingPeerField(self):
         g = intercoop.Parser(keyring = self.keyring)
         values= ns(self.values)
         del values.originpeer
@@ -110,7 +116,7 @@ country: ES
             intercoop.MissingField,
             "Required field 'originpeer' missing on the payload")
 
-    def test_parse_withBadYaml(self):
+    def test_parse_badYaml(self):
         g = intercoop.Parser(keyring = self.keyring)
         message = self.setupMessage(yaml='\t')
         self.assertParseRaises(g, message,
@@ -120,6 +126,57 @@ country: ES
             "found character '\\t' that cannot start any token\n"
             "  in \"<file>\", line 1, column 1"
             )
+
+    def test_parse_missingPayload(self):
+        g = intercoop.Parser(keyring = self.keyring)
+        message = self.setupMessage(
+            removedFromMessage=['payload']
+            )
+        self.assertParseRaises(g, message,
+            intercoop.BadMessage,
+            "Malformed message: missing payload"
+            )
+
+    def test_parse_missingSignature(self):
+        g = intercoop.Parser(keyring = self.keyring)
+        message = self.setupMessage(
+            removedFromMessage=['signature']
+            )
+        self.assertParseRaises(g, message,
+            intercoop.BadMessage,
+            "Malformed message: missing signature"
+            )
+
+    def test_parse_missingVersion(self):
+        g = intercoop.Parser(keyring = self.keyring)
+        message = self.setupMessage(
+            removedFromMessage=['intercoopVersion']
+            )
+        self.assertParseRaises(g, message,
+            intercoop.BadMessage,
+            "Malformed message: missing intercoopVersion"
+            )
+
+    def test_parse_wrongVersion(self):
+        g = intercoop.Parser(keyring = self.keyring)
+        message = self.setupMessage(
+            version='0.0',
+            )
+        self.assertParseRaises(g, message,
+            intercoop.WrongVersion,
+            "Wrong protocol version, expected 1.0, received 0.0"
+            )
+
+    def test_parse_badContainerYaml(self):
+        g = intercoop.Parser(keyring = self.keyring)
+        self.assertParseRaises(g, '\t',
+            intercoop.BadMessage,
+            "Malformed message: Bad message YAML format\n"
+            "while scanning for the next token\n"
+            "found character '\\t' that cannot start any token\n"
+            "  in \"<file>\", line 1, column 1"
+            )
+
 
 
 unittest.TestCase.__str__ = unittest.TestCase.id

@@ -5,6 +5,8 @@ from .crypto import *
 
 from yamlns import namespace as ns
 
+protocolVersion = '1.0'
+
 class MessageError(Exception):
     def __init__(self, *args, **kwds):
         super(MessageError,self).__init__(
@@ -22,6 +24,12 @@ class BadSignature(MessageError):
 class BadFormat(MessageError):
     "Error while parsing message as YAML:\n{}"
 
+class BadMessage(MessageError):
+    "Malformed message: {}"
+
+class WrongVersion(MessageError):
+    "Wrong protocol version, expected {}, received {}"
+
 
 class Generator(object):
     def __init__(self, ownKeyPair):
@@ -31,24 +39,39 @@ class Generator(object):
         payload = ns(values).dump()
         signature = sign(self.key, payload)
         return ns(
-            intercoopVersion = '1.0',
+            intercoopVersion = protocolVersion,
             payload = encode(payload),
             signature = signature,
             ).dump()
 
 class Parser(object):
 
-    # TODO: This should be a dict of public keys for peers
     def __init__(self, keyring):
         self.keyring = keyring
 
     def parse(self, message):
-        package = ns.loads(message)
-        valuesYaml = decode(package.payload)
+        def packageField(field):
+            if field in package:
+                return package[field]
+            raise BadMessage("missing {}".format(field))
+
+        try:
+            package = ns.loads(message)
+        except Exception as e:
+            raise BadMessage("Bad message YAML format\n{}".format(e))
+
+        version = packageField('intercoopVersion')
+        if version != protocolVersion:
+            raise WrongVersion(protocolVersion, version)
+
+        valuesYaml = decode(packageField('payload'))
+        signature = packageField('signature')
+
         try:
             values = ns.loads(valuesYaml)
         except Exception as e:
-            raise BadFormat(str(e))
+            raise BadFormat(e)
+
         try:
             peer = values.originpeer
         except AttributeError:
@@ -59,7 +82,7 @@ class Parser(object):
         except KeyError:
             raise BadPeer(peer)
 
-        if not isAuthentic(pubkey, valuesYaml, package.signature):
+        if not isAuthentic(pubkey, valuesYaml, signature):
             raise BadSignature()
 
         return values
