@@ -10,12 +10,12 @@ class Crypto_Test(unittest.TestCase):
     plain = "this is the content\n"
     base64 = "dGhpcyBpcyB0aGUgY29udGVudAo="
     signed = (
-        "AxmEUIQBd82wC4-9Jm337gWbvMapcLMVvE3Ord9wvnFmvuMUW7qzO-uI8IacrW"
-        "6uPWM-93g9Y6q2YjfeQCZl_JB7lJorY5PLgSXhvu0-TcCPFkaIEAh7-4TllQx_"
-        "-hwoN1Q3REOy-pB12iJZf9XrrOejfGG83kqXmXElSeS5RAWKwt2FcJFLIZIRZ9"
-        "CDHRvX31428YURv-HlmpklwBE_t6WSJmc-b4dCcTDKih-eJ3OteDvMcsN_0H76"
-        "uzEZTbJf3GwH8m5lCjNkWKVufBP_J2aQ-LvtgKiuyZI6lP9TcffVda9k4vdM2z"
-        "oPDtGTAxZQz68suevbGbAM_fYnBge2FA=="
+        "AxmEUIQBd82wC4-9Jm337gWbvMapcLMVvE3Ord9wvnFmvuMUW7qzO-uI8Iac"
+        "rW6uPWM-93g9Y6q2YjfeQCZl_JB7lJorY5PLgSXhvu0-TcCPFkaIEAh7-4Tl"
+        "lQx_-hwoN1Q3REOy-pB12iJZf9XrrOejfGG83kqXmXElSeS5RAWKwt2FcJFL"
+        "IZIRZ9CDHRvX31428YURv-HlmpklwBE_t6WSJmc-b4dCcTDKih-eJ3OteDvM"
+        "csN_0H76uzEZTbJf3GwH8m5lCjNkWKVufBP_J2aQ-LvtgKiuyZI6lP9TcffV"
+        "da9k4vdM2zoPDtGTAxZQz68suevbGbAM_fYnBge2FA=="
         )
 
     def setUp(self):
@@ -24,10 +24,10 @@ class Crypto_Test(unittest.TestCase):
         self.pubfile = 'testkey-public.pem'
 
         if not os.access(self.keyfile, os.F_OK):
-            crypto.generateKeyPair(self.keyfile, self.pubfile)
+            crypto.generateKey(self.keyfile, self.pubfile)
 
-        self.key = crypto.loadKeyPair(self.keyfile)
-        self.public = crypto.loadKeyPair(self.pubfile)
+        self.key = crypto.loadKey(self.keyfile)
+        self.public = crypto.loadKey(self.pubfile)
 
     def test_encode_unicode(self):
         encoded = crypto.encode(self.plain)
@@ -36,6 +36,22 @@ class Crypto_Test(unittest.TestCase):
     def test_decode_unicode(self):
         decoded = crypto.decode(self.base64)
         self.assertMultiLineEqual(self.plain, decoded)
+
+    def test_decode_incorrectBase64Padding(self):
+        with self.assertRaises(Exception) as ctx:
+            crypto.decode('AA')
+        self.assertEqual(str(ctx.exception),
+            "Incorrect padding")
+
+    def test_decode_nonBase64Chars(self):
+        with self.assertRaises(UnicodeError) as ctx:
+            crypto.decode('AB//')
+        errormsg = str(ctx.exception)
+        # Py2 does not have hyphen
+        errormsg = errormsg.replace('utf8', 'utf-8')
+        self.assertEqual(errormsg,
+            "'utf-8' codec can't decode byte 0xff "
+            "in position 2: invalid start byte")
 
     def test_sign(self):
         signature = crypto.sign(self.key, self.plain)

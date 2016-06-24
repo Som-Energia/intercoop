@@ -1,5 +1,9 @@
 # -*- encoding: utf-8 -*-
 
+"""
+Simple interface to common cryptographic actions.
+"""
+
 class _deps:
     "Hides dependencies on external modules"
     import base64
@@ -27,21 +31,26 @@ def sha(text):
     "Returns the SHA of a text"
     return _deps.SHA.new(text.encode('utf-8'))
 
-def generateKeyPair(filename, publicfilename=None):
+def generateKey(filename=None, publicfilename=None):
     key = _deps.RSA.generate(2048)
+    if filename:
+        exportKey(key, filename, publicfilename)
+    return key
+
+def exportKey(key, filename, publicfilename=None):
     with open(filename,'wb') as f:
         f.write(key.exportKey('PEM'))
-    if publicfilename is None: return
-    exportPublicKey(key, publicfilename)
-
-def loadKeyPair(filename):
-    with open(filename,'rb') as f:
-        return _deps.RSA.importKey(f.read())
+    if publicfilename is not None:
+        exportPublicKey(key, publicfilename)
 
 def exportPublicKey(key, filename):
     public = key.publickey()
     with open(filename,'wb') as f:
         f.write(public.exportKey('PEM'))
+
+def loadKey(filename):
+    with open(filename,'rb') as f:
+        return _deps.RSA.importKey(f.read())
 
 def sign(privatekey, text):
     signer = _deps.PKCS1_v1_5.new(privatekey)
@@ -51,5 +60,6 @@ def isAuthentic(publickey, text, signature):
     verifier = _deps.PKCS1_v1_5.new(publickey)
     decodedSignature = bdecode(signature)
     return verifier.verify(sha(text), decodedSignature)
+
 
 # vim: ts=4 sw=4 et

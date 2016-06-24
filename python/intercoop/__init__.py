@@ -64,8 +64,16 @@ class Parser(object):
         if version != protocolVersion:
             raise WrongVersion(protocolVersion, version)
 
-        valuesYaml = decode(packageField('payload'))
+        payload = packageField('payload')
         signature = packageField('signature')
+
+        try:
+            valuesYaml = decode(payload)
+        except UnicodeError:
+            raise BadMessage("Payload is not base64 coded UTF8")
+        except Exception as e:
+            raise BadMessage(
+                "Payload is invalid Base64: {}".format(e))
 
         try:
             values = ns.loads(valuesYaml)

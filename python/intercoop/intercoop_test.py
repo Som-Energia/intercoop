@@ -31,10 +31,10 @@ country: ES
         self.pubfile = 'testkey-public.pem'
 
         if not os.access(self.keyfile, os.F_OK):
-            intercoop.generateKeyPair(self.keyfile, self.pubfile)
+            intercoop.generateKey(self.keyfile, self.pubfile)
 
-        self.key = crypto.loadKeyPair(self.keyfile)
-        self.public = crypto.loadKeyPair(self.pubfile)
+        self.key = crypto.loadKey(self.keyfile)
+        self.public = crypto.loadKey(self.pubfile)
         self.values = ns.loads(self.yaml)
         self.encodedPayload1 = crypto.encode(self.yaml)
         self.signedPayload1 = crypto.sign(self.key, self.yaml)
@@ -177,10 +177,28 @@ country: ES
             "  in \"<file>\", line 1, column 1"
             )
 
+    def test_parse_badContainerUnicode(self):
+        g = intercoop.Parser(keyring = self.keyring)
+        message = self.setupMessage(
+            payload = "SAFASLDFKJASLK==",
+            )
+        self.assertParseRaises(g, message,
+            intercoop.BadMessage,
+            'Malformed message: Payload is not base64 coded UTF8'
+            )
+
+    def test_parse_badPayloadBase64(self):
+        g = intercoop.Parser(keyring = self.keyring)
+        message = self.setupMessage(
+            payload = "SO",
+            )
+        self.assertParseRaises(g, message,
+            intercoop.BadMessage,
+            'Malformed message: Payload is invalid Base64: Incorrect padding'
+            )
 
 
 unittest.TestCase.__str__ = unittest.TestCase.id
-
 
 
 if __name__ == "__main__":
