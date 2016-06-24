@@ -1,0 +1,75 @@
+# Intercoop
+
+## Purpose
+
+In the context of intercooperation among social economy entities,
+these libraries implement a protocol to allow a user of a source portal to enable services on a third entity
+in a way users control which third party services get enabled and transfer their personal data to.
+
+Some intended goals:
+
+- Ease extending intercooperation to new entities by sharing a common protocol
+- Be certain that the services request comes from the source entity 
+- Keep users in control of how and whom their personal data is transferred to
+- Still avoid the user from having to type personal data again and again
+
+
+## Glossary
+
+- Entity: one of the social economy peers that are intercooperating
+- User: one of the legal or physical person who have rights regarding a entity
+- Role: A set of rights a user might have within an entity (pe. member, worker, different kind of members...)
+- Source entity: The entity a member has rights on.
+- Target entity: The entity whose services are enabled for members of the source entity.
+
+## Main protocol sequence
+
+Case: a user of entity A (source) wants to enable service of intercooperation entity B (target):
+
+Preconditions:
+
+- Each entity has its own RSA public/private pair of keys
+- Intercooperating entities share their public key among them and keep their private one secret
+- User has validated its identity on web portal of entity A
+
+Main course scenario:
+
+- User indicates to entity A's Portal (Portal A) the intent to activate services on entity B
+- Portal A shows the user which data will be transferred to entity B (member number, national id, name, address, emal...) and **asks for consent**
+- User consents the transfer
+- Portal A builds a message cointaining trasferred data and signs it using A's private key.
+- Portal A sends the message to https API on entity B
+- API B validates the signature with A's public key, stores the transferred data and generates a token for later reference
+- API B responds to Portal A with an url on B having the token embedded inside.
+- Portal A redirects user's browser to that url, where the process to get the service can continue.
+
+
+## Errors
+
+
+- Bad request
+- Members of source entity has no intercooperation agreement with target entity
+
+
+## Code examples
+
+
+datadict = memberDataForIntercoopEntity(member, peer)
+package = signPackage(datadict, privatekey, format='yaml')
+try:
+	redirectUrl=sendPackage(package, entity)
+	
+
+
+
+
+def sendSignedPackage(datadict, privatekey, format='yaml'):
+
+
+
+
+
+
+
+
+
