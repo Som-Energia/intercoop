@@ -23,6 +23,11 @@ def bdecode(b64string):
     "Decode a unicode string representing base64 stream into bytes"
     return base64.urlsafe_b64decode(b64string.encode('utf8'))
 
+def sha(payload):
+    "Returns the SHA of an unicode string encoded as utf-8"
+    from Crypto.Hash import SHA
+    return SHA.new(payload.encode('utf-8'))
+
 def generateKeyPair(filename):
     from Crypto.PublicKey import RSA
     key = RSA.generate(2048)
@@ -36,20 +41,15 @@ def loadKeyPair(filename):
 
 def sign(key, payload):
     from Crypto.Signature import PKCS1_v1_5
-    from Crypto.Hash import SHA
- 
-    h = SHA.new(payload.encode('utf-8'))
     signer = PKCS1_v1_5.new(key)
-    return bencode(signer.sign(h))
+    return bencode(signer.sign(sha(payload)))
 
 def isAuthentic(key, payload, signature):
     from Crypto.Signature import PKCS1_v1_5
-    from Crypto.Hash import SHA
  
     decodedSignature = bdecode(signature)
-    h = SHA.new(payload.encode('utf-8'))
     verifier = PKCS1_v1_5.new(key)
-    return verifier.verify(h, decodedSignature)
+    return verifier.verify(sha(payload), decodedSignature)
 
 
 class Generator(object):
