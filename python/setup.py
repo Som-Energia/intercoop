@@ -19,9 +19,10 @@ setup(
 	install_requires=[
         'pycrypto',
         'yamlns>=0.3', # earlier are not Py2 compatible
+		'requests',
 	],
 	include_package_data = True,
-	test_suite = 'intercoop_test',
+	test_suite = 'intercoop',
 #	test_runner = 'colour_runner.runner.ColourTextTestRunner',
 	classifiers = [
 		'Programming Language :: Python',
