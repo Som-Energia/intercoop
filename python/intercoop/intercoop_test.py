@@ -101,6 +101,26 @@ country: ES
             intercoop.BadSignature,
             "Signature verification failed, untrusted content")
 
+    def test_parse_withMissingPeerField(self):
+        g = intercoop.Parser(keyring = self.keyring)
+        values= ns(self.values)
+        del values.originpeer
+        message = self.setupMessage(values=values)
+        self.assertParseRaises(g, message,
+            intercoop.MissingField,
+            "Required field 'originpeer' missing on the payload")
+
+    def test_parse_withBadYaml(self):
+        g = intercoop.Parser(keyring = self.keyring)
+        message = self.setupMessage(yaml='\t')
+        self.assertParseRaises(g, message,
+            intercoop.BadFormat,
+            "Error while parsing message as YAML:\n"
+            "while scanning for the next token\n"
+            "found character '\\t' that cannot start any token\n"
+            "  in \"<file>\", line 1, column 1"
+            )
+
 
 unittest.TestCase.__str__ = unittest.TestCase.id
 

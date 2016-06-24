@@ -20,7 +20,7 @@ class BadSignature(MessageError):
     "Signature verification failed, untrusted content"
 
 class BadFormat(MessageError):
-    "Error while parsing message as YAML: {}"
+    "Error while parsing message as YAML:\n{}"
 
 
 class Generator(object):
@@ -45,13 +45,23 @@ class Parser(object):
     def parse(self, message):
         package = ns.loads(message)
         valuesYaml = decode(package.payload)
-        values = ns.loads(valuesYaml)
         try:
-            pubkey = self.keyring.get(values.originpeer)
+            values = ns.loads(valuesYaml)
+        except Exception as e:
+            raise BadFormat(str(e))
+        try:
+            peer = values.originpeer
+        except AttributeError:
+            raise MissingField('originpeer')
+
+        try:
+            pubkey = self.keyring.get(peer)
         except KeyError:
-            raise BadPeer(values.originpeer)
+            raise BadPeer(peer)
+
         if not isAuthentic(pubkey, valuesYaml, package.signature):
             raise BadSignature()
+
         return values
         
         
