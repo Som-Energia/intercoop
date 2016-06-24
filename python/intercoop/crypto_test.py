@@ -24,6 +24,7 @@ class Crypto_Test(unittest.TestCase):
         if not os.access(self.keyfile, os.F_OK):
             self.key = crypto.generateKeyPair(self.keyfile)
         self.key = crypto.loadKeyPair(self.keyfile)
+        self.public = self.key.publickey()
 
     def test_encode_unicode(self):
         encoded = crypto.encode(self.plain)
@@ -37,13 +38,19 @@ class Crypto_Test(unittest.TestCase):
         signature = crypto.sign(self.key, self.plain)
         self.assertMultiLineEqual(signature, self.signed)
 
+    def test_sign_withNoPrivate_fails(self):
+        with self.assertRaises(TypeError) as ctx:
+            crypto.sign(self.public, self.plain)
+        self.assertEqual(ctx.exception.args[0],
+            "Private key not available in this object")
+
     def test_isAuthentic_whenOk(self):
-        result = crypto.isAuthentic(self.key, self.plain, self.signed)
+        result = crypto.isAuthentic(self.public, self.plain, self.signed)
         self.assertTrue(result)
 
     def test_isAuthentic_whenPayloadChanged(self):
         badPayload = "this is NOT the content\n"
-        result = crypto.isAuthentic(self.key, badPayload, self.signed)
+        result = crypto.isAuthentic(self.public, badPayload, self.signed)
         self.assertFalse(result)
 
 class CryptoUnicode_Test(Crypto_Test):
@@ -71,4 +78,3 @@ if __name__ == "__main__":
 
 
 # vim: ts=4 sw=4 et
-
