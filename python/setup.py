@@ -18,7 +18,7 @@ setup(
 		],
 	install_requires=[
         'pycrypto',
-        'yamlns',
+        'yamlns>=0.3', # earlier are not Py2 compatible
 	],
 	include_package_data = True,
 	test_suite = 'intercoop_test',
