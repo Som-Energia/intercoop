@@ -1,6 +1,11 @@
 # -*- encoding: utf-8 -*-
 
-
+class _deps:
+    "Hides dependencies on external modules"
+    import base64
+    from Crypto.Hash import SHA
+    from Crypto.PublicKey import RSA
+    from Crypto.Signature import PKCS1_v1_5
 
 def encode(payload):
     "Encode a unicode string into base64 (as unicode string)"
@@ -12,42 +17,31 @@ def decode(encodedPayload):
 
 def bencode(binaryPayload):
     "Encode bytes as base64 (as unicode string)"
-    import base64
-    return base64.urlsafe_b64encode(binaryPayload).decode('utf8')
+    return _deps.base64.urlsafe_b64encode(binaryPayload).decode('utf8')
 
 def bdecode(b64string):
     "Decode a unicode string representing base64 stream into bytes"
-    import base64
-    return base64.urlsafe_b64decode(b64string.encode('utf8'))
+    return _deps.base64.urlsafe_b64decode(b64string.encode('utf8'))
 
 def sha(payload):
     "Returns the SHA of an unicode string encoded as utf-8"
-    from Crypto.Hash import SHA
-    return SHA.new(payload.encode('utf-8'))
+    return _deps.SHA.new(payload.encode('utf-8'))
 
 def generateKeyPair(filename):
-    from Crypto.PublicKey import RSA
-
-    key = RSA.generate(2048)
+    key = _deps.RSA.generate(2048)
     with open(filename,'w') as f:
         f.write(key.exportKey('PEM'))
 
 def loadKeyPair(filename):
-    from Crypto.PublicKey import RSA
-
     with open(filename,'r') as f:
-        return RSA.importKey(f.read())
+        return _deps.RSA.importKey(f.read())
 
-def sign(key, payload):
-    from Crypto.Signature import PKCS1_v1_5
-
-    signer = PKCS1_v1_5.new(key)
+def sign(privatekey, payload):
+    signer = _deps.PKCS1_v1_5.new(privatekey)
     return bencode(signer.sign(sha(payload)))
 
-def isAuthentic(key, payload, signature):
-    from Crypto.Signature import PKCS1_v1_5
-
+def isAuthentic(publickey, payload, signature):
     decodedSignature = bdecode(signature)
-    verifier = PKCS1_v1_5.new(key)
+    verifier = _deps.PKCS1_v1_5.new(publickey)
     return verifier.verify(sha(payload), decodedSignature)
 
