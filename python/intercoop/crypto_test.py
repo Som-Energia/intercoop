@@ -41,8 +41,10 @@ class Crypto_Test(unittest.TestCase):
     def test_sign_withNoPrivate_fails(self):
         with self.assertRaises(TypeError) as ctx:
             crypto.sign(self.public, self.plain)
-        self.assertEqual(ctx.exception.args[0],
-            "Private key not available in this object")
+        self.assertIn(ctx.exception.args[0], [
+            "No private key", #  Py3
+            "Private key not available in this object", # Py2
+            ])
 
     def test_isAuthentic_whenOk(self):
         result = crypto.isAuthentic(self.public, self.plain, self.signed)
