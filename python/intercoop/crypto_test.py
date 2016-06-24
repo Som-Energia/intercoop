@@ -21,10 +21,13 @@ class Crypto_Test(unittest.TestCase):
     def setUp(self):
         self.maxDiff = None
         self.keyfile = 'testkey.pem'
+        self.pubfile = 'testkey-public.pem'
+
         if not os.access(self.keyfile, os.F_OK):
-            self.key = crypto.generateKeyPair(self.keyfile)
+            crypto.generateKeyPair(self.keyfile, self.pubfile)
+
         self.key = crypto.loadKeyPair(self.keyfile)
-        self.public = self.key.publickey()
+        self.public = crypto.loadKeyPair(self.pubfile)
 
     def test_encode_unicode(self):
         encoded = crypto.encode(self.plain)

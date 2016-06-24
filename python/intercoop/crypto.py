@@ -27,21 +27,29 @@ def sha(payload):
     "Returns the SHA of an unicode string encoded as utf-8"
     return _deps.SHA.new(payload.encode('utf-8'))
 
-def generateKeyPair(filename):
+def generateKeyPair(filename, publicfilename=None):
     key = _deps.RSA.generate(2048)
-    with open(filename,'w') as f:
+    with open(filename,'wb') as f:
         f.write(key.exportKey('PEM'))
+    if publicfilename is None: return
+    exportPublicKey(key, publicfilename)
 
 def loadKeyPair(filename):
-    with open(filename,'r') as f:
+    with open(filename,'rb') as f:
         return _deps.RSA.importKey(f.read())
+
+def exportPublicKey(key, filename):
+    public = key.publickey()
+    with open(filename,'wb') as f:
+        f.write(public.exportKey('PEM'))
 
 def sign(privatekey, payload):
     signer = _deps.PKCS1_v1_5.new(privatekey)
     return bencode(signer.sign(sha(payload)))
 
 def isAuthentic(publickey, payload, signature):
-    decodedSignature = bdecode(signature)
     verifier = _deps.PKCS1_v1_5.new(publickey)
+    decodedSignature = bdecode(signature)
     return verifier.verify(sha(payload), decodedSignature)
 
+# vim: ts=4 sw=4 et

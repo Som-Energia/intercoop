@@ -2,6 +2,7 @@
 
 import unittest
 import intercoop
+from . import crypto
 import os
 from yamlns import namespace as ns
 
@@ -22,13 +23,16 @@ country: ES
     def setUp(self):
         self.maxDiff = None
         self.keyfile = 'testkey.pem'
-        if not os.access(self.keyfile, os.F_OK):
-            self.key = intercoop.generateKeyPair(self.keyfile)
-        self.key = intercoop.loadKeyPair(self.keyfile)
+        self.pubfile = 'testkey-public.pem'
 
+        if not os.access(self.keyfile, os.F_OK):
+            intercoop.generateKeyPair(self.keyfile, self.pubfile)
+
+        self.key = crypto.loadKeyPair(self.keyfile)
+        self.public = crypto.loadKeyPair(self.pubfile)
         self.values = ns.loads(self.payload1)
-        self.encodedPayload1 = intercoop.encode(self.payload1)
-        self.signedPayload1 = intercoop.sign(self.key, self.payload1)
+        self.encodedPayload1 = crypto.encode(self.payload1)
+        self.signedPayload1 = crypto.sign(self.key, self.payload1)
 
     def test_produce(self):
         g = intercoop.Generator(ownKeyPair = self.key)
@@ -64,7 +68,7 @@ country: ES
     def test_parse_withInvalidSignature(self):
         message = ns(
             intercoopVersion = '1.0',
-            signature = intercoop.sign(self.key, self.payload1+"\n"),
+            signature = crypto.sign(self.key, self.payload1+"\n"),
             payload = self.encodedPayload1,
             ).dump()
 
