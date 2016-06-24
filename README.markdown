@@ -1,5 +1,7 @@
 # Intercoop
 
+[![Build Status](https://travis-ci.org/Som-Energia/intercoop.svg?branch=master)](https://travis-ci.org/Som-Energia/intercoop)
+
 ## Purpose
 
 In the context of intercooperation among social economy entities,
