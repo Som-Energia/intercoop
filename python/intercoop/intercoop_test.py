@@ -14,7 +14,7 @@ class KeyRingMock(object):
 
 class IntercoopMessage_Test(unittest.TestCase):
 
-    payload1=u"""\
+    yaml=u"""\
 intercoopVersion: '1.0'
 originpeer: testpeer
 origincode: 666
@@ -35,9 +35,9 @@ country: ES
 
         self.key = crypto.loadKeyPair(self.keyfile)
         self.public = crypto.loadKeyPair(self.pubfile)
-        self.values = ns.loads(self.payload1)
-        self.encodedPayload1 = crypto.encode(self.payload1)
-        self.signedPayload1 = crypto.sign(self.key, self.payload1)
+        self.values = ns.loads(self.yaml)
+        self.encodedPayload1 = crypto.encode(self.yaml)
+        self.signedPayload1 = crypto.sign(self.key, self.yaml)
         self.keyring = KeyRingMock(dict(
             testpeer=self.public,
             ))
@@ -53,12 +53,23 @@ country: ES
                 payload = self.encodedPayload1,
             ))
 
-    def test_parse(self):
-        message = ns(
+    def setupMessage(self,
+            values=None,
+            yaml=None,
+            signedyaml=None,
+            payload=None,
+            ):
+        values = ns(values or self.values)
+        yaml = yaml or values.dump()
+        return ns(
             intercoopVersion = '1.0',
-            signature = self.signedPayload1,
-            payload = self.encodedPayload1,
+            signature = crypto.sign(self.key, signedyaml or yaml),
+            payload = payload or crypto.encode(yaml),
             ).dump()
+
+
+    def test_parse(self):
+        message = self.setupMessage()
 
         g = intercoop.Parser(keyring = self.keyring)
         values = g.parse(message)
@@ -67,19 +78,28 @@ country: ES
             dict(values),
             )
 
+    def test_parse_withUnrecognizedPeer(self):
+        message = self.setupMessage(
+            values=ns(self.values, originpeer='badpeer'))
+
+        g = intercoop.Parser(keyring = self.keyring)
+
+        with self.assertRaises(intercoop.BadPeer) as ctx:
+            g.parse(message)
+        self.assertEqual(ctx.exception.args[0],
+            "The entity 'badpeer' is not a recognized one")
+
     def test_parse_withInvalidSignature(self):
-        message = ns(
-            intercoopVersion = '1.0',
-            signature = crypto.sign(self.key, self.payload1+"\n"),
-            payload = self.encodedPayload1,
-            ).dump()
+        message = self.setupMessage(
+            signedyaml = self.yaml + "\n",
+            )
 
         g = intercoop.Parser(keyring = self.keyring)
         with self.assertRaises(intercoop.BadSignature) as ctx:
             g.parse(message)
         self.assertEqual(ctx.exception.args[0],
             "Signature verification failed, untrusted content")
-            
+
 
 unittest.TestCase.__str__ = unittest.TestCase.id
 

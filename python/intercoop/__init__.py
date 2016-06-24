@@ -46,8 +46,10 @@ class Parser(object):
         package = ns.loads(message)
         valuesYaml = decode(package.payload)
         values = ns.loads(valuesYaml)
-        # TODO: Choose key depending on originpeer
-        pubkey = self.keyring.get('testpeer')
+        try:
+            pubkey = self.keyring.get(values.originpeer)
+        except KeyError:
+            raise BadPeer(values.originpeer)
         if not isAuthentic(pubkey, valuesYaml, package.signature):
             raise BadSignature()
         return values
