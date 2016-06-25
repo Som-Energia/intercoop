@@ -30,8 +30,19 @@ class UnsecureDataStorage_Test(unittest.TestCase):
 
     def test_tokenfile(self):
         s = datastorage.DataStorage(self.datadir)
-        self.assertEqual(s._tokenfile('mytoken'),
-            os.path.join(self.datadir, 'mytoken.yaml'))
+        token = (
+            '01020304-0506-0708-090a-0b0c0d0e0f10'
+            )
+        self.assertEqual(s._tokenfile(token),
+            os.path.join(self.datadir, token+'.yaml'))
+
+    def test_tokenfile_badtoken(self):
+        s = datastorage.DataStorage(self.datadir)
+        token = '../../etc/passwd'
+        with self.assertRaises(Exception) as ctx:
+            s._tokenfile(token)
+        self.assertEqual(str(ctx.exception),
+            "Bad token '{}'".format(token))
 
     def test_store(self):
         s = datastorage.DataStorage(self.datadir)

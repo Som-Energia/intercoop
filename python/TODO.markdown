@@ -25,8 +25,8 @@
 ## Phase 3: peer descriptors handling
 
 - (Unsecure) temporary data storage
-	- Add a data set
-	- Retrieve a data set
+	+ Add a data set
+	+ Retrieve a data set
 	- Data set not found
 	- Purgue old data
 - Portal example

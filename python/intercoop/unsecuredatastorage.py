@@ -18,6 +18,12 @@ class DataStorage(object):
                 .format(folder))
 
     def _tokenfile(self, token):
+        import re
+        if not re.match(
+            '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
+            token,
+            ):
+            raise Exception("Bad token '{}'".format(token))
         return os.path.join(self.folder, token+'.yaml')
 
     def store(self, **kwds):
