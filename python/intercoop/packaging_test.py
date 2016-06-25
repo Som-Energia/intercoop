@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 import unittest
-import intercoop
+from . import packaging
 from . import crypto
 import os
 from yamlns import namespace as ns
@@ -43,7 +43,7 @@ country: ES
             ))
 
     def test_produce(self):
-        g = intercoop.Generator(ownKeyPair = self.key)
+        g = packaging.Generator(ownKeyPair = self.key)
         message = g.produce(self.values)
         self.assertEqual(
             dict(ns.loads(message)),
@@ -64,7 +64,7 @@ country: ES
         values = ns(values or self.values)
         yaml = yaml or values.dump()
         messageValues =  ns(
-            intercoopVersion = version or intercoop.protocolVersion,
+            intercoopVersion = version or packaging.protocolVersion,
             signature = crypto.sign(self.key, signedyaml or yaml),
             payload = payload or crypto.encode(yaml),
             )
@@ -82,7 +82,7 @@ country: ES
     def test_parse(self):
         message = self.setupMessage()
 
-        g = intercoop.Parser(keyring = self.keyring)
+        g = packaging.Parser(keyring = self.keyring)
         values = g.parse(message)
         self.assertEqual(
             dict(self.values),
@@ -90,37 +90,37 @@ country: ES
             )
 
     def test_parse_invalidSignature(self):
-        g = intercoop.Parser(keyring = self.keyring)
+        g = packaging.Parser(keyring = self.keyring)
         message = self.setupMessage(
             signedyaml = self.yaml + "\n",
             )
         self.assertParseRaises(g, message,
-            intercoop.BadSignature,
+            packaging.BadSignature,
             "Signature verification failed, untrusted content")
 
     def test_parse_unrecognizedPeer(self):
-        g = intercoop.Parser(keyring = self.keyring)
+        g = packaging.Parser(keyring = self.keyring)
         message = self.setupMessage(
             values=ns(self.values, originpeer='badpeer')
             )
         self.assertParseRaises(g,message,
-            intercoop.BadPeer,
+            packaging.BadPeer,
             "The entity 'badpeer' is not a recognized one")
 
     def test_parse_missingPeerField(self):
-        g = intercoop.Parser(keyring = self.keyring)
+        g = packaging.Parser(keyring = self.keyring)
         values= ns(self.values)
         del values.originpeer
         message = self.setupMessage(values=values)
         self.assertParseRaises(g, message,
-            intercoop.MissingField,
+            packaging.MissingField,
             "Required field 'originpeer' missing on the payload")
 
     def test_parse_badYaml(self):
-        g = intercoop.Parser(keyring = self.keyring)
+        g = packaging.Parser(keyring = self.keyring)
         message = self.setupMessage(yaml='\t')
         self.assertParseRaises(g, message,
-            intercoop.BadFormat,
+            packaging.BadFormat,
             "Error while parsing message as YAML:\n"
             "while scanning for the next token\n"
             "found character '\\t' that cannot start any token\n"
@@ -128,49 +128,49 @@ country: ES
             )
 
     def test_parse_missingPayload(self):
-        g = intercoop.Parser(keyring = self.keyring)
+        g = packaging.Parser(keyring = self.keyring)
         message = self.setupMessage(
             removedFromMessage=['payload']
             )
         self.assertParseRaises(g, message,
-            intercoop.BadMessage,
+            packaging.BadMessage,
             "Malformed message: missing payload"
             )
 
     def test_parse_missingSignature(self):
-        g = intercoop.Parser(keyring = self.keyring)
+        g = packaging.Parser(keyring = self.keyring)
         message = self.setupMessage(
             removedFromMessage=['signature']
             )
         self.assertParseRaises(g, message,
-            intercoop.BadMessage,
+            packaging.BadMessage,
             "Malformed message: missing signature"
             )
 
     def test_parse_wrongVersion(self):
-        g = intercoop.Parser(keyring = self.keyring)
+        g = packaging.Parser(keyring = self.keyring)
         message = self.setupMessage(
             version='0.0',
             )
         self.assertParseRaises(g, message,
-            intercoop.WrongVersion,
+            packaging.WrongVersion,
             "Wrong protocol version, expected 1.0, received 0.0"
             )
 
     def test_parse_missingVersion(self):
-        g = intercoop.Parser(keyring = self.keyring)
+        g = packaging.Parser(keyring = self.keyring)
         message = self.setupMessage(
             removedFromMessage=['intercoopVersion']
             )
         self.assertParseRaises(g, message,
-            intercoop.BadMessage,
+            packaging.BadMessage,
             "Malformed message: missing intercoopVersion"
             )
 
     def test_parse_badContainerYaml(self):
-        g = intercoop.Parser(keyring = self.keyring)
+        g = packaging.Parser(keyring = self.keyring)
         self.assertParseRaises(g, '\t',
-            intercoop.BadMessage,
+            packaging.BadMessage,
             "Malformed message: Bad message YAML format\n"
             "while scanning for the next token\n"
             "found character '\\t' that cannot start any token\n"
@@ -178,22 +178,22 @@ country: ES
             )
 
     def test_parse_badContainerUnicode(self):
-        g = intercoop.Parser(keyring = self.keyring)
+        g = packaging.Parser(keyring = self.keyring)
         message = self.setupMessage(
             payload = "SAFASLDFKJASLK==",
             )
         self.assertParseRaises(g, message,
-            intercoop.BadMessage,
+            packaging.BadMessage,
             'Malformed message: Payload is not base64 coded UTF8'
             )
 
     def test_parse_badPayloadBase64(self):
-        g = intercoop.Parser(keyring = self.keyring)
+        g = packaging.Parser(keyring = self.keyring)
         message = self.setupMessage(
             payload = "SO",
             )
         self.assertParseRaises(g, message,
-            intercoop.BadMessage,
+            packaging.BadMessage,
             'Malformed message: Payload is invalid Base64: Incorrect padding'
             )
 

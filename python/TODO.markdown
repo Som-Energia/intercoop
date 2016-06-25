@@ -1,13 +1,37 @@
 # TODO
 
-+ base64 strings unicodeness
+## Phase 1: encription primitives
+
++ base64 encoding decoding
++ utf8 encoding/decoding after base64
++ binary base64
++ key generation, export, import
++ public key split
++ package signing/verification
+
+## Phase 2: pack and unpack messages
+
 + Review take yaml's as unicode
-- Unsafe yamls
-- Parser takes key from dictionary and chooses acording the peer code
-- Error handling: bad peer code
-- Error handling: message is not valid yaml/unicode
-- Error handling: payload does not decode as valid yaml/unicode
-- Error handling: message has not the required fields
-- Error handling: payload has not the required fields
++ Parser takes key from dictionary and chooses acording the peer code
++ Error handling: bad peer code
++ Error handling: package is not valid yaml/unicode
++ Error handling: payload does not decode base64
++ Error handling: payload does not decode as valid yaml/unicode
++ Error handling: package has not the required fields
++ Error handling: payload has not the required fields
+- Protect against unsafe yamls (limit yaml parser features)
+
+## Phase 3: peer descriptors handling
+
+- File based keyring
+- Portal example
+
+
+## Phase 4: communication
+
+- Use package 
+- Propagate api side exception
+- Handle network error
+- Return redirection url
 
 
