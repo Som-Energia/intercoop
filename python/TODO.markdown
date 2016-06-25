@@ -8,6 +8,7 @@
 + key generation, export, import
 + public key split
 + package signing/verification
+- token generation
 
 ## Phase 2: pack and unpack messages
 
@@ -23,7 +24,11 @@
 
 ## Phase 3: peer descriptors handling
 
-- File based keyring
+- (Unsecure) temporary data storage
+	- Add a data set
+	- Retrieve a data set
+	- Data set not found
+	- Purgue old data
 - Portal example
 
 
