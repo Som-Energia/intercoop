@@ -17,14 +17,17 @@ class DataStorage(object):
             raise Exception("Storage folder '{}' should exist"
                 .format(folder))
 
+    def _tokenfile(self, token):
+        return os.path.join(self.folder, token+'.yaml')
+
     def store(self, **kwds):
-        uuid = crypto.uuid()
-        filename = os.path.join(self.folder, uuid+'.yaml')
+        token = crypto.uuid()
+        filename = self._tokenfile(token)
         content = ns(kwds).dump()
-        # use dump with filename when yamlns fixes Py2 issues
+        # TODO: use dump with filename when yamlns fixes Py2 issues
         with open(filename, 'wb') as f:
             f.write(content.encode('utf-8'))
-        return uuid
+        return token
 
 
 # vim: ts=4 sw=4 et
