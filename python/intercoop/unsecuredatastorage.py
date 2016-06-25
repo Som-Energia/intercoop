@@ -26,10 +26,10 @@ class DataStorage(object):
             raise Exception("Bad token '{}'".format(token))
         return os.path.join(self.folder, token+'.yaml')
 
-    def store(self, **kwds):
+    def store(self, data=None, **kwds):
         token = crypto.uuid()
         filename = self._tokenfile(token)
-        content = ns(kwds).dump()
+        content = ns(data or kwds).dump()
         # TODO: use dump with filename when yamlns fixes Py2 issues
         with open(filename, 'wb') as f:
             f.write(content.encode('utf-8'))

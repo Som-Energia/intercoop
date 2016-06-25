@@ -39,8 +39,10 @@ class UnsecureDataStorage_Test(unittest.TestCase):
     def test_tokenfile_badtoken(self):
         s = datastorage.DataStorage(self.datadir)
         token = '../../etc/passwd'
+
         with self.assertRaises(Exception) as ctx:
             s._tokenfile(token)
+
         self.assertEqual(str(ctx.exception),
             "Bad token '{}'".format(token))
 
@@ -56,6 +58,11 @@ class UnsecureDataStorage_Test(unittest.TestCase):
         stored = s.retrieve(token)
         self.assertEqual(stored.dato1, 'valor1')
 
+    def test_store_usingNs(self):
+        s = datastorage.DataStorage(self.datadir)
+        token = s.store(ns(dato1='valor1'))
+        stored = ns.load(s._tokenfile(token))
+        self.assertEqual(stored.dato1, 'valor1')
 
 
 
