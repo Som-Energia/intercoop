@@ -89,15 +89,6 @@ country: ES
             dict(values),
             )
 
-    def test_parse_unrecognizedPeer(self):
-        g = intercoop.Parser(keyring = self.keyring)
-        message = self.setupMessage(
-            values=ns(self.values, originpeer='badpeer')
-            )
-        self.assertParseRaises(g,message,
-            intercoop.BadPeer,
-            "The entity 'badpeer' is not a recognized one")
-
     def test_parse_invalidSignature(self):
         g = intercoop.Parser(keyring = self.keyring)
         message = self.setupMessage(
@@ -106,6 +97,15 @@ country: ES
         self.assertParseRaises(g, message,
             intercoop.BadSignature,
             "Signature verification failed, untrusted content")
+
+    def test_parse_unrecognizedPeer(self):
+        g = intercoop.Parser(keyring = self.keyring)
+        message = self.setupMessage(
+            values=ns(self.values, originpeer='badpeer')
+            )
+        self.assertParseRaises(g,message,
+            intercoop.BadPeer,
+            "The entity 'badpeer' is not a recognized one")
 
     def test_parse_missingPeerField(self):
         g = intercoop.Parser(keyring = self.keyring)
@@ -147,16 +147,6 @@ country: ES
             "Malformed message: missing signature"
             )
 
-    def test_parse_missingVersion(self):
-        g = intercoop.Parser(keyring = self.keyring)
-        message = self.setupMessage(
-            removedFromMessage=['intercoopVersion']
-            )
-        self.assertParseRaises(g, message,
-            intercoop.BadMessage,
-            "Malformed message: missing intercoopVersion"
-            )
-
     def test_parse_wrongVersion(self):
         g = intercoop.Parser(keyring = self.keyring)
         message = self.setupMessage(
@@ -165,6 +155,16 @@ country: ES
         self.assertParseRaises(g, message,
             intercoop.WrongVersion,
             "Wrong protocol version, expected 1.0, received 0.0"
+            )
+
+    def test_parse_missingVersion(self):
+        g = intercoop.Parser(keyring = self.keyring)
+        message = self.setupMessage(
+            removedFromMessage=['intercoopVersion']
+            )
+        self.assertParseRaises(g, message,
+            intercoop.BadMessage,
+            "Malformed message: missing intercoopVersion"
             )
 
     def test_parse_badContainerYaml(self):

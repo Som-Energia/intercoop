@@ -43,14 +43,14 @@ class Crypto_Test(unittest.TestCase):
         self.assertEqual(str(ctx.exception),
             "Incorrect padding")
 
-    def test_decode_nonBase64Chars(self):
+    def test_decode_nonUnicode(self):
         with self.assertRaises(UnicodeError) as ctx:
-            crypto.decode('AB//')
+            crypto.decode('ABCD')
         errormsg = str(ctx.exception)
         # Py2 does not have hyphen
         errormsg = errormsg.replace('utf8', 'utf-8')
         self.assertEqual(errormsg,
-            "'utf-8' codec can't decode byte 0xff "
+            "'utf-8' codec can't decode byte 0x83 "
             "in position 2: invalid start byte")
 
     def test_sign(self):
