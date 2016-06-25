@@ -64,6 +64,12 @@ class UnsecureDataStorage_Test(unittest.TestCase):
         stored = ns.load(s._tokenfile(token))
         self.assertEqual(stored.dato1, 'valor1')
 
+    def test_store_overwritingNsValues(self):
+        s = datastorage.DataStorage(self.datadir)
+        token = s.store(ns(dato1='valor1'), dato1='valor2')
+        stored = ns.load(s._tokenfile(token))
+        self.assertEqual(stored.dato1, 'valor2')
+
 
 
 
