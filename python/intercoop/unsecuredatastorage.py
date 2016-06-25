@@ -29,5 +29,9 @@ class DataStorage(object):
             f.write(content.encode('utf-8'))
         return token
 
+    def retrieve(self, token):
+        filename = self._tokenfile(token)
+        return ns.load(filename)
+
 
 # vim: ts=4 sw=4 et
