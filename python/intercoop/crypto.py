@@ -6,10 +6,14 @@ Simple interface to common cryptographic actions.
 
 class _deps:
     "Hides dependencies on external modules"
+    import uuid
     import base64
     from Crypto.Hash import SHA
     from Crypto.PublicKey import RSA
     from Crypto.Signature import PKCS1_v1_5
+
+def uuid():
+    return str(_deps.uuid.uuid4())
 
 def encode(text):
     "Encode text into base64 (as text)"

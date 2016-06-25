@@ -74,6 +74,13 @@ class Crypto_Test(unittest.TestCase):
         result = crypto.isAuthentic(self.public, badPayload, self.signed)
         self.assertFalse(result)
 
+    def test_uuid(self):
+        uuid = crypto.uuid()
+        self.assertRegex(str(uuid),
+            '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}')
+
+
+
 class CryptoUnicode_Test(Crypto_Test):
 
     plain = u"ñáéíóúç\n"
@@ -90,6 +97,9 @@ class CryptoUnicode_Test(Crypto_Test):
 
 
 unittest.TestCase.__str__ = unittest.TestCase.id
+if not hasattr(unittest.TestCase, 'assertRegex'):
+    unittest.TestCase.assertRegex = unittest.TestCase.assertRegexpMatches
+    
 
 
 
