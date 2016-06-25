@@ -31,7 +31,7 @@ country: ES
         self.pubfile = 'testkey-public.pem'
 
         if not os.access(self.keyfile, os.F_OK):
-            intercoop.generateKey(self.keyfile, self.pubfile)
+            crypto.generateKey(self.keyfile, self.pubfile)
 
         self.key = crypto.loadKey(self.keyfile)
         self.public = crypto.loadKey(self.pubfile)
