@@ -15,6 +15,7 @@ setup(
 	license = 'GNU Affero General Public License v3 or later (AGPLv3+)',
 	packages=find_packages(exclude=['*[tT]est*']),
 	scripts=[
+		'intercoop/apiexample.py',
 		],
 	install_requires=[
 		'pycrypto',

@@ -2,10 +2,12 @@
 
 import unittest
 import os
+import shutil
 from yamlns import namespace as ns
 from . import crypto
 from . import apiexample
 from . import packaging
+from . import unsecuredatastorage
 
 class KeyRingMock(object):
     def __init__(self, keys):
@@ -30,35 +32,46 @@ country: ES
     def setUp(self):
         self.keyfile = 'testkey.pem'
         self.pubfile = 'testkey-public.pem'
-        if not os.access(self.keyfile, os.F_OK):
-            crypto.generateKey(self.keyfile, self.pubfile)
         self.key = crypto.loadKey(self.keyfile)
-        self.public = crypto.loadKey(self.pubfile)
-
-        apiexample.app.config['TESTING'] = True
-        self.client = apiexample.app.test_client()
-        apiexample.keyring = KeyRingMock(dict(
-            testpeer=self.public,
+        self.pub = crypto.loadKey(self.pubfile)
+        self.keyring = KeyRingMock(dict(
+            testpeer=self.pub,
             ))
+
+        self.datadir='apiexamplestorage'
+        try: os.makedirs(self.datadir)
+        except: pass
+        self.storage = unsecuredatastorage.DataStorage(self.datadir)
+
+        app = apiexample.IntercoopApi('testapi', self.storage, self.keyring).app
+
+        app.config['TESTING'] = True
+        self.client = app.test_client()
+
+    def cleanUp(self):
+        try:
+            shutil.rmtree(self.datadir)
+        except: pass
+        
+    def tearDown(self):
+        self.cleanUp()
 
 
     def test_protocolVersion(self):
-        r = self.client.get('/intercoop/protocolVersion')
+        r = self.client.get('/protocolVersion')
         self.assertEqual(
-            r.data.decode('utf8'),
-            packaging.protocolVersion,
+            ns.loads(r.data),
+            ns(protocolVersion=packaging.protocolVersion),
             )
 
     def test_peermember_post(self):
         g = packaging.Generator(self.key)
 
-        r = self.client.post('/intercoop/peermember',
+        r = self.client.post('/peermember',
             data=g.produce(ns.loads(self.yaml)),
             )
-        self.assertRegex(
-            r.data.decode('utf8'),
-            '[0-9a-f\-]+'
-            )
+        data = ns.loads(r.data)
+        self.assertRegex(data.uuid, '^[0-9a-f\-]+$')
 
 
 

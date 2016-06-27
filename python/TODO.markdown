@@ -8,7 +8,7 @@
 - [x] key generation, export, import
 - [x] public key split
 - [x] package signing/verification
-- [ ] token generation
+- [x] token generation
 
 ## Phase 2: pack and unpack messages
 
@@ -24,18 +24,29 @@
 
 ## Phase 3: peer information
 
-- [ ] (Unsecure) temporary data storage
+
+- [ ] Unsecure temporary data storage
 	+ [x] Add a data set
 	+ [x] Retrieve a data set
 	+ [x] Data set not found
 	- [ ] Purgue old data
-- [ ] Peer descriptors
-	- [ ] Get by peer id
+
+- [ ] Keyring
+	- [ ] Given a peer id return the public key
+	- [ ] Raise an error if no key available
+	- [ ] Handle error in the case of bad key format
 
 - [ ] Portal example
+	- [ ] Solve mockup injection in flask for testing
+	- [ ] Implement success case
+	- [ ] Consider different error cases
+
+- [ ] Peer descriptors
+	- [ ] Get by peer id
+	- [ ] Get translated string
 
 
-## Phase 4: communication
+## Phase 4: client (portal) side
 
 - [ ] Use package 
 - [ ] Propagate api side exception
