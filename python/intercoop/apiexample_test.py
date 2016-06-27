@@ -57,23 +57,51 @@ country: ES
         self.cleanUp()
 
 
-    def test_protocolVersion(self):
+    def test__protocolVersion_get(self):
         r = self.client.get('/protocolVersion')
         self.assertEqual(
             ns.loads(r.data),
             ns(protocolVersion=packaging.protocolVersion),
             )
 
-    def test_peermember_post(self):
+    def test__peermember_post__ok(self):
         g = packaging.Generator(self.key)
+        data = ns.loads(self.yaml)
+        package = g.produce(data)
 
-        r = self.client.post('/peermember',
-            data=g.produce(ns.loads(self.yaml)),
-            )
+        r = self.client.post('/peermember', data=package)
+
         data = ns.loads(r.data)
+        self.assertEqual(r.status_code, 200)
         self.assertRegex(data.uuid, '^[0-9a-f\-]+$')
 
+    def test__peermember_post__badPeer(self):
+        g = packaging.Generator(self.key)
+        data = ns.loads(self.yaml)
+        data.originpeer = 'badpeer'
+        package = g.produce(data)
 
+        r = self.client.post('/peermember', data=package)
 
+        self.assertEqual(r.status_code, 403)
+        self.assertEqual(ns.loads(r.data), ns(
+            error = 'BadPeer',
+            message = "The entity 'badpeer' is not a recognized one",
+            ))
+
+    def test__peermember_post__badSignature(self):
+        g = packaging.Generator(self.key)
+        data = ns.loads(self.yaml)
+        package = ns.loads(g.produce(data))
+        package.payload = crypto.encode(self.yaml+'\n')
+        package = package.dump()
+
+        r = self.client.post('/peermember', data=package)
+
+        self.assertEqual(ns.loads(r.data), ns(
+            error = 'BadSignature',
+            message = "Signature verification failed, untrusted content",
+            ))
+        self.assertEqual(r.status_code, 403)
 
 # vim: ts=4 sw=4 et

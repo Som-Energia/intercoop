@@ -6,17 +6,34 @@ from flask import (
 	request,
 	)
 
-from . import crypto
 from . import packaging
+from .perfume import Perfume, route
 from yamlns import namespace as ns
 from functools import wraps
 
-from .perfume import Perfume, route
 
 def yaml_response(f):
+    def handle(e, status_code):
+        response = make_response(ns(
+            error=type(e).__name__,
+            message=str(e),
+            ).dump())
+        response.mimetype='application/yaml'
+        response.status_code = status_code
+        return response
+        
+
     @wraps(f)
     def wrapper(*args, **kwd):
-        result = f(*args, **kwd)
+        try:
+            result = f(*args, **kwd)
+        except (
+                packaging.BadPeer,
+                packaging.BadSignature,
+                ) as e:
+            return handle(e, 403) # Unauthorized
+        except packaging.MessageError as e:
+            return handle(e, 400) # Bad request
         response = make_response(ns(result).dump())
         response.mimetype='application/yaml'
         return response
@@ -37,7 +54,6 @@ class IntercoopApi(Perfume):
         return ns(
             protocolVersion = packaging.protocolVersion
             )
-
 
     @route('/peermember', methods=['POST'])
     @yaml_response
@@ -60,4 +76,3 @@ if __name__ == '__main__':
 
 
 # vim: ts=4 sw=4 et
-
