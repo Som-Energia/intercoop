@@ -2,41 +2,44 @@
 
 ## Phase 1: encription primitives
 
-+ base64 encoding decoding
-+ utf8 encoding/decoding after base64
-+ binary base64
-+ key generation, export, import
-+ public key split
-+ package signing/verification
-- token generation
+- [x] base64 encoding decoding
+- [x] utf8 encoding/decoding after base64
+- [x] binary base64
+- [x] key generation, export, import
+- [x] public key split
+- [x] package signing/verification
+- [ ] token generation
 
 ## Phase 2: pack and unpack messages
 
-+ Review take yaml's as unicode
-+ Parser takes key from dictionary and chooses acording the peer code
-+ Error handling: bad peer code
-+ Error handling: package is not valid yaml/unicode
-+ Error handling: payload does not decode base64
-+ Error handling: payload does not decode as valid yaml/unicode
-+ Error handling: package has not the required fields
-+ Error handling: payload has not the required fields
-- Protect against unsafe yamls (limit yaml parser features)
+- [x] Review take yaml's as unicode
+- [x] Parser takes key from dictionary and chooses acording the peer code
+- [x] Error handling: bad peer code
+- [x] Error handling: package is not valid yaml/unicode
+- [x] Error handling: payload does not decode base64
+- [x] Error handling: payload does not decode as valid yaml/unicode
+- [x] Error handling: package has not the required fields
+- [x] Error handling: payload has not the required fields
+- [ ] Protect against unsafe yamls (limit yaml parser features)
 
-## Phase 3: peer descriptors handling
+## Phase 3: peer information
 
-- (Unsecure) temporary data storage
-	+ Add a data set
-	+ Retrieve a data set
-	- Data set not found
-	- Purgue old data
-- Portal example
+- [ ] (Unsecure) temporary data storage
+	+ [x] Add a data set
+	+ [x] Retrieve a data set
+	+ [x] Data set not found
+	- [ ] Purgue old data
+- [ ] Peer descriptors
+	- [ ] Get by peer id
+
+- [ ] Portal example
 
 
 ## Phase 4: communication
 
-- Use package 
-- Propagate api side exception
-- Handle network error
-- Return redirection url
+- [ ] Use package 
+- [ ] Propagate api side exception
+- [ ] Handle network error
+- [ ] Return redirection url
 
 
