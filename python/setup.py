@@ -17,9 +17,10 @@ setup(
 	scripts=[
 		],
 	install_requires=[
-        'pycrypto',
-        'yamlns>=0.3', # earlier are not Py2 compatible
+		'pycrypto',
+		'yamlns>=0.3', # earlier are not Py2 compatible
 		'requests',
+		'flask',
 	],
 	include_package_data = True,
 	test_suite = 'intercoop',
