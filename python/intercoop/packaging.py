@@ -3,7 +3,7 @@
 from .crypto import *
 from yamlns import namespace as ns
 
-protocolVersion = '1.0'
+protocolVersion = u'1.0'
 
 class MessageError(Exception):
     def __init__(self, *args, **kwds):
