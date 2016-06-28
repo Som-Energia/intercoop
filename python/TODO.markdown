@@ -20,37 +20,51 @@
 - [x] Error handling: payload does not decode as valid yaml/unicode
 - [x] Error handling: package has not the required fields
 - [x] Error handling: payload has not the required fields
-- [ ] Protect against unsafe yamls (limit yaml parser features)
 
-## Phase 3: peer information
+## Phase 3: dummy information sources
 
-
-- [ ] Unsecure temporary data storage
+- [x] Unsecure temporary data storage
 	+ [x] Add a data set
 	+ [x] Retrieve a data set
 	+ [x] Data set not found
-	- [ ] Purgue old data
 
-- [ ] Keyring
-	- [ ] Given a peer id return the public key
-	- [ ] Raise an error if no key available
-	- [ ] Handle error in the case of bad key format
+- [x] Keyring
+	- [x] Dummy keyring
 
-- [ ] Portal example
-	- [ ] Solve mockup injection in flask for testing
-	- [ ] Implement success case
-	- [ ] Consider different error cases
+## Phase 4: API example
+
+- [x] API example
+	- [x] Solve mockup injection in flask for testing
+	- [x] Implement success case on register data
+	- [x] Consider different error cases
+	- [x] Implement getter
+
+## Phase 5: Portal example
+
+- [ ] Encapsulate api calling and error handling
 
 - [ ] Peer descriptors
 	- [ ] Get by peer id
 	- [ ] Get translated string
 
+- [ ] Portal example
+	- [ ] Use package 
+	- [ ] Propagate api side exception
+	- [ ] Handle network error
+	- [ ] Return redirection url
 
-## Phase 4: client (portal) side
+## TODO Remainders
 
-- [ ] Use package 
-- [ ] Propagate api side exception
-- [ ] Handle network error
-- [ ] Return redirection url
+- [ ] unsecuredatastorage: Purgue old data
+- [ ] packaging: Protect against unsafe yamls (limit yaml parser features)
+- [ ] packaging: Embed data in errors so that they can be restored in client
+- [ ] api: Return uri instead of (or besides) the uuid
+- [ ] Proper keyring (either build one or use peer descriptors
+	- [ ] Given a peer id return the public key
+	- [ ] Raise an error if no key available
+	- [ ] Handle error in the case of bad key format
+
+
+
 
 
