@@ -118,6 +118,30 @@ country: ES
             ))
         self.assertEqual(r.status_code, 400)
 
+    def test__peermember_get(self):
+        values = ns.loads(self.yaml)
+        uuid = self.storage.store(values)
+
+        data = ns(uuid=uuid)
+
+        r = self.client.get('/peermember/{}'.format(uuid))
+
+        self.assertEqual(ns.loads(r.data), values)
+        self.assertEqual(r.status_code, 200)
+
+    def test__peermember_get__notFound(self):
+        uuid = '01020304-0506-0708-090a-0b0c0d0e0f10'
+        data = ns(uuid=uuid)
+
+        r = self.client.get('/peermember/{}'.format(uuid))
+
+        self.assertEqual(ns.loads(r.data), ns(
+            error = 'NoSuchUuid',
+            message = "No personal data available for uuid "
+                "'01020304-0506-0708-090a-0b0c0d0e0f10'",
+            ))
+        self.assertEqual(r.status_code, 404)
+
 
 
 # vim: ts=4 sw=4 et

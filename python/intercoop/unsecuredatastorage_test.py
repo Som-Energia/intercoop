@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 from . import unsecuredatastorage as datastorage
+from . import packaging
 import unittest
 import os
 import shutil
@@ -57,6 +58,15 @@ class UnsecureDataStorage_Test(unittest.TestCase):
         token = s.store(dato1='valor1')
         stored = s.retrieve(token)
         self.assertEqual(stored.dato1, 'valor1')
+
+    def test_retrieve_nonExisting(self):
+        s = datastorage.DataStorage(self.datadir)
+        token = '01020304-0506-0708-090a-0b0c0d0e0f10'
+        with self.assertRaises(packaging.NoSuchUuid) as ctx:
+            s.retrieve(token)
+        self.assertEqual(str(ctx.exception),
+            "No personal data available for uuid "
+            "'01020304-0506-0708-090a-0b0c0d0e0f10'")
 
     def test_store_usingNs(self):
         s = datastorage.DataStorage(self.datadir)

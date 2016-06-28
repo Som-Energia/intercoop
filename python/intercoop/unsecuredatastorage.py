@@ -3,6 +3,7 @@
 from yamlns import namespace as ns
 import os
 from . import crypto
+from . import packaging
 
 class DataStorage(object):
     """
@@ -39,7 +40,10 @@ class DataStorage(object):
 
     def retrieve(self, token):
         filename = self._tokenfile(token)
-        return ns.load(filename)
+        try:
+            return ns.load(filename)
+        except IOError:
+            raise packaging.NoSuchUuid(token)
 
 
 # vim: ts=4 sw=4 et

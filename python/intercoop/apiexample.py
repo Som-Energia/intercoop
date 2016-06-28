@@ -4,6 +4,7 @@
 from flask import (
 	make_response,
 	request,
+    Response
 	)
 
 from . import packaging
@@ -12,28 +13,36 @@ from yamlns import namespace as ns
 from functools import wraps
 
 
-def yaml_response(f):
-    def handle(e, status_code):
-        response = make_response(ns(
-            error=type(e).__name__,
-            message=str(e),
-            ).dump())
-        response.mimetype='application/yaml'
-        response.status_code = status_code
-        return response
+def handle(e, status_code):
+    response = make_response(ns(
+        error=type(e).__name__,
+        message=str(e),
+        ).dump())
+    response.mimetype='application/yaml'
+    response.status_code = status_code
+    return response
         
 
+def yaml_response(f):
     @wraps(f)
     def wrapper(*args, **kwd):
         try:
             result = f(*args, **kwd)
-        except (
-                packaging.BadPeer,
-                packaging.BadSignature,
-                ) as e:
+        except packaging.BadPeer as e:
             return handle(e, 403) # Unauthorized
+
+        except packaging.BadSignature as e:
+            return handle(e, 403) # Unauthorized
+
+        except packaging.NoSuchUuid as e:
+            return handle(e, 404) # Not found
+
         except packaging.MessageError as e:
             return handle(e, 400) # Bad request
+
+        if type(result) is Response:
+            return result
+
         response = make_response(ns(result).dump())
         response.mimetype='application/yaml'
         return response
@@ -69,6 +78,12 @@ class IntercoopApi(Perfume):
         return ns(
             uuid=uuid,
             )
+
+    @route('/peermember/<uuid>', methods=['GET'])
+    @yaml_response
+    def peermember_get(self, uuid):
+        values = self.storage.retrieve(uuid)
+        return values
 
 if __name__ == '__main__':
     IntercoopApi().run()

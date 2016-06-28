@@ -10,6 +10,9 @@ class MessageError(Exception):
         super(MessageError,self).__init__(
             self.__doc__.format(*args, **kwds))
 
+class NoSuchUuid(MessageError):
+    "No personal data available for uuid '{}'"
+
 class MissingField(MessageError):
     "Required field '{}' missing on the payload"
 
