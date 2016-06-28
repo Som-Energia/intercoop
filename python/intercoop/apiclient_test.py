@@ -22,10 +22,13 @@ country: ES
         self.keyfile = 'testkey.pem'
         self.key = crypto.loadKey(self.keyfile)
         self.personalData = ns.loads(self.yaml)
-        self.apiurl="https://api.somacme.coop/intercoop"
+        self.apiurl = "https://api.somacme.coop/intercoop"
+        self.continuationUrl = 'https://somacme.coop/contract?token={}'
+        self.uuid = '01020304-0506-0708-090a-0b0c0d0e0f10'
 
 
     def test_getProtocolVersion(self):
+
         continuationUrl = "https://somacme.coop/contract?01020304-0506-0708-090a-0b0c0d0e0f10"
         client = apiclient.ApiClient(
             apiurl=self.apiurl,
@@ -37,7 +40,7 @@ country: ES
                 service='contract', 
                 personalData=self.personalData,
                 )
-        self.assertEqual(url,continuationUrl)
+        self.assertEqual(url,self.continuationUrl.format(self.uuid))
                 
 
 

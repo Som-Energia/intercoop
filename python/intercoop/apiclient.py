@@ -8,7 +8,7 @@ class ApiClient(object):
         pass
 
     def activateService(self, service, personalData):
-        return "https://somacme.coop/contract?01020304-0506-0708-090a-0b0c0d0e0f10"
+        return "https://somacme.coop/contract?token=01020304-0506-0708-090a-0b0c0d0e0f10"
 
 
 # vim: ts=4 sw=4 et
