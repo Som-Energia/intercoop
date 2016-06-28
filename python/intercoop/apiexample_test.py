@@ -104,4 +104,20 @@ country: ES
             ))
         self.assertEqual(r.status_code, 403)
 
+    def test__peermember_post__missingField(self):
+        g = packaging.Generator(self.key)
+        data = ns.loads(self.yaml)
+        del data.originpeer
+        package = g.produce(data)
+
+        r = self.client.post('/peermember', data=package)
+
+        self.assertEqual(ns.loads(r.data), ns(
+            error = 'MissingField',
+            message = "Required field 'originpeer' missing on the payload",
+            ))
+        self.assertEqual(r.status_code, 400)
+
+
+
 # vim: ts=4 sw=4 et
