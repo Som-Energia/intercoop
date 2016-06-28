@@ -23,25 +23,36 @@ country: ES
         self.key = crypto.loadKey(self.keyfile)
         self.personalData = ns.loads(self.yaml)
         self.apiurl = "https://api.somacme.coop/intercoop"
-        self.continuationUrl = 'https://somacme.coop/contract?token={}'
         self.uuid = '01020304-0506-0708-090a-0b0c0d0e0f10'
+        self.continuationUrl = 'https://somacme.coop/contract?token={}'.format(
+            self.uuid)
 
-
-    def test_getProtocolVersion(self):
-
-        continuationUrl = "https://somacme.coop/contract?01020304-0506-0708-090a-0b0c0d0e0f10"
-        client = apiclient.ApiClient(
+        self.client = apiclient.ApiClient(
             apiurl=self.apiurl,
             key=self.key,
         )
+
+
+    def test_activateService(self):
+
+        apiResponse = ns(
+            continuationUrl = self.continuationUrl
+            ).dump()
+
         with requests_mock.mock() as m:
-            m.get('http://test.com', text='data')
-            url=client.activateService(
+            m.post(
+                self.apiurl+ '/activateService',
+                text = apiResponse,
+                status_code = 200,
+                )
+
+            url=self.client.activateService(
                 service='contract', 
                 personalData=self.personalData,
                 )
-        self.assertEqual(url,self.continuationUrl.format(self.uuid))
-                
+
+        self.assertEqual(url,self.continuationUrl)
+ 
 
 
 

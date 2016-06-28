@@ -1,14 +1,19 @@
 # -*- encoding: utf-8 -*-
 from yamlns import namespace as ns
 import requests
+from . import packaging
 
 class ApiClient(object):
-    
+
     def __init__(self, apiurl, key):
-        pass
+        self.apiurl = apiurl
+        self.key = key
 
     def activateService(self, service, personalData):
-        return "https://somacme.coop/contract?token=01020304-0506-0708-090a-0b0c0d0e0f10"
+        package = packaging.Generator(self.key).produce(personalData)
+        response = requests.post(self.apiurl+'/activateService', data=package)
+        r = ns.loads(response.text)
+        return r.continuationUrl
 
 
 # vim: ts=4 sw=4 et
