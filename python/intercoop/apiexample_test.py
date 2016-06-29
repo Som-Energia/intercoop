@@ -69,7 +69,7 @@ country: ES
         data = ns.loads(self.yaml)
         package = g.produce(data)
 
-        r = self.client.post("/"+self.service+'/activateService', data=package)
+        r = self.client.post('/activateService', data=package)
 
         data = ns.loads(r.data)
         self.assertEqual(r.status_code, 200)
@@ -81,7 +81,7 @@ country: ES
         data.originpeer = 'badpeer'
         package = g.produce(data)
 
-        r = self.client.post("/"+self.service+'/activateService', data=package)
+        r = self.client.post('activateService', data=package)
 
         self.assertEqual(r.status_code, 403)
         self.assertEqual(ns.loads(r.data), ns(
@@ -96,7 +96,7 @@ country: ES
         package.payload = crypto.encode(self.yaml+'\n')
         package = package.dump()
 
-        r = self.client.post("/"+self.service+'/activateService', data=package)
+        r = self.client.post('/activateService', data=package)
 
         self.assertEqual(ns.loads(r.data), ns(
             error = 'BadSignature',
@@ -110,7 +110,7 @@ country: ES
         del data.originpeer
         package = g.produce(data)
 
-        r = self.client.post("/"+self.service+'/activateService', data=package)
+        r = self.client.post('/activateService', data=package)
 
         self.assertEqual(ns.loads(r.data), ns(
             error = 'MissingField',
@@ -124,7 +124,7 @@ country: ES
 
         data = ns(uuid=uuid)
 
-        r = self.client.get("/"+self.service+'/activateService/{}'.format(uuid))
+        r = self.client.get('/activateService/{}'.format(uuid))
 
         self.assertEqual(ns.loads(r.data), values)
         self.assertEqual(r.status_code, 200)
@@ -133,7 +133,7 @@ country: ES
         uuid = '01020304-0506-0708-090a-0b0c0d0e0f10'
         data = ns(uuid=uuid)
 
-        r = self.client.get("/"+self.service+'/activateService/{}'.format(uuid))
+        r = self.client.get('/activateService/{}'.format(uuid))
 
         self.assertEqual(ns.loads(r.data), ns(
             error = 'NoSuchUuid',

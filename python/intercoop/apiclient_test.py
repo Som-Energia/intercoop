@@ -42,7 +42,7 @@ country: ES
 
         with requests_mock.mock() as m:
             m.post(
-                self.apiurl+"/"+self.service+'/activateService',
+                self.apiurl+'/activateService',
                 text = apiResponse,
                 status_code = 200,
                 )

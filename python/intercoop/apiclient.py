@@ -11,7 +11,7 @@ class ApiClient(object):
 
     def activateService(self, service, personalData):
         package = packaging.Generator(self.key).produce(personalData)
-        response = requests.post(self.apiurl+"/"+service+'/activateService', data=package)
+        response = requests.post(self.apiurl+'/activateService', data=package)
         r = ns.loads(response.text)
         return r.continuationUrl
 
