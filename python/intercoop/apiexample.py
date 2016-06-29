@@ -64,9 +64,9 @@ class IntercoopApi(Perfume):
             protocolVersion = packaging.protocolVersion
             )
 
-    @route('/peermember', methods=['POST'])
+    @route('/<service>/activateService', methods=['POST'])
     @yaml_response
-    def peermember_post(self):
+    def activateService_post(self, service):
         """Registers personal data of a member of a source entity to get a given service.
         Return the uuid of the registation, and the url the member
         browser should redirect to fully activate the service.
@@ -79,9 +79,9 @@ class IntercoopApi(Perfume):
             uuid=uuid,
             )
 
-    @route('/peermember/<uuid>', methods=['GET'])
+    @route('/<service>/activateService/<uuid>', methods=['GET'])
     @yaml_response
-    def peermember_get(self, uuid):
+    def activateService_get(self, service, uuid):
         values = self.storage.retrieve(uuid)
         return values
 
