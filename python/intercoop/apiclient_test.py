@@ -23,6 +23,7 @@ country: ES
         self.key = crypto.loadKey(self.keyfile)
         self.personalData = ns.loads(self.yaml)
         self.apiurl = "https://api.somacme.coop/intercoop"
+        self.service = "contract"
         self.uuid = '01020304-0506-0708-090a-0b0c0d0e0f10'
         self.continuationUrl = 'https://somacme.coop/contract?token={}'.format(
             self.uuid)
@@ -41,13 +42,13 @@ country: ES
 
         with requests_mock.mock() as m:
             m.post(
-                self.apiurl+ '/activateService',
+                self.apiurl+"/"+self.service+'/activateService',
                 text = apiResponse,
                 status_code = 200,
                 )
 
             url=self.client.activateService(
-                service='contract', 
+                service=self.service,
                 personalData=self.personalData,
                 )
 
