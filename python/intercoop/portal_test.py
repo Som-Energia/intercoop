@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 import unittest
 from . import portal
 from . import peerdatastorage
@@ -19,6 +20,9 @@ class Portal_Test(unittest.TestCase):
     peerVersion: 1
     peerid: somacme
     name: Som Acme, SCCL
+    services:
+      contract:
+        es: Contrata explosivos éticos
     """
 
     sombogusyaml=u"""\
@@ -26,14 +30,18 @@ class Portal_Test(unittest.TestCase):
     peerVersion: 1
     peerid: sombogus
     name: Som Bogus, SCCL
+    services:
+      contract:
+        es: Contrata 
     """
     def setUp(self):
         import os
+        import codecs
         self.cleanUp()
         os.system("mkdir -p "+self.datadir)
-        with open(os.path.join(self.datadir, 'somacme.yaml'),'w') as f:
+        with codecs.open(os.path.join(self.datadir, 'somacme.yaml'),'w','utf-8') as f:
             f.write(self.somacmeyaml)
-        with open(os.path.join(self.datadir, 'sombogus.yaml'),'w') as f:
+        with codecs.open(os.path.join(self.datadir, 'sombogus.yaml'),'w','utf-8') as f:
             f.write(self.sombogusyaml)
         app = portal.Portal("testportal",self.datadir).app
         app.config['TESTING'] = True

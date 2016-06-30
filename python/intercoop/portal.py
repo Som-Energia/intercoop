@@ -14,7 +14,7 @@ from yamlns import namespace as ns
 class Portal(Perfume):
     @route('/', methods=['GET'])
     def index(self):
-        return """<html>
+        response = """<html>
             <head></head>
             <body>Lista de peers
             <ul>
@@ -23,6 +23,7 @@ class Portal(Perfume):
             </body>
             </html>
             """
+        return response
     def __init__(self, name, datadir):
         super(Portal, self).__init__(name)
         self.peerdatastorage = peerdatastorage.PeerDataStorage(datadir)
