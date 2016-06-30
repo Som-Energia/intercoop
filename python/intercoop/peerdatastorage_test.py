@@ -23,7 +23,12 @@ peerid: somacme
 name: Som Acme, SCCL
 """
 
-
+sombogusyaml=u"""\
+intercoopVersion: 1.0
+peerVersion: 1
+peerid: sombogus
+name: Som Bogus, SCCL
+"""
 class PeerDataStorage_Test(unittest.TestCase):
     
     def setUp(self):
@@ -33,7 +38,8 @@ class PeerDataStorage_Test(unittest.TestCase):
         os.system("mkdir -p "+self.peerdatadir)
         with open(os.path.join(self.peerdatadir, 'somacme.yaml'),'w') as f:
             f.write(somacmeyaml)
-
+        with open(os.path.join(self.peerdatadir, 'sombogus.yaml'),'w') as f:
+            f.write(sombogusyaml)
     def tearDown(self):
         self.cleanUp()
 
@@ -42,7 +48,6 @@ class PeerDataStorage_Test(unittest.TestCase):
         try:
             shutil.rmtree(self.peerdatadir)
         except: pass
-
 
     def test_get(self):
         s = peerdatastorage.PeerDataStorage(self.peerdatadir)
@@ -57,5 +62,13 @@ class PeerDataStorage_Test(unittest.TestCase):
         self.assertEqual(str(ctx.exception),
             "Not such peer 'badpeer'")
  
+    def test_iterator(self):
+        s = peerdatastorage.PeerDataStorage(self.peerdatadir)
+        peerDataList = list(e for e in s)
+        self.assertItemsEqual(peerDataList,[
+                ns.loads(somacmeyaml),
+                ns.loads(sombogusyaml),
+            ]
+        )
 
 # vim: ts=4 sw=4 et

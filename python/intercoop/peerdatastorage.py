@@ -14,7 +14,14 @@ class PeerDataStorage(object):
             return ns.load(filename)
         except IOError:
             raise Exception("Not such peer '{}'".format(peername))
-        
 
+    def __iter__(self):
+        return (
+            ns.load(os.path.join(self.datadir, i))
+            for i in os.listdir(self.datadir) 
+            if i.endswith(".yaml")
+        )
+            
+                     
 
 # vim: ts=4 sw=4 et
