@@ -2,6 +2,7 @@
 import unittest
 from . import peerdatastorage
 from yamlns import namespace as ns
+import os
 
 """
 # TODO's
@@ -10,7 +11,7 @@ from yamlns import namespace as ns
 - [x] Get cuando funciona
 - [x] Get cuando no está
 - [ ] Constructor error when no such folder
-- [ ] Proteger contra peerid's maliciosos (../../) limitando a letras numeros y signos de separacion validos
+- [x] Proteger contra peerid's maliciosos (../../) limitando a letras numeros y signos de separacion validos
 - [ ] Own exception types (not just plain Exception)
 - [x] Iterador
 - [ ] Accesores mas semanticos
@@ -29,17 +30,19 @@ peerVersion: 1
 peerid: sombogus
 name: Som Bogus, SCCL
 """
+
 class PeerDataStorage_Test(unittest.TestCase):
     
     def setUp(self):
         import os
         self.peerdatadir = "peerdata"
         self.cleanUp()
-        os.system("mkdir -p "+self.peerdatadir)
-        with open(os.path.join(self.peerdatadir, 'somacme.yaml'),'w') as f:
-            f.write(somacmeyaml)
-        with open(os.path.join(self.peerdatadir, 'sombogus.yaml'),'w') as f:
-            f.write(sombogusyaml)
+
+        os.makedirs(self.peerdatadir)
+        self.write('somacme.yaml', somacmeyaml)
+        self.write('sombogus.yaml', sombogusyaml)
+        
+
     def tearDown(self):
         self.cleanUp()
 
@@ -49,12 +52,19 @@ class PeerDataStorage_Test(unittest.TestCase):
             shutil.rmtree(self.peerdatadir)
         except: pass
 
+    def write(self, filename, content):
+        with open(os.path.join(self.peerdatadir, filename),'w') as f:
+            f.write(content)
+
+
     def test_get(self):
+        self.write('somacme.yaml', somacmeyaml)
+
         s = peerdatastorage.PeerDataStorage(self.peerdatadir)
         peerData = s.get("somacme")
         self.assertEqual(peerData,ns.loads(somacmeyaml))
 
-    def test_badpeer(self):
+    def test_get_badpeer(self):
         s = peerdatastorage.PeerDataStorage(self.peerdatadir)
         with self.assertRaises(Exception) as ctx:
             peerData = s.get("badpeer")
@@ -62,17 +72,24 @@ class PeerDataStorage_Test(unittest.TestCase):
         self.assertEqual(str(ctx.exception),
             "Not such peer 'badpeer'")
  
-    def test_iterator(self):
+    def test_get_invalidpeer(self):
         s = peerdatastorage.PeerDataStorage(self.peerdatadir)
-        peerDataList = list(e for e in s)
+        with self.assertRaises(Exception) as ctx:
+            peerData = s.get("../../etc/passwd")
+
+        self.assertEqual(str(ctx.exception),
+            "Invalid peer '../../etc/passwd'")
+ 
+    def test_iter(self):
+        s = peerdatastorage.PeerDataStorage(self.peerdatadir)
         try:
-            self.assertCountEqual(peerDataList,[
+            self.assertCountEqual(list(s),[
                     ns.loads(somacmeyaml),
                     ns.loads(sombogusyaml),
                 ]
             )
         except AttributeError:
-            self.assertItemsEqual(peerDataList,[
+            self.assertItemsEqual(list(s),[
                     ns.loads(somacmeyaml),
                     ns.loads(sombogusyaml),
                 ]

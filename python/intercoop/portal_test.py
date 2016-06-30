@@ -1,11 +1,13 @@
 # -*- encoding: utf-8 -*-
 
 import unittest
+import os
+import shutil
 from . import portal
 from . import peerdatastorage
+from yamlns import namespace as ns
 
-class Portal_Test(unittest.TestCase):
-    index_html=(u"""\
+header= u"""\
 <html>
 <head>
 <meta encoding='utf-8' />
@@ -14,9 +16,30 @@ class Portal_Test(unittest.TestCase):
 <body>
 <h1>Intercooperación</h1>
 <ul>
+"""
+
+footer = u"""\
+</ul>
+</body>
+</html>
+"""
+
+descripcionAcme = u"""\
+<div class='service'>
+<a href='activateservice/somacme/explosives'>
+<div class='service_header'>Comprar explosivos</div>
+<div class='service_description>Puedes comprar explosivos éticos de la mejor calidad.
+</div>
+</a>
+</div>
+"""
+
+
+class Portal_Test(unittest.TestCase):
+    descriptions=(u"""\
 <li>Som Acme, SCCL
 <ul>
-<li>contract</li>
+<li>explosives</li>
 </ul>
 </li>
 <li>Som Bogus, SCCL
@@ -24,12 +47,8 @@ class Portal_Test(unittest.TestCase):
 <li>contract</li>
 </ul>
 </li>
-</ul>
-</body>
-</html>
 """
     )
-    datadir="peerdata"
 
     somacmeyaml=u"""\
     intercoopVersion: 1.0
@@ -37,8 +56,12 @@ class Portal_Test(unittest.TestCase):
     peerid: somacme
     name: Som Acme, SCCL
     services:
-      contract:
-        es: Contrata explosivos éticos
+      explosives:
+        name:
+            es: Comprar explosivos
+        description:
+            es: >
+                Puedes comprar explosivos éticos de la mejor calidad.
     """
 
     sombogusyaml=u"""\
@@ -51,18 +74,16 @@ class Portal_Test(unittest.TestCase):
         es: Contrata 
     """
 
-    def writeFile(self, filename, content):
-        import os
-        with open(os.path.join(self.datadir,filename),'wb') as f:
+    def write(self, filename, content):
+        fullname = os.path.join(self.datadir,filename)
+        with open(fullname, 'wb') as f:
             f.write(content.encode('utf-8'))
         
     def setUp(self):
-        import os
-        self.cleanUp()
         self.maxDiff=None
+        self.datadir="peerdata"
+        self.cleanUp()
         os.system("mkdir -p "+self.datadir)
-        self.writeFile('somacme.yaml',self.somacmeyaml)
-        self.writeFile('sombogus.yaml',self.sombogusyaml)
 
         app = portal.Portal("Example Portal", peerdata=self.datadir).app
         app.config['TESTING'] = True
@@ -72,16 +93,31 @@ class Portal_Test(unittest.TestCase):
         self.cleanUp()
 
     def cleanUp(self):
-        import shutil
         try:
             shutil.rmtree(self.datadir)
         except: pass    
 
-    def test_index(self):
+    def test_index_whenEmpty(self):
         self.assertMultiLineEqual(
-            self.index_html,
+            header+footer,
             self.client.get("/").data.decode('utf-8')
             )
+
+    def test_index_many(self):
+        self.write('somacme.yaml',self.somacmeyaml)
+        self.write('sombogus.yaml',self.sombogusyaml)
+        self.assertMultiLineEqual(
+            header+self.descriptions+footer,
+            self.client.get("/").data.decode('utf-8')
+            )
+
+    def test_serviceDescription(self):
+        peer = ns.loads(self.somacmeyaml.encode('utf-8'))
+        p = portal.Portal("Example Portal", peerdata=self.datadir)
+        self.assertMultiLineEqual(
+            p.serviceDescription(peer, 'explosives'),
+            descripcionAcme)
+
 
 
 # vim: ts=4 sw=4 et

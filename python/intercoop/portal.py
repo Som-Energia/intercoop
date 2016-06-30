@@ -35,6 +35,21 @@ class Portal(Perfume):
         self.peerdatastorage = peerdatastorage.PeerDataStorage(peerdata)
         self.name = name
 
+    def serviceDescription(self, peer, service):
+        return u"""\
+<div class='service'>
+<a href='activateservice/{peer.peerid}/{serviceid}'>
+<div class='service_header'>{service.name.es}</div>
+<div class='service_description>{service.description.es}</div>
+</a>
+</div>
+""".format(
+    peer = peer,
+    serviceid = service,
+    service = peer.services[service],
+    language='es',
+    )
+
 
     @route('/', methods=['GET'])
     def index(self):
