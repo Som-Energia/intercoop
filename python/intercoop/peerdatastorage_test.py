@@ -8,8 +8,10 @@ from yamlns import namespace as ns
 
 - [x] Hacer el setUp
 - [x] Get cuando funciona
-- [ ] Get cuando no está
+- [x] Get cuando no está
+- [ ] Constructor error when no such folder
 - [ ] Proteger contra peerid's maliciosos (../../) limitando a letras numeros y signos de separacion validos
+- [ ] Own exception types (not just plain Exception)
 - [ ] Iterador
 - [ ] Accesores mas semanticos
 """
@@ -45,6 +47,15 @@ class PeerDataStorage_Test(unittest.TestCase):
     def test_get(self):
         s = peerdatastorage.PeerDataStorage(self.peerdatadir)
         peerData = s.get("somacme")
-        self.assertEqual(peerData,ns.loads(somacmeyaml)) # TODO: proper value
+        self.assertEqual(peerData,ns.loads(somacmeyaml))
+
+    def test_badpeer(self):
+        s = peerdatastorage.PeerDataStorage(self.peerdatadir)
+        with self.assertRaises(Exception) as ctx:
+            peerData = s.get("badpeer")
+
+        self.assertEqual(str(ctx.exception),
+            "Not such peer 'badpeer'")
+ 
 
 # vim: ts=4 sw=4 et
