@@ -11,7 +11,18 @@ from . import peerdatastorage
 from .perfume import Perfume, route
 from yamlns import namespace as ns
 
-template = """\
+"""
+# TODO:
+
+- Translations
+- No service description
+- No service name
+- No such service
+"""
+
+
+
+template = u"""\
 <html>
 <head>
 <meta encoding='utf-8' />
@@ -32,7 +43,7 @@ class Portal(Perfume):
 
     def __init__(self, name, peerdata):
         super(Portal, self).__init__(name)
-        self.peerdatastorage = peerdatastorage.PeerDataStorage(peerdata)
+        self.peers = peerdatastorage.PeerDataStorage(peerdata)
         self.name = name
 
     def serviceDescription(self, peer, service):
@@ -40,7 +51,7 @@ class Portal(Perfume):
 <div class='service'>
 <a href='activateservice/{peer.peerid}/{serviceid}'>
 <div class='service_header'>{service.name.es}</div>
-<div class='service_description>{service.description.es}</div>
+<div class='service_description'>{service.description.es}</div>
 </a>
 </div>
 """.format(
@@ -50,21 +61,28 @@ class Portal(Perfume):
     language='es',
     )
 
+    def peerDescription(self, peer):
+        return u"""\
+<div class='peer'>
+<div class='peerlogo'><img src='{peer.logo}' /></div>
+<div class='peerheader'><a href='{peer.url.es}'>{peer.name}</a></div>
+<div class='peerdescription'>{peer.description.es}</div>
+<div class='services'>
+""".format(peer=peer) + "".join(
+    self.serviceDescription(peer, service)
+    for service in peer.services
+)+u"""\
+</div>
+</div>
+"""
 
     @route('/', methods=['GET'])
     def index(self):
         response = template.format(
             self.name,
             "".join(
-                "<li>%s</li>\n" % (
-                    p.name + "\n<ul>\n{}</ul>\n".format(
-                        "</br>".join(
-                            "<li>%s</li>\n" % s 
-                            for s in p.services
-                            )
-                        )
-                     ) if "services" in p else ""
-                for p in self.peerdatastorage
+                self.peerDescription(peer)
+                for peer in self.peers
                 )
             )
         return response

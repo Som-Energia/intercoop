@@ -7,6 +7,46 @@ from . import portal
 from . import peerdatastorage
 from yamlns import namespace as ns
 
+somacmeyaml=u"""\
+intercoopVersion: 1.0
+peerVersion: 1
+peerid: somacme
+name: Som Acme, SCCL
+logo: http://www.linpictures.com/images/indevimgs/acme.jpg
+url:
+  es: http://somacme.coop/es
+description:
+  es: >
+    La cooperativa para atrapar correcaminos
+services:
+  explosives:
+    name:
+      es: Comprar explosivos
+    description:
+      es: >
+        Puedes comprar explosivos éticos de la mejor calidad.
+"""
+
+sombogusyaml=u"""\
+intercoopVersion: 1.0
+peerVersion: 1
+peerid: sombogus
+name: Som Bogus, SCCL
+logo: http://www.linpictures.com/images/indevimgs/acme.jpg
+url:
+  es: https://es.sombogus.coop
+description:
+    es: >
+      Productos inútiles pero muy éticos
+services:
+  contract:
+    name:
+        es: Contrata 
+    description:
+        es: >
+          Puedes comprar explosivos éticos de la mejor calidad.
+"""
+
 header= u"""\
 <html>
 <head>
@@ -24,13 +64,46 @@ footer = u"""\
 </html>
 """
 
-descripcionAcme = u"""\
+acmePeerHeader = """\
+<div class='peer'>
+<div class='peerlogo'><img src='http://www.linpictures.com/images/indevimgs/acme.jpg' /></div>
+<div class='peerheader'><a href='http://somacme.coop/es'>Som Acme, SCCL</a></div>
+<div class='peerdescription'>La cooperativa para atrapar correcaminos
+</div>
+<div class='services'>
+"""
+
+acmeService = u"""\
 <div class='service'>
 <a href='activateservice/somacme/explosives'>
 <div class='service_header'>Comprar explosivos</div>
-<div class='service_description>Puedes comprar explosivos éticos de la mejor calidad.
+<div class='service_description'>Puedes comprar explosivos éticos de la mejor calidad.
 </div>
 </a>
+</div>
+"""
+
+bogusPeerHeader = u"""\
+<div class='peer'>
+<div class='peerlogo'><img src='http://www.linpictures.com/images/indevimgs/acme.jpg' /></div>
+<div class='peerheader'><a href='https://es.sombogus.coop'>Som Bogus, SCCL</a></div>
+<div class='peerdescription'>Productos inútiles pero muy éticos
+</div>
+<div class='services'>
+"""
+
+bogusService = u"""\
+<div class='service'>
+<a href='activateservice/sombogus/contract'>
+<div class='service_header'>Contrata</div>
+<div class='service_description'>Puedes comprar explosivos éticos de la mejor calidad.
+</div>
+</a>
+</div>
+"""
+
+peerFooter = u"""\
+</div>
 </div>
 """
 
@@ -49,30 +122,6 @@ class Portal_Test(unittest.TestCase):
 </li>
 """
     )
-
-    somacmeyaml=u"""\
-    intercoopVersion: 1.0
-    peerVersion: 1
-    peerid: somacme
-    name: Som Acme, SCCL
-    services:
-      explosives:
-        name:
-            es: Comprar explosivos
-        description:
-            es: >
-                Puedes comprar explosivos éticos de la mejor calidad.
-    """
-
-    sombogusyaml=u"""\
-    intercoopVersion: 1.0
-    peerVersion: 1
-    peerid: sombogus
-    name: Som Bogus, SCCL
-    services:
-      contract:
-        es: Contrata 
-    """
 
     def write(self, filename, content):
         fullname = os.path.join(self.datadir,filename)
@@ -103,21 +152,45 @@ class Portal_Test(unittest.TestCase):
             self.client.get("/").data.decode('utf-8')
             )
 
-    def test_index_many(self):
-        self.write('somacme.yaml',self.somacmeyaml)
-        self.write('sombogus.yaml',self.sombogusyaml)
-        self.assertMultiLineEqual(
-            header+self.descriptions+footer,
-            self.client.get("/").data.decode('utf-8')
-            )
-
     def test_serviceDescription(self):
-        peer = ns.loads(self.somacmeyaml.encode('utf-8'))
+        peer = ns.loads(somacmeyaml.encode('utf-8'))
         p = portal.Portal("Example Portal", peerdata=self.datadir)
         self.assertMultiLineEqual(
             p.serviceDescription(peer, 'explosives'),
-            descripcionAcme)
+            acmeService)
 
+    def test_peerDescription_withSingleService(self):
+        peer = ns.loads(somacmeyaml.encode('utf-8'))
+        p = portal.Portal("Example Portal", peerdata=self.datadir)
+        self.assertMultiLineEqual(
+            p.peerDescription(peer),
+            acmePeerHeader + acmeService + peerFooter)
+
+    def test_index_onePeer(self):
+        self.write('somacme.yaml',somacmeyaml)
+        self.assertMultiLineEqual(
+            header+
+            acmePeerHeader+
+            acmeService+
+            peerFooter+
+            footer,
+            self.client.get("/").data.decode('utf-8')
+            )
+
+    def test_index_many(self):
+        self.write('somacme.yaml',somacmeyaml)
+        self.write('sombogus.yaml',sombogusyaml)
+        self.assertMultiLineEqual(
+            header+
+            acmePeerHeader+
+            acmeService+
+            peerFooter+
+            bogusPeerHeader+
+            bogusService+
+            peerFooter+
+            footer,
+            self.client.get("/").data.decode('utf-8')
+            )
 
 
 # vim: ts=4 sw=4 et
