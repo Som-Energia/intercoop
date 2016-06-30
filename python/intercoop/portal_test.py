@@ -42,16 +42,18 @@ class Portal_Test(unittest.TestCase):
       contract:
         es: Contrata 
     """
+    def writeFile(self, filename, content):
+        import os
+        with open(os.path.join(self.datadir,filename),'wb') as f:
+            f.write(content.encode('utf-8'))
+        
     def setUp(self):
         import os
-        import codecs
         self.cleanUp()
         self.maxDiff=None
         os.system("mkdir -p "+self.datadir)
-        with codecs.open(os.path.join(self.datadir, 'somacme.yaml'),'w','utf-8') as f:
-            f.write(self.somacmeyaml)
-        with codecs.open(os.path.join(self.datadir, 'sombogus.yaml'),'w','utf-8') as f:
-            f.write(self.sombogusyaml)
+        self.writeFile('somacme.yaml',self.somacmeyaml)
+        self.writeFile('sombogus.yaml',self.sombogusyaml)
         app = portal.Portal("testportal",self.datadir).app
         app.config['TESTING'] = True
         self.client = app.test_client()
