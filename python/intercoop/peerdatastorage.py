@@ -18,7 +18,7 @@ class PeerDataStorage(object):
     def __iter__(self):
         return (
             ns.load(os.path.join(self.datadir, i))
-            for i in os.listdir(self.datadir) 
+            for i in sorted(os.listdir(self.datadir) )
             if i.endswith(".yaml")
         )
             

@@ -1,25 +1,33 @@
 # -*- encoding: utf-8 -*-
+
 import unittest
 from . import portal
 from . import peerdatastorage
 
 class Portal_Test(unittest.TestCase):
-    index_html=("""<html>
-            <head></head>
-            <body>Lista de peers
-            <ul>
-                <li>Som Acme, SCCL"""
-            """<ul>"""
-            """<li>contract</li>"""
-            """</ul></li>"""
-            """</br><li>Som Bogus, SCCL<ul>"""
-            """<li>contract</li>"""
-            """</ul>"""
-            """</li>
-            </ul>
-            </body>
-            </html>
-            """
+    index_html=(u"""\
+<html>
+<head>
+<meta encoding='utf-8' />
+<title>Example Portal</title>
+</head>
+<body>
+<h1>Intercooperación</h1>
+<ul>
+<li>Som Acme, SCCL
+<ul>
+<li>contract</li>
+</ul>
+</li>
+<li>Som Bogus, SCCL
+<ul>
+<li>contract</li>
+</ul>
+</li>
+</ul>
+</body>
+</html>
+"""
     )
     datadir="peerdata"
 
@@ -42,6 +50,7 @@ class Portal_Test(unittest.TestCase):
       contract:
         es: Contrata 
     """
+
     def writeFile(self, filename, content):
         import os
         with open(os.path.join(self.datadir,filename),'wb') as f:
@@ -54,7 +63,8 @@ class Portal_Test(unittest.TestCase):
         os.system("mkdir -p "+self.datadir)
         self.writeFile('somacme.yaml',self.somacmeyaml)
         self.writeFile('sombogus.yaml',self.sombogusyaml)
-        app = portal.Portal("testportal",self.datadir).app
+
+        app = portal.Portal("Example Portal", peerdata=self.datadir).app
         app.config['TESTING'] = True
         self.client = app.test_client()
 
@@ -66,5 +76,12 @@ class Portal_Test(unittest.TestCase):
         try:
             shutil.rmtree(self.datadir)
         except: pass    
+
     def test_index(self):
-        self.assertMultiLineEqual(self.index_html,self.client.get("/").data.decode('utf-8'))
+        self.assertMultiLineEqual(
+            self.index_html,
+            self.client.get("/").data.decode('utf-8')
+            )
+
+
+# vim: ts=4 sw=4 et
