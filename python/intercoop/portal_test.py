@@ -52,6 +52,7 @@ header= u"""\
 <head>
 <meta encoding='utf-8' />
 <title>Example Portal</title>
+<link rel="stylesheet" type="text/css" href="intercoop.css">
 </head>
 <body>
 <h1>Intercooperación</h1>
@@ -75,11 +76,10 @@ acmePeerHeader = """\
 
 acmeService = u"""\
 <div class='service'>
-<a href='activateservice/somacme/explosives'>
 <div class='service_header'>Comprar explosivos</div>
 <div class='service_description'>Puedes comprar explosivos éticos de la mejor calidad.
 </div>
-</a>
+<a class='service_activation_bt' href='activateservice/somacme/explosives'>Activa</a>
 </div>
 """
 
@@ -94,11 +94,10 @@ bogusPeerHeader = u"""\
 
 bogusService = u"""\
 <div class='service'>
-<a href='activateservice/sombogus/contract'>
 <div class='service_header'>Contrata</div>
 <div class='service_description'>Puedes comprar explosivos éticos de la mejor calidad.
 </div>
-</a>
+<a class='service_activation_bt' href='activateservice/sombogus/contract'>Activa</a>
 </div>
 """
 

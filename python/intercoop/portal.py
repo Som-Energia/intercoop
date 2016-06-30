@@ -28,6 +28,7 @@ template = u"""\
 <head>
 <meta encoding='utf-8' />
 <title>{}</title>
+<link rel="stylesheet" type="text/css" href="intercoop.css">
 </head>
 <body>
 <h1>Intercooperación</h1>
@@ -35,6 +36,66 @@ template = u"""\
 {}</ul>
 </body>
 </html>
+"""
+
+css = """\
+.peer {
+    clear: right;
+    margin: 3ex 1ex;
+    font-family: sans;
+    width: 70ex;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.peer .peerlogo {
+    float: right;
+}
+
+.peerdescription {
+    padding: 3ex;
+}
+
+.peerheader {
+    font-weight: bold;
+}
+
+.service {
+    clear: right;
+    border: 2pt solid #ddd;
+    background: #eee;
+}
+
+.service_header {
+    font-weight: bold;
+    display: block;
+    border-bottom: 1pt solid #ddd;
+}
+
+
+.service_activation_bt {
+    display: block;
+    position: relative;
+    width: 20ex;
+    text-decoration: none;
+    padding: 1ex;
+    background: #586;
+    color: white;
+    font-weight: bold;
+    margin: 2ex 2ex 2ex 45ex;
+    text-shadow: 1pt 1pt 1pt black;
+    border: 1pt solid #aaa;
+    border-radius: 1ex;
+    text-align: center;
+}
+
+.service_activation_bt:active {
+    border: 1pt solid #eee;
+}
+.service_activation_bt:hover {
+    border: 1pt solid #333;
+    background: #687;
+}
 """
 
 
@@ -50,10 +111,9 @@ class Portal(Perfume):
     def serviceDescription(self, peer, service):
         return u"""\
 <div class='service'>
-<a href='activateservice/{peer.peerid}/{serviceid}'>
 <div class='service_header'>{service.name.es}</div>
 <div class='service_description'>{service.description.es}</div>
-</a>
+<a class='service_activation_bt' href='activateservice/{peer.peerid}/{serviceid}'>Activa</a>
 </div>
 """.format(
     peer = peer,
@@ -76,6 +136,10 @@ class Portal(Perfume):
 </div>
 </div>
 """
+
+    @route('/intercoop.css', methods=['GET'])
+    def css(self):
+        return css
 
     @route('/', methods=['GET'])
     def index(self):
