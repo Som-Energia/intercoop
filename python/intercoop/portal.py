@@ -8,6 +8,7 @@ from flask import (
 	)
 
 from . import apiclient
+from . import peerdatastorage
 from .perfume import Perfume, route
 from yamlns import namespace as ns
 class Portal(Perfume):
@@ -15,9 +16,14 @@ class Portal(Perfume):
     def index(self):
         return """<html>
             <head></head>
-            <body>Lista de peers</body>
+            <body>Lista de peers
+            <ul>
+                """+"</br>".join("<li>%s</li>" % p.name for p in self.peerdatastorage)+"""
+            </ul>
+            </body>
             </html>
             """
-    def __init__(self, name):
+    def __init__(self, name, datadir):
         super(Portal, self).__init__(name)
+        self.peerdatastorage = peerdatastorage.PeerDataStorage(datadir)
 
