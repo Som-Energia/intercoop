@@ -44,7 +44,7 @@ services:
         es: Contrata 
     description:
         es: >
-          Puedes comprar explosivos éticos de la mejor calidad.
+          Productos con marcas tipo Panone, Grifons, Pas Natural, Reacciona...
 """
 
 header= u"""\
@@ -95,7 +95,7 @@ bogusPeerHeader = u"""\
 bogusService = u"""\
 <div class='service'>
 <div class='service_header'>Contrata</div>
-<div class='service_description'>Puedes comprar explosivos éticos de la mejor calidad.
+<div class='service_description'>Productos con marcas tipo Panone, Grifons, Pas Natural, Reacciona...
 </div>
 <a class='service_activation_bt' href='activateservice/sombogus/contract'>Activa</a>
 </div>
