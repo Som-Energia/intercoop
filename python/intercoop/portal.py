@@ -14,10 +14,11 @@ from yamlns import namespace as ns
 """
 # TODO:
 
-- Translations
+- Solve translations
 - No service description
 - No service name
 - No such service
+- Include peer.info optionally
 """
 
 
