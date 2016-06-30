@@ -3,7 +3,7 @@
 import unittest
 import os
 import shutil
-from . import portal
+from . import portalexample
 from . import peerdatastorage
 from yamlns import namespace as ns
 
@@ -133,7 +133,7 @@ class Portal_Test(unittest.TestCase):
         self.cleanUp()
         os.system("mkdir -p "+self.datadir)
 
-        app = portal.Portal("Example Portal", peerdata=self.datadir).app
+        app = portalexample.Portal("Example Portal", peerdata=self.datadir).app
         app.config['TESTING'] = True
         self.client = app.test_client()
 
@@ -153,14 +153,14 @@ class Portal_Test(unittest.TestCase):
 
     def test_serviceDescription(self):
         peer = ns.loads(somacmeyaml.encode('utf-8'))
-        p = portal.Portal("Example Portal", peerdata=self.datadir)
+        p = portalexample.Portal("Example Portal", peerdata=self.datadir)
         self.assertMultiLineEqual(
             p.serviceDescription(peer, 'explosives'),
             acmeService)
 
     def test_peerDescription_withSingleService(self):
         peer = ns.loads(somacmeyaml.encode('utf-8'))
-        p = portal.Portal("Example Portal", peerdata=self.datadir)
+        p = portalexample.Portal("Example Portal", peerdata=self.datadir)
         self.assertMultiLineEqual(
             p.peerDescription(peer),
             acmePeerHeader + acmeService + peerFooter)
