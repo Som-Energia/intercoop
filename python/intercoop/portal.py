@@ -18,7 +18,18 @@ class Portal(Perfume):
             <head></head>
             <body>Lista de peers
             <ul>
-                """+"</br>".join("<li>%s</li>" % p.name for p in self.peerdatastorage)+"""
+                """
+        response+="</br>".join(
+            "<li>%s</li>" % 
+                (p.name + "<ul>{}</ul>".format(
+                    "</br>".join("<li>%s</li>" % s 
+                            for s in p.services
+                    )
+                )
+             ) if "services" in p else ""
+            for p in self.peerdatastorage
+        )
+        response+="""
             </ul>
             </body>
             </html>

@@ -4,15 +4,23 @@ from . import portal
 from . import peerdatastorage
 
 class Portal_Test(unittest.TestCase):
-    index_html="""<html>
+    index_html=("""<html>
             <head></head>
             <body>Lista de peers
             <ul>
-                <li>Som Acme, SCCL</li></br><li>Som Bogus, SCCL</li>
+                <li>Som Acme, SCCL"""
+            """<ul>"""
+            """<li>contract</li>"""
+            """</ul></li>"""
+            """</br><li>Som Bogus, SCCL<ul>"""
+            """<li>contract</li>"""
+            """</ul>"""
+            """</li>
             </ul>
             </body>
             </html>
             """
+    )
     datadir="peerdata"
 
     somacmeyaml=u"""\
@@ -38,6 +46,7 @@ class Portal_Test(unittest.TestCase):
         import os
         import codecs
         self.cleanUp()
+        self.maxDiff=None
         os.system("mkdir -p "+self.datadir)
         with codecs.open(os.path.join(self.datadir, 'somacme.yaml'),'w','utf-8') as f:
             f.write(self.somacmeyaml)
@@ -56,4 +65,4 @@ class Portal_Test(unittest.TestCase):
             shutil.rmtree(self.datadir)
         except: pass    
     def test_index(self):
-        self.assertEqual(self.index_html,self.client.get("/").data.decode('utf-8'))
+        self.assertMultiLineEqual(self.index_html,self.client.get("/").data.decode('utf-8'))
