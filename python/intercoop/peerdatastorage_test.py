@@ -12,7 +12,7 @@ from yamlns import namespace as ns
 - [ ] Constructor error when no such folder
 - [ ] Proteger contra peerid's maliciosos (../../) limitando a letras numeros y signos de separacion validos
 - [ ] Own exception types (not just plain Exception)
-- [ ] Iterador
+- [x] Iterador
 - [ ] Accesores mas semanticos
 """
 
@@ -65,10 +65,18 @@ class PeerDataStorage_Test(unittest.TestCase):
     def test_iterator(self):
         s = peerdatastorage.PeerDataStorage(self.peerdatadir)
         peerDataList = list(e for e in s)
-        self.assertItemsEqual(peerDataList,[
-                ns.loads(somacmeyaml),
-                ns.loads(sombogusyaml),
-            ]
-        )
+        try:
+            self.assertCountEqual(peerDataList,[
+                    ns.loads(somacmeyaml),
+                    ns.loads(sombogusyaml),
+                ]
+            )
+        except AttributeError:
+            self.assertItemsEqual(peerDataList,[
+                    ns.loads(somacmeyaml),
+                    ns.loads(sombogusyaml),
+                ]
+            )
+
 
 # vim: ts=4 sw=4 et
