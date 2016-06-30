@@ -19,6 +19,7 @@ from yamlns import namespace as ns
 - No service name
 - No such service
 - Include peer.info optionally
+- route activateservice/<peer>/<service>
 """
 
 
@@ -36,6 +37,25 @@ template = u"""\
 {}</ul>
 </body>
 </html>
+"""
+
+peerTmpl = u"""\
+<div class='peer'>
+<div class='peerlogo'><img src='{peer.logo}' /></div>
+<div class='peerheader'><a href='{peer.url.es}'>{peer.name}</a></div>
+<div class='peerdescription'>{peer.description.es}</div>
+<div class='services'>
+{services}\
+</div>
+</div>
+"""
+
+serviceTmpl = u"""\
+<div class='service'>
+<div class='service_header'>{service.name.es}</div>
+<div class='service_description'>{service.description.es}</div>
+<a class='service_activation_bt' href='activateservice/{peer.peerid}/{serviceid}'>Activa</a>
+</div>
 """
 
 css = """\
@@ -108,38 +128,25 @@ class Portal(Perfume):
         self.peers = peerdatastorage.PeerDataStorage(peerdata)
         self.name = name
 
-    def serviceDescription(self, peer, service):
-        return u"""\
-<div class='service'>
-<div class='service_header'>{service.name.es}</div>
-<div class='service_description'>{service.description.es}</div>
-<a class='service_activation_bt' href='activateservice/{peer.peerid}/{serviceid}'>Activa</a>
-</div>
-""".format(
-    peer = peer,
-    serviceid = service,
-    service = peer.services[service],
-    language='es',
-    )
-
-    def peerDescription(self, peer):
-        return u"""\
-<div class='peer'>
-<div class='peerlogo'><img src='{peer.logo}' /></div>
-<div class='peerheader'><a href='{peer.url.es}'>{peer.name}</a></div>
-<div class='peerdescription'>{peer.description.es}</div>
-<div class='services'>
-""".format(peer=peer) + "".join(
-    self.serviceDescription(peer, service)
-    for service in peer.services
-)+u"""\
-</div>
-</div>
-"""
-
     @route('/intercoop.css', methods=['GET'])
     def css(self):
         return css
+
+    def serviceDescription(self, peer, service):
+        return serviceTmpl.format(
+            peer = peer,
+            serviceid = service,
+            service = peer.services[service],
+            )
+
+    def peerDescription(self, peer):
+        return peerTmpl.format(
+            peer=peer,
+            services = "".join(
+                self.serviceDescription(peer, service)
+                for service in peer.services
+                ),
+            )
 
     @route('/', methods=['GET'])
     def index(self):
