@@ -191,5 +191,17 @@ class Portal_Test(unittest.TestCase):
             self.client.get("/").data.decode('utf-8')
             )
 
+    def test_field(self):
+        p = portalexample.Portal("Example Portal", peerdata=self.datadir)
+        self.assertMultiLineEqual(
+            "<div class='field'>\n"
+            "<div class='fieldheader'>Campo:<div>\n"
+            "<div class='fieldvalue'>Valor<div>\n"
+            "</div>\n"
+            , p.formatField(data, field))
+
+
+
+
 
 # vim: ts=4 sw=4 et

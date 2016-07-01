@@ -20,6 +20,7 @@ from yamlns import namespace as ns
 - No such service
 - Include peer.info optionally
 - route activateservice/<peer>/<service>
+- require login
 """
 
 
@@ -158,6 +159,11 @@ class Portal(Perfume):
                 )
             )
         return response
+
+    @route('/activateservice/<peer>/<service>', methods=['GET'])
+    def activateService(self, peer, service):
+        return ''
+
 
 
 # vim: ts=4 sw=4 et
