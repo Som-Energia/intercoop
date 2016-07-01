@@ -14,7 +14,18 @@ from yamlns import namespace as ns
 """
 # TODO:
 
+- fields = portal.requiredFields(peer, service)
+    - when service fields, use them
+    - when no service fields, use global peer fields
+- data = portal.userInfo(fields)
+- translations = portal.fieldTranslation(fields)
+- fieldhtml = portal.renderField(fieldLabel, value)
+- innerhtml = portal.renderUserData(data)
+
+Postponed:
+
 - Solve translations
+- Should different types in field be rendered differently
 - No service description
 - No service name
 - No such service
@@ -74,8 +85,8 @@ serviceTmpl = u"""\
 
 fieldTmpl = u"""\
 <div class='field'>
-<div class='fieldheader'>Campo:{field}</div>
-<div class='fieldvalue'>Valor:{data}</div>
+<div class='fieldheader'>{field}:</div>
+<div class='fieldvalue'>{value}</div>
 </div>
 """
 
@@ -171,11 +182,6 @@ class Portal(Perfume):
                 for service in peer.services
                 ),
             )
-    def formatField(self, data, field):
-        return fieldTmpl.format(
-            data=data,
-            field=field,
-            )
     @route('/', methods=['GET'])
     def index(self):
         response = template.format(
@@ -187,14 +193,20 @@ class Portal(Perfume):
             )
         return response
 
+    def renderField(self, value, field):
+        return fieldTmpl.format(
+            value=value,
+            field=field,
+            )
+
     @route('/activateservice/<peer>/<service>', methods=['GET'])
     def activateService(self, peer, service):
         response = templateActivateService.format(
             service=service,
             fields="".join(
-                self.formatField(
+                self.renderField(
                     field=self.peers.get(peer).services[service].fields[field].es,
-                    data=self.dataSource.getField(field))
+                    value=self.dataSource.getField(field))
                 for field in self.peers.get(peer).services[service].fields
                 )
             )

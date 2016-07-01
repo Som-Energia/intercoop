@@ -22,13 +22,14 @@ services:
   explosives:
     name:
       es: Comprar explosivos
-    fields:
-      name:
-        es: Nombre del titular
     description:
       es: >
         Puedes comprar explosivos éticos de la mejor calidad.
+    fields:
+      name:
+        es: Nombre
 """
+
 sombogusyaml=u"""\
 intercoopVersion: 1.0
 peerVersion: 1
@@ -118,30 +119,20 @@ acmeExplosivesHeader = u"""\
 <body>
 <h1>Campos que se enviarán al servicio explosives</h1>
 """
+
 acmeExplosivesFooter = u"""\
 </div>
 </body>
 </html>
 """
-acmeExplosivesNameField = u"""\
+
+nameField = u"""\
 <div class='field'>
-<div class='fieldheader'>Campo:Nombre del titular</div>
-<div class='fieldvalue'>Valor:Bugs</div>
+<div class='fieldheader'>Nombre:</div>
+<div class='fieldvalue'>Bunny, Bugs</div>
 """
+
 class Portal_Test(unittest.TestCase):
-    descriptions=(u"""\
-<li>Som Acme, SCCL
-<ul>
-<li>explosives</li>
-</ul>
-</li>
-<li>Som Bogus, SCCL
-<ul>
-<li>contract</li>
-</ul>
-</li>
-"""
-    )
 
     def write(self, filename, content):
         fullname = os.path.join(self.datadir,filename)
@@ -212,29 +203,21 @@ class Portal_Test(unittest.TestCase):
             self.client.get("/").data.decode('utf-8')
             )
 
-    def test_emptyField(self):
+    def test_renderField(self):
         p = portalexample.Portal("Example Portal", peerdata=self.datadir)
         self.assertMultiLineEqual(
             "<div class='field'>\n"
-            "<div class='fieldheader'>Campo:</div>\n"
-            "<div class='fieldvalue'>Valor:</div>\n"
+            "<div class='fieldheader'>Nombre</div>\n"
+            "<div class='fieldvalue'>Bunny, Bugs</div>\n"
             "</div>\n"
-            , p.formatField(data="", field=""))
+            , p.renderField(data="Bunny, Bugs", field="Nombre"))
 
-    def test_oneField(self):
-        p = portalexample.Portal("Example Portal", peerdata=self.datadir)
-        self.assertMultiLineEqual(
-            "<div class='field'>\n"
-            "<div class='fieldheader'>Campo:Nombre</div>\n"
-            "<div class='fieldvalue'>Valor:Bugs</div>\n"
-            "</div>\n"
-            , p.formatField(data="Bugs", field="Nombre"))
     def test_activateService(self):
         self.write("somacme.yaml",somacmeyaml)
         p = portalexample.Portal("Example Portal", peerdata=self.datadir)
         self.assertMultiLineEqual(
             acmeExplosivesHeader+
-            acmeExplosivesNameField+
+            nameField+
             acmeExplosivesFooter, 
             self.client.get("/activateservice/somacme/explosives").data.decode('utf-8'))
 
