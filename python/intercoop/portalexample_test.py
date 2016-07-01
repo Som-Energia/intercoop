@@ -259,6 +259,14 @@ class Portal_Test(unittest.TestCase):
             ['name'],
             p.requiredFields("sombogus","contract")
         )
+    
+    def test_requiredFields_ServiceAndPeer(self):
+        self.write("somacme.yaml",somacmeyaml)
+        p = portalexample.Portal("Example Portal", peerdata=self.datadir)
+        self.assertEqual(
+            ['name'],
+            p.requiredFields("somacme","explosives")
+        )
 
 
 # vim: ts=4 sw=4 et
