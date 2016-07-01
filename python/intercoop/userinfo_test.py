@@ -41,10 +41,7 @@ class UserInfo_Test(unittest.TestCase):
             'nif',
             ])
 
-        self.assertEqual(data, ns(
-            name='de los Palotes, Perico',
-            nif = '12345678Z',
-            ))
+        self.assertEqual(data, ns.loads(useryaml))
                 
 
 

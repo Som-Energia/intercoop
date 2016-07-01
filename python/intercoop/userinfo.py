@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 from yamlns import namespace as ns
+import os
 
 class UserInfo(object):
 	"""This mock object returns user info related to provided keys.
@@ -12,10 +13,7 @@ class UserInfo(object):
 		self.datadir = datadir
 
 	def getFields(self, user, fields):
-		return ns(
-			name = 'de los Palotes, Perico',
-            nif = '12345678Z',
-			)
+		return ns.load(os.path.join(self.datadir, user+'.yaml'))
 
 
 
