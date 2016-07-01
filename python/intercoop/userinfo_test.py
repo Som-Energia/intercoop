@@ -42,7 +42,17 @@ class UserInfo_Test(unittest.TestCase):
             ])
 
         self.assertEqual(data, ns.loads(useryaml))
-                
+
+    def test_getFields_filtering(self):
+        storage = userinfo.UserInfo(self.datadir)
+        data = storage.getFields('myuser', [
+            'nif',
+            ])
+
+        self.assertEqual(data, ns(
+            nif = '12345678Z',
+            ))
+
 
 
 

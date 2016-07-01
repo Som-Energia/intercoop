@@ -13,7 +13,12 @@ class UserInfo(object):
 		self.datadir = datadir
 
 	def getFields(self, user, fields):
-		return ns.load(os.path.join(self.datadir, user+'.yaml'))
+		userdata = ns.load(os.path.join(self.datadir, user+'.yaml'))
+		return ns([
+			(key, value)
+			for key,value in userdata.iteritems()
+			if key in fields
+			])
 
 
 
