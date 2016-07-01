@@ -6,6 +6,7 @@ from flask import (
     Response
     )
 
+from . import crypto
 from . import apiclient
 from . import peerdatastorage
 from . import userinfo
@@ -30,9 +31,12 @@ Roadmap:
     - [ ] translations = portal.fieldTranslation(fields)
     - [ ] fieldhtml = portal.renderField(fieldLabel, value)
     - [ ] innerhtml = portal.renderUserData(data)
+- [ ] route confirmactivateservice/<peer>/<service>
 
 Postponed:
 
+- [ ] activateservice: special display for list fields
+- [ ] activateservice: special display for None fields
 - [ ] bad peer in required fields
 - [ ] bad service in required fields
 - [ ] Solve translations
@@ -51,26 +55,13 @@ template = u"""\
 <head>
 <meta encoding='utf-8' />
 <title>{}</title>
-<link rel="stylesheet" type="text/css" href="intercoop.css">
+<link rel="stylesheet" type="text/css" href="/intercoop.css">
 </head>
 <body>
 <h1>Intercooperación</h1>
 <ul>
 {}</ul>
 </body>
-</html>
-"""
-
-templateActivateService = u"""\
-<html>
-<head>
-<meta encoding='utf-8' />
-<title>Activación servicio {service}</title>
-<link rel="stylesheet" type="text/css" href="intercoop.css">
-</head>
-<body>
-<h1>Campos que se enviarán al servicio {service}</h1>
-{fields}</body>
 </html>
 """
 
@@ -93,6 +84,32 @@ serviceTmpl = u"""\
 </div>
 """
 
+templateActivateService = u"""\
+<html>
+<head>
+<meta encoding='utf-8' />
+<title>Activación del servicio '{service.name.es}' en '{peer.name}'</title>
+<link rel="stylesheet" type="text/css" href="/intercoop.css">
+</head>
+<body>
+<h1>Autorización de transferencia de datos personales a <em>{peer.name}</em></h1>
+<div class='privacywarning'>
+Para activar el servicio <em>{service.name.es}</em>
+en <em>{peer.name}</em>,
+transferiremos a dicha entidad los siguientes datos:
+<div class='transferfields'>
+{fields}\
+</div>
+Dicha entidad tratará dichos datos según su propia
+<a href='{peer.privacyPolicyUrl.es}' target='_blank'>política de privacidad</a>.
+</div>
+<a class='privacy_accept_bt' href='/confirmactivateservice/{peerid}/{serviceid}'>
+Acepto
+</a>
+</body>
+</html>
+"""
+
 fieldTmpl = u"""\
 <div class='field'>
 <div class='fieldheader'>{field}:</div>
@@ -101,6 +118,8 @@ fieldTmpl = u"""\
 """
 
 css = """\
+
+
 .peer {
     clear: right;
     margin: 3ex 1ex;
@@ -135,7 +154,7 @@ css = """\
 }
 
 
-.service_activation_bt {
+.service_activation_bt, .privacy_accept_bt {
     display: block;
     position: relative;
     width: 20ex;
@@ -151,32 +170,48 @@ css = """\
     text-align: center;
 }
 
-.service_activation_bt:active {
+.service_activation_bt:active, .privacy_accept_bt:active {
     border: 1pt solid #eee;
 }
-.service_activation_bt:hover {
+.service_activation_bt:hover, .privacy_accept_bt:hover {
     border: 1pt solid #333;
     background: #687;
 }
-"""
 
-class DataSource(object):
-    def getField(self,field):
-        return "Bunny, Bugs"
+.transferfields {
+    margin: 1ex;
+    box-shadow: 2px 4px 5px #444;
+    padding: 1ex;
+}
+.transferfields .field {
+    display: table-row;
+}
+.transferfields .fieldvalue,
+.transferfields .fieldheader {
+    display: table-cell;
+}
+.transferfields .fieldheader {
+    font-weight: bold;
+    border-bottom: solid 1pt #eee;
+}
+
+"""
 
 
 class Portal(Perfume):
 
-    def __init__(self, name, peerdatadir, userdatadir=None):
+    def __init__(self, name, peerdatadir, userdatadir, keyfile):
         super(Portal, self).__init__(name)
-        self.peers = peerdatastorage.PeerDataStorage(peerdatadir)
         self.name = name
-        if userdatadir:
-            self.users = userinfo.UserInfo(userdatadir)
+        self.key = crypto.loadKey(keyfile)
+        self.peers = peerdatastorage.PeerDataStorage(peerdatadir)
+        self.users = userinfo.UserInfo(userdatadir)
 
     @route('/intercoop.css', methods=['GET'])
     def css(self):
-        return css
+        r = make_response(css)
+        r.mimetype='text/css'
+        return r
 
     def serviceDescription(self, peer, service):
         return serviceTmpl.format(
@@ -225,18 +260,36 @@ class Portal(Perfume):
 
     @route('/activateservice/<peer>/<service>', methods=['GET'])
     def activateService(self, peer, service):
+        # TODO: done twice, also in requiredFields
+        peerData = self.peers.get(peer)
+        serviceData = peerData.services[service]
+        fields = self.requiredFields(peer, service)
+        data = self.users.getFields('myuser', fields) # TODO: Real user
         response = templateActivateService.format(
-            service=service,
+            peerid=peer,
+            peer=peerData,
+            serviceid=service,
+            service=serviceData,
             fields="".join(
                 self.renderField(
-                    field='Nombre',
-                    value='Bunny, Bugs',
+                    field = field, # TODO: Translate the field
+                    value = value,
                     )
-                for field in self.requiredFields(peer, service)
+                for field, value in data.items()
                 )
             )
         return response
 
+    @route('/confirmactivateservice/<peer>/<service>', methods=['GET'])
+    def confirmActivateService(self, peer, service):
+        peerData = self.peers.get(peer)
+        serviceData = peerData.services[service]
+        fields = self.requiredFields(peer, service)
+        data = self.users.getFields('myuser', fields) # TODO: Real user
+        api = apiclient.ApiClient(peerData.targetUrl, self.key)
+        # TODO: handle errors
+        continuationUri = api.activateService(service, data)
+        return redirect(continuationUri, 302)
 
 
 # vim: ts=4 sw=4 et

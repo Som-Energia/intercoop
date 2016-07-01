@@ -7,17 +7,41 @@ from . import portalexample
 from . import peerdatastorage
 from yamlns import namespace as ns
 
+
+myuseryaml=u"""\
+nif: 12345678Z
+name: Bunny, Bugs
+peerroles:
+- member
+- worker
+innerid: 666
+address: Golf Club, 5th hole
+city: Murcia
+state: Murcia
+postalcode: '01022'
+country: ES
+email:
+- bugsbunny@loonietoons.com
+phone:
+- '555121232'
+proxynif:
+proxyname:
+"""
+
 somacmeyaml=u"""\
 intercoopVersion: 1.0
 peerVersion: 1
 peerid: somacme
 name: Som Acme, SCCL
-logo: http://www.linpictures.com/images/indevimgs/acme.jpg
 url:
   es: http://somacme.coop/es
+logo: http://www.linpictures.com/images/indevimgs/acme.jpg
+privacyPolicyUrl:
+  es: http://www.wallpapersonly.net/wallpapers/thats-all-folks-1680x1050.jpg
 description:
   es: >
     La cooperativa para atrapar correcaminos
+targetUrl: http://localhost:5001/intercoop/
 services:
   explosives:
     name:
@@ -44,12 +68,15 @@ intercoopVersion: 1.0
 peerVersion: 1
 peerid: sombogus
 name: Som Bogus, SCCL
-logo: http://www.linpictures.com/images/indevimgs/acme.jpg
 url:
   es: https://es.sombogus.coop
+logo: http://www.linpictures.com/images/indevimgs/acme.jpg
+privacyPolicyUrl: 
+    es: http://www.wallpapersonly.net/wallpapers/thats-all-folks-1680x1050.jpg
 description:
     es: >
       Productos inútiles pero muy éticos
+targetUrl: http://localhost:5002/intercoop/
 services:
   contract:
     name:
@@ -67,7 +94,7 @@ header= u"""\
 <head>
 <meta encoding='utf-8' />
 <title>Example Portal</title>
-<link rel="stylesheet" type="text/css" href="intercoop.css">
+<link rel="stylesheet" type="text/css" href="/intercoop.css">
 </head>
 <body>
 <h1>Intercooperación</h1>
@@ -134,55 +161,80 @@ acmeExplosivesHeader = u"""\
 <html>
 <head>
 <meta encoding='utf-8' />
-<title>Activación servicio explosives</title>
-<link rel="stylesheet" type="text/css" href="intercoop.css">
+<title>Activación del servicio 'Comprar explosivos' en 'Som Acme, SCCL'</title>
+<link rel="stylesheet" type="text/css" href="/intercoop.css">
 </head>
 <body>
-<h1>Campos que se enviarán al servicio explosives</h1>
+<h1>Autorización de transferencia de datos personales a <em>Som Acme, SCCL</em></h1>
+<div class='privacywarning'>
+Para activar el servicio <em>Comprar explosivos</em>
+en <em>Som Acme, SCCL</em>,
+transferiremos a dicha entidad los siguientes datos:
+<div class='transferfields'>
 """
+
 
 acmeExplosivesFooter = u"""\
 </div>
+Dicha entidad tratar\xe1 dichos datos seg\xfan su propia
+<a href='http://www.wallpapersonly.net/wallpapers/thats-all-folks-1680x1050.jpg' target='_blank'>pol\xedtica de privacidad</a>.
+</div>
+<a class='privacy_accept_bt' href='/confirmactivateservice/somacme/explosives'>
+Acepto
+</a>
 </body>
 </html>
 """
 
 nameField = u"""\
 <div class='field'>
-<div class='fieldheader'>Nombre:</div>
-<div class='fieldvalue'>Bunny, Bugs</div>
+<div class='fieldheader'>nif:</div>
+<div class='fieldvalue'>12345678Z</div>
+</div>
 """
 
 class Portal_Test(unittest.TestCase):
 
-    def write(self, filename, content):
-        fullname = os.path.join(self.datadir,filename)
+    def write(self, filename, content, folder=None):
+        fullname = os.path.join(folder or self.peerdatadir,filename)
         with open(fullname, 'wb') as f:
             f.write(content.encode('utf-8'))
         
     def setUp(self):
         self.maxDiff=None
-        self.datadir="peerdatadir"
+        self.keyfile = 'testkey.pem'
+        self.peerdatadir='peerdatadir'
+        self.userdatadir='userdatadir'
         self.cleanUp()
-        os.system("mkdir -p "+self.datadir)
-
-        portal = self.setupPortal()
-        app = portal.app
-        app.config['TESTING'] = True
-        self.client = app.test_client()
+        os.system("mkdir -p "+self.peerdatadir)
+        os.system("mkdir -p "+self.userdatadir)
+        self.write('myuser.yaml', myuseryaml, self.userdatadir)
 
     def setupPortal(self):
-        return portalexample.Portal("Example Portal", peerdatadir=self.datadir)
+        return portalexample.Portal("Example Portal",
+            keyfile=self.keyfile,
+            peerdatadir=self.peerdatadir,
+            userdatadir=self.userdatadir,
+            )
+
+    def setupApp(self):
+        self.portal = self.setupPortal()
+        self.app =  self.portal.app
+        self.app.config['TESTING'] = True
+        self.client = self.app.test_client()
+
 
     def tearDown(self):
         self.cleanUp()
 
     def cleanUp(self):
-        try:
-            shutil.rmtree(self.datadir)
+        try: shutil.rmtree(self.peerdatadir)
+        except: pass    
+        try: shutil.rmtree(self.userdatadir)
         except: pass    
 
     def test_index_whenEmpty(self):
+        self.setupApp()
         self.assertMultiLineEqual(
             header+footer,
             self.client.get("/").data.decode('utf-8')
@@ -210,6 +262,7 @@ class Portal_Test(unittest.TestCase):
             acmePeerHeader + acmeService + acmeService2 + peerFooter)
 
     def test_index_onePeer(self):
+        self.setupApp()
         self.write('somacme.yaml',somacmeyaml)
         self.assertMultiLineEqual(
             header+
@@ -222,6 +275,7 @@ class Portal_Test(unittest.TestCase):
             )
 
     def test_index_many(self):
+        self.setupApp()
         self.write('somacme.yaml',somacmeyaml)
         self.write('sombogus.yaml',sombogusyaml)
         self.assertMultiLineEqual(
@@ -247,15 +301,6 @@ class Portal_Test(unittest.TestCase):
             "</div>\n"
             ) 
 
-    def test_activateService(self):
-        self.write("somacme.yaml",somacmeyaml)
-        p = self.setupPortal()
-        self.assertMultiLineEqual(
-            acmeExplosivesHeader+
-            nameField+
-            acmeExplosivesFooter, 
-            self.client.get("/activateservice/somacme/explosives").data.decode('utf-8'))
-    
     def test_requiredFields_justInService_useService(self):
         self.write("sombogus.yaml",sombogusyaml)
         p = self.setupPortal()
@@ -291,4 +336,13 @@ class Portal_Test(unittest.TestCase):
         self.assertEqual(str(ctx.exception),
             "Peer 'sombogus' does not specify fields for service 'contract'")
 
+    def test_activateService(self):
+        self.setupApp()
+        self.write("somacme.yaml",somacmeyaml)
+        self.assertMultiLineEqual(
+            acmeExplosivesHeader+
+            nameField+
+            acmeExplosivesFooter, 
+            self.client.get("/activateservice/somacme/explosives").data.decode('utf-8'))
+    
 # vim: ts=4 sw=4 et

@@ -15,6 +15,8 @@ url:
   ca: https://www.somenergia.coop/ca
   eu: https://www.somenergia.coop/eu
   gl: https://www.somenergia.coop/gl
+privacyPolicyUrl:
+  es: https://www.somenergia.coop/es/politica-de-privacidad-cookies-y-aviso-legal/
 info:
   es: >
     Som Energia es una cooperativa de consumo de energía verde sin ánimo de lucro.
@@ -56,8 +58,8 @@ services:
       ca: Participar en compres col·lectives per a socis/es.
 targetUrl: https://api.somenergia.coop/intercoop/contrataluz
 dataFormat: yaml
-transferredPersonalData:
-- peerserial # serial number within the source entity
+fields:
+- innerid # serial number within the source entity
 - peerroles # list of roles within the source entity (member, worker, customer...)
 - nif
 - name
@@ -68,9 +70,8 @@ transferredPersonalData:
 - country
 - phone
 - email
-- islegalentity: # legal entities require a proxy
-  - proxynif
-  - proxyname
+- proxynif
+- proxyname
 publickey: >
   ADSFASDFWQR$DASG$YRSGJFGKUSGFGDSFGSDFGRSGSERGDSFGSDFGSDFG
   SDFGSDFGSDFGCVXBXCVERGTZXCVJJFGPAKJEMCPEHDKSLQFYGHCJALWER
