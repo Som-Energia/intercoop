@@ -20,10 +20,11 @@ Roadmap:
     - [ ] fields = portal.requiredFields(peer, service)
         - [ ] when service fields, use them
         - [ ] when no service fields, use global peer fields
-    - [ ] data = portal.userInfo(userid, fields)
-        - [ ] works
-        - [ ] no such user
-        - [ ] no such field
+    - [+] data = portal.userInfo(userid, fields)
+        - [+] all fields
+        - [+] filtering
+        - [+] no such user
+        - [+] no such field
     - [ ] translations = portal.fieldTranslation(fields)
     - [ ] fieldhtml = portal.renderField(fieldLabel, value)
     - [ ] innerhtml = portal.renderUserData(data)
