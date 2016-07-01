@@ -204,6 +204,7 @@ class Portal(Perfume):
             value=value,
             field=field,
             )
+
     def requiredFields(self, peer, service):
         peerData = self.peers.get(peer)
         serviceData = peerData.services[service]
@@ -215,6 +216,7 @@ class Portal(Perfume):
         if not fields:
             raise Exception("No fields in peer")
         return [f for f in fields]
+
     @route('/activateservice/<peer>/<service>', methods=['GET'])
     def activateService(self, peer, service):
         response = templateActivateService.format(

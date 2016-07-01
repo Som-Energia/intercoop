@@ -260,7 +260,7 @@ class Portal_Test(unittest.TestCase):
             p.requiredFields("sombogus","contract")
         )
     
-    def test_requiredFields_ServiceAndPeer(self):
+    def test_requiredFields_useService(self):
         self.write("somacme.yaml",somacmeyaml)
         p = portalexample.Portal("Example Portal", peerdata=self.datadir)
         self.assertEqual(
@@ -268,5 +268,12 @@ class Portal_Test(unittest.TestCase):
             p.requiredFields("somacme","explosives")
         )
 
+    def test_requiredFields_noFields(self):
+        self.write("sombogus.yaml",sombogusyaml)
+        p = portalexample.Portal("Example Portal", peerdata=self.datadir)
+        del(p.peers.get("sombogus").fields)
+        self.assertRaises(
+            p.requiredFields("sombogus","contract")
+        )
 
 # vim: ts=4 sw=4 et
