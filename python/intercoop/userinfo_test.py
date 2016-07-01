@@ -53,6 +53,19 @@ class UserInfo_Test(unittest.TestCase):
             nif = '12345678Z',
             ))
 
+    def test_getFields_baduser(self):
+        storage = userinfo.UserInfo(self.datadir)
+        with self.assertRaises(userinfo.BadUser) as ctx:
+            storage.getFields('baduser', ['nif',])
+        self.assertEqual(str(ctx.exception),
+            "User not found 'baduser'")
+
+    def test_getFields_badfield(self):
+        storage = userinfo.UserInfo(self.datadir)
+        with self.assertRaises(userinfo.BadField) as ctx:
+            storage.getFields('myuser', ['badfield',])
+        self.assertEqual(str(ctx.exception),
+            "Unrecognized user field 'badfield'")
 
 
 

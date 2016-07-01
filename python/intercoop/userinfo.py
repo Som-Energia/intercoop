@@ -3,6 +3,22 @@
 from yamlns import namespace as ns
 import os
 
+"""
+# TODO:
+
+- [ ] process differently unsupported and not pressent fields
+"""
+
+class BadUser(Exception):
+    def __init__(self, user):
+		super(BadUser, self).__init__(
+			"User not found '{}'".format(user))
+
+class BadField(Exception):
+    def __init__(self, field):
+		super(BadField, self).__init__(
+			"Unrecognized user field '{}'".format(field))
+
 class UserInfo(object):
 	"""This mock object returns user info related to provided keys.
 	In your system the substitute of this object should use the ERP
@@ -13,7 +29,15 @@ class UserInfo(object):
 		self.datadir = datadir
 
 	def getFields(self, user, fields):
-		userdata = ns.load(os.path.join(self.datadir, user+'.yaml'))
+		try:
+			userdata = ns.load(os.path.join(self.datadir, user+'.yaml'))
+		except Exception:
+			raise BadUser(user)
+
+		for field in fields:
+			if field not in userdata:
+				raise BadField(field)
+
 		return ns([
 			(key, value)
 			for key,value in userdata.iteritems()
