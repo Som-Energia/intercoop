@@ -8,6 +8,7 @@ from flask import (
 
 from . import apiclient
 from . import peerdatastorage
+from . import userinfo
 from .perfume import Perfume, route
 from yamlns import namespace as ns
 
@@ -163,11 +164,12 @@ class DataSource(object):
 
 class Portal(Perfume):
 
-    def __init__(self, name, peerdata):
+    def __init__(self, name, peerdatadir, userdatadir=None):
         super(Portal, self).__init__(name)
-        self.peers = peerdatastorage.PeerDataStorage(peerdata)
+        self.peers = peerdatastorage.PeerDataStorage(peerdatadir)
         self.name = name
-        self.dataSource = DataSource()
+        if userdatadir:
+            self.users = userinfo.UserInfo(userdatadir)
 
     @route('/intercoop.css', methods=['GET'])
     def css(self):
@@ -214,7 +216,8 @@ class Portal(Perfume):
         elif 'fields' in peerData:
             fields = peerData.fields
         if not fields:
-            raise Exception("No fields in peer")
+            raise Exception("Peer '{}' does not specify fields for service '{}'"
+                .format(peer, service))
         return [f for f in fields]
 
     @route('/activateservice/<peer>/<service>', methods=['GET'])
@@ -223,9 +226,10 @@ class Portal(Perfume):
             service=service,
             fields="".join(
                 self.renderField(
-                    field=self.peers.get(peer).services[service].fields[field].es,
-                    value=self.dataSource.getField(field))
-                for field in self.peers.get(peer).services[service].fields
+                    field='Nombre',
+                    value='Bunny, Bugs',
+                    )
+                for field in self.requiredFields(peer, service)
                 )
             )
         return response

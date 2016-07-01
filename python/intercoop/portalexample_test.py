@@ -25,9 +25,6 @@ services:
     description:
       es: >
         Puedes comprar explosivos éticos de la mejor calidad.
-    fields:
-      name:
-        es: Nombre
   anvil:
     name:
       es: Comprar yunques
@@ -35,8 +32,11 @@ services:
       es: >
         Yunques garantizados, siempre caen en una cabeza
     fields:
-      name:
-        es: Nombre
+      innerid:
+        es: Número de socio/a
+fields:
+  nif:
+    es: NIF
 """
 
 sombogusyaml=u"""\
@@ -57,9 +57,9 @@ services:
     description:
         es: >
           Productos con marcas tipo Panone, Grifons, Pas Natural, Reacciona...
-fields:
-  name:
-    es: Nombre      
+    fields:
+      name:
+        es: Nombre      
 """
 
 header= u"""\
@@ -162,13 +162,17 @@ class Portal_Test(unittest.TestCase):
         
     def setUp(self):
         self.maxDiff=None
-        self.datadir="peerdata"
+        self.datadir="peerdatadir"
         self.cleanUp()
         os.system("mkdir -p "+self.datadir)
 
-        app = portalexample.Portal("Example Portal", peerdata=self.datadir).app
+        portal = self.setupPortal()
+        app = portal.app
         app.config['TESTING'] = True
         self.client = app.test_client()
+
+    def setupPortal(self):
+        return portalexample.Portal("Example Portal", peerdatadir=self.datadir)
 
     def tearDown(self):
         self.cleanUp()
@@ -186,21 +190,21 @@ class Portal_Test(unittest.TestCase):
 
     def test_serviceDescription(self):
         peer = ns.loads(somacmeyaml.encode('utf-8'))
-        p = portalexample.Portal("Example Portal", peerdata=self.datadir)
+        p = self.setupPortal()
         self.assertMultiLineEqual(
             p.serviceDescription(peer, 'explosives'),
             acmeService)
 
     def test_peerDescription_singleService(self):
         peer = ns.loads(sombogusyaml.encode('utf-8'))
-        p = portalexample.Portal("Example Portal", peerdata=self.datadir)
+        p = self.setupPortal()
         self.assertMultiLineEqual(
             p.peerDescription(peer),
             bogusPeerHeader + bogusService + peerFooter)
 
     def test_peerDescription_manyServices(self):
         peer = ns.loads(somacmeyaml.encode('utf-8'))
-        p = portalexample.Portal("Example Portal", peerdata=self.datadir)
+        p = self.setupPortal()
         self.assertMultiLineEqual(
             p.peerDescription(peer),
             acmePeerHeader + acmeService + acmeService2 + peerFooter)
@@ -234,7 +238,7 @@ class Portal_Test(unittest.TestCase):
             )
 
     def test_renderField(self):
-        p = portalexample.Portal("Example Portal", peerdata=self.datadir)
+        p = self.setupPortal()
         self.assertMultiLineEqual(
             p.renderField(field="Nombre", value="Bunny, Bugs"),
             "<div class='field'>\n"
@@ -245,35 +249,46 @@ class Portal_Test(unittest.TestCase):
 
     def test_activateService(self):
         self.write("somacme.yaml",somacmeyaml)
-        p = portalexample.Portal("Example Portal", peerdata=self.datadir)
+        p = self.setupPortal()
         self.assertMultiLineEqual(
             acmeExplosivesHeader+
             nameField+
             acmeExplosivesFooter, 
             self.client.get("/activateservice/somacme/explosives").data.decode('utf-8'))
     
-    def test_requiredFields_usePeer(self):
+    def test_requiredFields_justInService_useService(self):
         self.write("sombogus.yaml",sombogusyaml)
-        p = portalexample.Portal("Example Portal", peerdata=self.datadir)
+        p = self.setupPortal()
         self.assertEqual(
             ['name'],
             p.requiredFields("sombogus","contract")
         )
     
-    def test_requiredFields_useService(self):
+    def test_requiredFields_justInPeer_usePeer(self):
         self.write("somacme.yaml",somacmeyaml)
-        p = portalexample.Portal("Example Portal", peerdata=self.datadir)
+        p = self.setupPortal()
         self.assertEqual(
-            ['name'],
+            ['nif'],
             p.requiredFields("somacme","explosives")
+        )
+    
+    def test_requiredFields_inServiceAndPeer_useService(self):
+        self.write("somacme.yaml",somacmeyaml)
+        p = self.setupPortal()
+        self.assertEqual(
+            ['innerid'],
+            p.requiredFields("somacme","anvil")
         )
 
     def test_requiredFields_noFields(self):
-        self.write("sombogus.yaml",sombogusyaml)
-        p = portalexample.Portal("Example Portal", peerdata=self.datadir)
-        del(p.peers.get("sombogus").fields)
-        self.assertRaises(
+        bogus = ns.loads(sombogusyaml.encode('utf8'))
+        del bogus.services.contract.fields
+        self.write("sombogus.yaml",bogus.dump().decode('utf8'))
+        p = self.setupPortal()
+        with self.assertRaises(Exception) as ctx:
             p.requiredFields("sombogus","contract")
-        )
+
+        self.assertEqual(str(ctx.exception),
+            "Peer 'sombogus' does not specify fields for service 'contract'")
 
 # vim: ts=4 sw=4 et
