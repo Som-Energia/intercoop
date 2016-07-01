@@ -34,14 +34,16 @@ class UserInfo_Test(unittest.TestCase):
     def tearDown(self):
         self.cleanUp()
 
-    def test_getFields_singleField(self):
+    def test_getFields_allFields(self):
         storage = userinfo.UserInfo(self.datadir)
         data = storage.getFields('myuser', [
-            'name'
+            'name',
+            'nif',
             ])
 
         self.assertEqual(data, ns(
             name='de los Palotes, Perico',
+            nif = '12345678Z',
             ))
                 
 

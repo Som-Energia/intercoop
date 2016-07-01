@@ -9,11 +9,12 @@ class UserInfo(object):
 	"""
 
 	def __init__(self, datadir):
-		''
+		self.datadir = datadir
 
 	def getFields(self, user, fields):
 		return ns(
 			name = 'de los Palotes, Perico',
+            nif = '12345678Z',
 			)
 
 
