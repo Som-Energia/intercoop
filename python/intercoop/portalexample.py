@@ -18,9 +18,10 @@ from yamlns import namespace as ns
 Roadmap:
 
 - [ ] route activateservice/<peer>/<service>
-    - [ ] fields = portal.requiredFields(peer, service)
-        - [ ] when service fields, use them
-        - [ ] when no service fields, use global peer fields
+    - [x] fields = portal.requiredFields(peer, service)
+        - [x] when service fields, use them
+        - [x] when no service fields, use global peer fields
+        - [x] when no fields anywhere, raise
     - [+] data = portal.userInfo(userid, fields)
         - [+] all fields
         - [+] filtering
@@ -32,6 +33,8 @@ Roadmap:
 
 Postponed:
 
+- [ ] bad peer in required fields
+- [ ] bad service in required fields
 - [ ] Solve translations
 - [ ] Should different types in field be rendered differently
 - [ ] No service description
@@ -210,15 +213,15 @@ class Portal(Perfume):
     def requiredFields(self, peer, service):
         peerData = self.peers.get(peer)
         serviceData = peerData.services[service]
-        fields = None
+
         if 'fields' in serviceData:
-            fields = serviceData.fields
-        elif 'fields' in peerData:
-            fields = peerData.fields
-        if not fields:
-            raise Exception("Peer '{}' does not specify fields for service '{}'"
-                .format(peer, service))
-        return [f for f in fields]
+            return list(serviceData.fields)
+
+        if 'fields' in peerData:
+            return list(peerData.fields)
+
+        raise Exception("Peer '{}' does not specify fields for service '{}'"
+            .format(peer, service))
 
     @route('/activateservice/<peer>/<service>', methods=['GET'])
     def activateService(self, peer, service):
