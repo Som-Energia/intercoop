@@ -59,6 +59,13 @@ serviceTmpl = u"""\
 </div>
 """
 
+fieldTmpl = u"""\
+<div class='field'>
+<div class='fieldheader'>Campo:{field}</div>
+<div class='fieldvalue'>Valor:{data}</div>
+</div>
+"""
+
 css = """\
 .peer {
     clear: right;
@@ -148,7 +155,11 @@ class Portal(Perfume):
                 for service in peer.services
                 ),
             )
-
+    def formatField(self, data, field):
+        return fieldTmpl.format(
+            data=data,
+            field=field,
+            )
     @route('/', methods=['GET'])
     def index(self):
         response = template.format(
