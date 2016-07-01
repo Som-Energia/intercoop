@@ -4,6 +4,9 @@ from yamlns import namespace as ns
 import requests
 from . import packaging
 
+class BackendError(packaging.MessageError):
+    "Error comunicating with the other entity\n{}"
+
 class ApiClient(object):
 
     def __init__(self, apiurl, key):
@@ -13,10 +16,12 @@ class ApiClient(object):
     def activateService(self, service, personalData):
         package = packaging.Generator(self.key).produce(personalData)
         response = requests.post(self.apiurl+'/activateService', data=package)
-        if response.status_code != 200:
-            raise Exception(response.text)
         r = ns.loads(response.text)
-        return r.continuationUrl
+        if response.status_code == 200:
+            return r.continuationUrl
+        if 'type' in r and 'arguments' in r:
+            raise packaging.error(r.type, *r.arguments)
+        raise BackendError(response.text)
 
 
 # vim: ts=4 sw=4 et

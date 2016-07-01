@@ -282,13 +282,19 @@ class Portal(Perfume):
 
     @route('/confirmactivateservice/<peer>/<service>', methods=['GET'])
     def confirmActivateService(self, peer, service):
+        # TODO: Not under test!!
         peerData = self.peers.get(peer)
         serviceData = peerData.services[service]
         fields = self.requiredFields(peer, service)
         data = self.users.getFields('myuser', fields) # TODO: Real user
         api = apiclient.ApiClient(peerData.targetUrl, self.key)
+        # TODO: augment personal data keys with source ones
         # TODO: handle errors
-        continuationUri = api.activateService(service, data)
+        try:
+            continuationUri = api.activateService(service, data)
+        except:
+            # TODO: Log the error
+            return "Error comunicando con la entidad"
         return redirect(continuationUri, 302)
 
 

@@ -9,6 +9,7 @@ class MessageError(Exception):
     def __init__(self, *args, **kwds):
         super(MessageError,self).__init__(
             self.__doc__.format(*args, **kwds))
+        self.arguments=args
 
 class NoSuchUuid(MessageError):
     "No personal data available for uuid '{}'"
@@ -30,6 +31,21 @@ class BadMessage(MessageError):
 
 class WrongVersion(MessageError):
     "Wrong protocol version, expected {}, received {}"
+
+
+def error(exceptionType, *args):
+    if exceptionType not in globals():
+        return Exception(exceptionType, *args)
+
+    ExceptionClass = globals()[exceptionType]
+
+    if type(ExceptionClass) != type:
+        return Exception(exceptionType, *args)
+
+    if not issubclass(ExceptionClass, MessageError):
+        return Exception(exceptionType, *args)
+
+    return ExceptionClass(*args)
 
 
 class Generator(object):

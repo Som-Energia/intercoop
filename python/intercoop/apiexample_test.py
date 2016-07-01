@@ -87,6 +87,7 @@ country: ES
         self.assertEqual(ns.loads(r.data), ns(
             error = 'BadPeer',
             message = "The entity 'badpeer' is not a recognized one",
+            arguments = ['badpeer'],
             ))
 
     def test__activateService_post__badSignature(self):
@@ -101,6 +102,7 @@ country: ES
         self.assertEqual(ns.loads(r.data), ns(
             error = 'BadSignature',
             message = "Signature verification failed, untrusted content",
+            arguments = [],
             ))
         self.assertEqual(r.status_code, 403)
 
@@ -115,6 +117,7 @@ country: ES
         self.assertEqual(ns.loads(r.data), ns(
             error = 'MissingField',
             message = "Required field 'originpeer' missing on the payload",
+            arguments = ['originpeer']
             ))
         self.assertEqual(r.status_code, 400)
 
@@ -139,6 +142,7 @@ country: ES
             error = 'NoSuchUuid',
             message = "No personal data available for uuid "
                 "'01020304-0506-0708-090a-0b0c0d0e0f10'",
+            arguments=[uuid],
             ))
         self.assertEqual(r.status_code, 404)
 
