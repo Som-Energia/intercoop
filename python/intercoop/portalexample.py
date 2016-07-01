@@ -203,7 +203,8 @@ class Portal(Perfume):
             value=value,
             field=field,
             )
-
+    def requiredFields(self, peer, service):
+        return [f for f in self.peers.get(peer).fields]
     @route('/activateservice/<peer>/<service>', methods=['GET'])
     def activateService(self, peer, service):
         response = templateActivateService.format(

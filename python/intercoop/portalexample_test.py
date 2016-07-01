@@ -57,6 +57,9 @@ services:
     description:
         es: >
           Productos con marcas tipo Panone, Grifons, Pas Natural, Reacciona...
+fields:
+  name:
+    es: Nombre      
 """
 
 header= u"""\
@@ -248,8 +251,14 @@ class Portal_Test(unittest.TestCase):
             nameField+
             acmeExplosivesFooter, 
             self.client.get("/activateservice/somacme/explosives").data.decode('utf-8'))
-
-
+    
+    def test_requiredFields_usePeer(self):
+        self.write("sombogus.yaml",sombogusyaml)
+        p = portalexample.Portal("Example Portal", peerdata=self.datadir)
+        self.assertEqual(
+            ['name'],
+            p.requiredFields("sombogus","contract")
+        )
 
 
 # vim: ts=4 sw=4 et
