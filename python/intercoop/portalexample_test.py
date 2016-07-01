@@ -28,6 +28,15 @@ services:
     fields:
       name:
         es: Nombre
+  anvil:
+    name:
+      es: Comprar yunques
+    description:
+      es: >
+        Yunques garantizados, siempre caen en una cabeza
+    fields:
+      name:
+        es: Nombre
 """
 
 sombogusyaml=u"""\
@@ -83,6 +92,15 @@ acmeService = u"""\
 <div class='service_description'>Puedes comprar explosivos éticos de la mejor calidad.
 </div>
 <a class='service_activation_bt' href='activateservice/somacme/explosives'>Activa</a>
+</div>
+"""
+
+acmeService2 = u"""\
+<div class='service'>
+<div class='service_header'>Comprar yunques</div>
+<div class='service_description'>Yunques garantizados, siempre caen en una cabeza
+</div>
+<a class='service_activation_bt' href='activateservice/somacme/anvil'>Activa</a>
 </div>
 """
 
@@ -170,12 +188,19 @@ class Portal_Test(unittest.TestCase):
             p.serviceDescription(peer, 'explosives'),
             acmeService)
 
-    def test_peerDescription_withSingleService(self):
+    def test_peerDescription_singleService(self):
+        peer = ns.loads(sombogusyaml.encode('utf-8'))
+        p = portalexample.Portal("Example Portal", peerdata=self.datadir)
+        self.assertMultiLineEqual(
+            p.peerDescription(peer),
+            bogusPeerHeader + bogusService + peerFooter)
+
+    def test_peerDescription_manyServices(self):
         peer = ns.loads(somacmeyaml.encode('utf-8'))
         p = portalexample.Portal("Example Portal", peerdata=self.datadir)
         self.assertMultiLineEqual(
             p.peerDescription(peer),
-            acmePeerHeader + acmeService + peerFooter)
+            acmePeerHeader + acmeService + acmeService2 + peerFooter)
 
     def test_index_onePeer(self):
         self.write('somacme.yaml',somacmeyaml)
@@ -183,6 +208,7 @@ class Portal_Test(unittest.TestCase):
             header+
             acmePeerHeader+
             acmeService+
+            acmeService2+
             peerFooter+
             footer,
             self.client.get("/").data.decode('utf-8')
@@ -195,6 +221,7 @@ class Portal_Test(unittest.TestCase):
             header+
             acmePeerHeader+
             acmeService+
+            acmeService2+
             peerFooter+
             bogusPeerHeader+
             bogusService+
@@ -206,11 +233,12 @@ class Portal_Test(unittest.TestCase):
     def test_renderField(self):
         p = portalexample.Portal("Example Portal", peerdata=self.datadir)
         self.assertMultiLineEqual(
+            p.renderField(field="Nombre", value="Bunny, Bugs"),
             "<div class='field'>\n"
-            "<div class='fieldheader'>Nombre</div>\n"
+            "<div class='fieldheader'>Nombre:</div>\n"
             "<div class='fieldvalue'>Bunny, Bugs</div>\n"
             "</div>\n"
-            , p.renderField(data="Bunny, Bugs", field="Nombre"))
+            ) 
 
     def test_activateService(self):
         self.write("somacme.yaml",somacmeyaml)

@@ -17,7 +17,10 @@ from yamlns import namespace as ns
 - fields = portal.requiredFields(peer, service)
     - when service fields, use them
     - when no service fields, use global peer fields
-- data = portal.userInfo(fields)
+- data = portal.userInfo(userid, fields)
+    - works
+    - no such user
+    - no such field
 - translations = portal.fieldTranslation(fields)
 - fieldhtml = portal.renderField(fieldLabel, value)
 - innerhtml = portal.renderUserData(data)
@@ -152,7 +155,7 @@ css = """\
 
 class DataSource(object):
     def getField(self,field):
-        return "Bugs"
+        return "Bunny, Bugs"
 
 
 class Portal(Perfume):
