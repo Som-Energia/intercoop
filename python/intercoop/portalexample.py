@@ -40,6 +40,19 @@ template = u"""\
 </html>
 """
 
+templateActivateService = u"""\
+<html>
+<head>
+<meta encoding='utf-8' />
+<title>Activación servicio {service}</title>
+<link rel="stylesheet" type="text/css" href="intercoop.css">
+</head>
+<body>
+<h1>Campos que se enviarán al servicio {service}</h1>
+{fields}</body>
+</html>
+"""
+
 peerTmpl = u"""\
 <div class='peer'>
 <div class='peerlogo'><img src='{peer.logo}' /></div>
@@ -126,7 +139,9 @@ css = """\
 }
 """
 
-
+class DataSource(object):
+    def getField(self,field):
+        return "Bugs"
 
 
 class Portal(Perfume):
@@ -135,6 +150,7 @@ class Portal(Perfume):
         super(Portal, self).__init__(name)
         self.peers = peerdatastorage.PeerDataStorage(peerdata)
         self.name = name
+        self.dataSource = DataSource()
 
     @route('/intercoop.css', methods=['GET'])
     def css(self):
@@ -173,7 +189,16 @@ class Portal(Perfume):
 
     @route('/activateservice/<peer>/<service>', methods=['GET'])
     def activateService(self, peer, service):
-        return ''
+        response = templateActivateService.format(
+            service=service,
+            fields="".join(
+                self.formatField(
+                    field=self.peers.get(peer).services[service].fields[field].es,
+                    data=self.dataSource.getField(field))
+                for field in self.peers.get(peer).services[service].fields
+                )
+            )
+        return response
 
 
 

@@ -22,11 +22,13 @@ services:
   explosives:
     name:
       es: Comprar explosivos
+    fields:
+      name:
+        es: Nombre del titular
     description:
       es: >
         Puedes comprar explosivos éticos de la mejor calidad.
 """
-
 sombogusyaml=u"""\
 intercoopVersion: 1.0
 peerVersion: 1
@@ -106,7 +108,26 @@ peerFooter = u"""\
 </div>
 """
 
-
+acmeExplosivesHeader = u"""\
+<html>
+<head>
+<meta encoding='utf-8' />
+<title>Activación servicio explosives</title>
+<link rel="stylesheet" type="text/css" href="intercoop.css">
+</head>
+<body>
+<h1>Campos que se enviarán al servicio explosives</h1>
+"""
+acmeExplosivesFooter = u"""\
+</div>
+</body>
+</html>
+"""
+acmeExplosivesNameField = u"""\
+<div class='field'>
+<div class='fieldheader'>Campo:Nombre del titular</div>
+<div class='fieldvalue'>Valor:Bugs</div>
+"""
 class Portal_Test(unittest.TestCase):
     descriptions=(u"""\
 <li>Som Acme, SCCL
@@ -200,6 +221,22 @@ class Portal_Test(unittest.TestCase):
             "</div>\n"
             , p.formatField(data="", field=""))
 
+    def test_oneField(self):
+        p = portalexample.Portal("Example Portal", peerdata=self.datadir)
+        self.assertMultiLineEqual(
+            "<div class='field'>\n"
+            "<div class='fieldheader'>Campo:Nombre</div>\n"
+            "<div class='fieldvalue'>Valor:Bugs</div>\n"
+            "</div>\n"
+            , p.formatField(data="Bugs", field="Nombre"))
+    def test_activateService(self):
+        self.write("somacme.yaml",somacmeyaml)
+        p = portalexample.Portal("Example Portal", peerdata=self.datadir)
+        self.assertMultiLineEqual(
+            acmeExplosivesHeader+
+            acmeExplosivesNameField+
+            acmeExplosivesFooter, 
+            self.client.get("/activateservice/somacme/explosives").data.decode('utf-8'))
 
 
 
