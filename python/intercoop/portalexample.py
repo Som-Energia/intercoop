@@ -14,27 +14,29 @@ from yamlns import namespace as ns
 """
 # TODO:
 
-- fields = portal.requiredFields(peer, service)
-    - when service fields, use them
-    - when no service fields, use global peer fields
-- data = portal.userInfo(userid, fields)
-    - works
-    - no such user
-    - no such field
-- translations = portal.fieldTranslation(fields)
-- fieldhtml = portal.renderField(fieldLabel, value)
-- innerhtml = portal.renderUserData(data)
+Roadmap:
+
+- [ ] route activateservice/<peer>/<service>
+    - [ ] fields = portal.requiredFields(peer, service)
+        - [ ] when service fields, use them
+        - [ ] when no service fields, use global peer fields
+    - [ ] data = portal.userInfo(userid, fields)
+        - [ ] works
+        - [ ] no such user
+        - [ ] no such field
+    - [ ] translations = portal.fieldTranslation(fields)
+    - [ ] fieldhtml = portal.renderField(fieldLabel, value)
+    - [ ] innerhtml = portal.renderUserData(data)
 
 Postponed:
 
-- Solve translations
-- Should different types in field be rendered differently
-- No service description
-- No service name
-- No such service
-- Include peer.info optionally
-- route activateservice/<peer>/<service>
-- require login
+- [ ] Solve translations
+- [ ] Should different types in field be rendered differently
+- [ ] No service description
+- [ ] No service name
+- [ ] No such service
+- [ ] Include peer.info optionally
+- [ ] require login
 """
 
 
