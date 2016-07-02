@@ -202,6 +202,7 @@ class Portal_Test(unittest.TestCase):
         
     def setUp(self):
         self.maxDiff=None
+        self.peerid= 'somillusio'
         self.keyfile = 'testkey.pem'
         self.peerdatadir='peerdatadir'
         self.userdatadir='userdatadir'
@@ -212,6 +213,7 @@ class Portal_Test(unittest.TestCase):
 
     def setupPortal(self):
         return portalexample.Portal("Example Portal",
+            peerid = self.peerid,
             keyfile=self.keyfile,
             peerdatadir=self.peerdatadir,
             userdatadir=self.userdatadir,

@@ -21,7 +21,8 @@ with open('instance/users/myuser.yaml','wb') as f:
 	f.write(portalexample_test.myuseryaml.encode('utf8'))
 
 p = portalexample.Portal(
-	'Som Ilusio',
+	'intercoop',
+	peerid='somillusio',
 	keyfile='testkey.pem',
 	peerdatadir='instance/peers',
 	userdatadir='instance/users',

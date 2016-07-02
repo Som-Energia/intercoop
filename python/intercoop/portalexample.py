@@ -200,9 +200,10 @@ css = """\
 
 class Portal(Perfume):
 
-    def __init__(self, name, peerdatadir, userdatadir, keyfile):
+    def __init__(self, name, peerid, peerdatadir, userdatadir, keyfile):
         super(Portal, self).__init__(name)
         self.name = name
+        self.peerid = peerid
         self.key = crypto.loadKey(keyfile)
         self.peers = peerdatastorage.PeerDataStorage(peerdatadir)
         self.users = userinfo.UserInfo(userdatadir)
