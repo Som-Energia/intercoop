@@ -9,6 +9,7 @@ from yamlns import namespace as ns
 
 
 myuseryaml=u"""\
+originpeer: somillusio
 nif: 12345678Z
 name: Bunny, Bugs
 peerroles:
@@ -56,11 +57,11 @@ services:
       es: >
         Yunques garantizados, siempre caen en una cabeza
     fields:
-      innerid:
-        es: Número de socio/a
+    - originpeer
+    - innerid
 fields:
-  nif:
-    es: NIF
+- originpeer
+- nif
 """
 
 sombogusyaml=u"""\
@@ -85,8 +86,8 @@ services:
         es: >
           Productos con marcas tipo Panone, Grifons, Pas Natural, Reacciona...
     fields:
-      name:
-        es: Nombre      
+    - originpeer
+    - name
 """
 
 i18n1stlevel=u"""\
@@ -214,6 +215,12 @@ nameField = u"""\
 <div class='fieldvalue'>12345678Z</div>
 </div>
 """
+originField = u"""\
+<div class='field'>
+<div class='fieldheader'>originpeer:</div>
+<div class='fieldvalue'>somillusio</div>
+</div>
+"""
 
 class Portal_Test(unittest.TestCase):
 
@@ -329,7 +336,7 @@ class Portal_Test(unittest.TestCase):
         self.write("sombogus.yaml",sombogusyaml)
         p = self.setupPortal()
         self.assertEqual(
-            ['name'],
+            ['originpeer','name'],
             p.requiredFields("sombogus","contract")
         )
     
@@ -337,7 +344,7 @@ class Portal_Test(unittest.TestCase):
         self.write("somacme.yaml",somacmeyaml)
         p = self.setupPortal()
         self.assertEqual(
-            ['nif'],
+            ['originpeer','nif'],
             p.requiredFields("somacme","explosives")
         )
     
@@ -345,7 +352,7 @@ class Portal_Test(unittest.TestCase):
         self.write("somacme.yaml",somacmeyaml)
         p = self.setupPortal()
         self.assertEqual(
-            ['innerid'],
+            ['originpeer', 'innerid'],
             p.requiredFields("somacme","anvil")
         )
 
@@ -365,6 +372,7 @@ class Portal_Test(unittest.TestCase):
         self.write("somacme.yaml",somacmeyaml)
         self.assertMultiLineEqual(
             acmeExplosivesHeader+
+            originField+
             nameField+
             acmeExplosivesFooter, 
             self.client.get("/activateservice/somacme/explosives").data.decode('utf-8'))
