@@ -263,7 +263,7 @@ class Portal(Perfume):
         raise Exception("Peer '{}' does not specify fields for service '{}'"
             .format(peer, service))
 
-    def fieldTranslation(self, peername, field, isocode):
+    def fieldTranslation(self, peername, field, lang, langfallback=None):
         peerData = self.peers.get(peername)
         fieldExpanded = field.split("/")
         try:
@@ -272,10 +272,16 @@ class Portal(Perfume):
                 fieldTraverse = fieldTraverse[fieldElem]
         except KeyError:
             raise Exception("Invalid field '{}'".format(field))
-        try:
-            translation = fieldTraverse[isocode]
-        except KeyError:
-            raise Exception("Invalid translation '{}' for field '{}'".format(isocode,field))
+        if lang in fieldTraverse:
+            translation = fieldTraverse[lang]
+        elif langfallback in fieldTraverse:
+            translation = fieldTraverse[langfallback]
+        elif langfallback:
+            raise Exception("None of the '{}' or '{}' translations exist for field '{}'".format(
+                lang,langfallback,field))
+        else:
+            raise Exception("Invalid translation '{}' for field '{}'".format(
+                lang,field))
         return translation.rstrip()
 
     @route('/activateservice/<peer>/<service>', methods=['GET'])
