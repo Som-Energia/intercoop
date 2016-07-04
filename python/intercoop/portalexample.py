@@ -259,6 +259,11 @@ class Portal(Perfume):
         raise Exception("Peer '{}' does not specify fields for service '{}'"
             .format(peer, service))
 
+    def fieldTranslation(self, peername, field, isocode):
+        peerData = self.peers.get(peername)
+        serviceData = peerData[field]
+        return serviceData[isocode].rstrip()
+
     @route('/activateservice/<peer>/<service>', methods=['GET'])
     def activateService(self, peer, service):
         # TODO: done twice, also in requiredFields
@@ -297,6 +302,5 @@ class Portal(Perfume):
             # TODO: Log the error
             return "Error comunicando con la entidad"
         return redirect(continuationUri, 302)
-
 
 # vim: ts=4 sw=4 et

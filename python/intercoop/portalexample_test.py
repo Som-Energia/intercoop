@@ -347,4 +347,12 @@ class Portal_Test(unittest.TestCase):
             acmeExplosivesFooter, 
             self.client.get("/activateservice/somacme/explosives").data.decode('utf-8'))
     
+    def test_fieldTranslation_existTranslationFirstLevel(self):
+        self.setupApp()
+        self.write("somacme.yaml",somacmeyaml)
+        p = self.setupPortal()
+        self.assertEqual(
+            "La cooperativa para atrapar correcaminos",
+            p.fieldTranslation("somacme","description","es"))            
+
 # vim: ts=4 sw=4 et
