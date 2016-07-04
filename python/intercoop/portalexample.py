@@ -30,9 +30,8 @@ Roadmap:
         - [+] no such field
     - [ ] translations = portal.fieldTranslation(fields)
         - [+] One level, translation and field exist
-        - [ ] Peer doesn't exist
-        - [ ] One level, field exists but translation no
-        - [ ] One level, field doesn't exist
+        - [+] One level, field exists but translation no
+        - [+] One level, field doesn't exist
         - [ ] Many level, translation and field exist
         - [ ] Many level, field exists but translation no
         - [ ] Many level, field doesn't exist
@@ -269,10 +268,14 @@ class Portal(Perfume):
     def fieldTranslation(self, peername, field, isocode):
         peerData = self.peers.get(peername)
         try:
-            serviceData = peerData[field]
+            fieldData = peerData[field]
         except KeyError:
             raise Exception("Invalid field '{}'".format(field))
-        return serviceData[isocode].rstrip()
+        try:
+            translation = fieldData[isocode]
+        except KeyError:
+            raise Exception("Invalid translation '{}' for field '{}'".format(isocode,field))
+        return fieldData[isocode].rstrip()
 
     @route('/activateservice/<peer>/<service>', methods=['GET'])
     def activateService(self, peer, service):
