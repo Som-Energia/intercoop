@@ -6,19 +6,24 @@ from intercoop import portalexample_test
 
 import os
 
-try: os.makedirs('instance/peers')
-except: pass
+def write(filename, content):
+	with open(filename,'wb') as f:
+		f.write(content.encode('utf8'))
+
 try: os.makedirs('instance/users')
 except: pass
-with open('instance/peers/sombogus.yaml','wb') as f:
-    f.write(portalexample_test.sombogusyaml.encode('utf8'))
-with open('instance/peers/somacme.yaml','wb') as f:
-    f.write(portalexample_test.somacmeyaml.encode('utf8'))
+
+try: os.makedirs('instance/peers')
+except: pass
+
 with open('../peerdescriptor-example.yaml','rb') as some:
-    with open('instance/peers/somenergia.yaml','wb') as f:
-        f.write(some.read())
-with open('instance/users/myuser.yaml','wb') as f:
-	f.write(portalexample_test.myuseryaml.encode('utf8'))
+	somenergiayaml = some.read().decode('utf8')
+
+write('instance/peers/somenergia.yaml', somenergiayaml)
+write('instance/peers/sombogus.yaml', portalexample_test.sombogusyaml)
+write('instance/peers/somacme.yaml', portalexample_test.somacmeyaml)
+write('instance/users/myuser.yaml', portalexample_test.myuseryaml)
+
 
 p = portalexample.Portal(
 	'intercoop',
