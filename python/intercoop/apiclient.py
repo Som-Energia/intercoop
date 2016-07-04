@@ -15,7 +15,7 @@ class ApiClient(object):
 
     def activateService(self, service, personalData):
         package = packaging.Generator(self.key).produce(personalData)
-        response = requests.post(self.apiurl+'/activateService', data=package)
+        response = requests.post(self.apiurl+'activateService', data=package)
         r = ns.loads(response.text)
         if response.status_code == 200:
             return r.continuationUrl

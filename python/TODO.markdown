@@ -61,6 +61,7 @@
 - [ ] api: Return uri instead of (or besides) the uuid
 - [ ] api: Check all required values
 - [ ] api: Check services availability for the peer
+- [ ] api: Check service version is all right
 - [ ] api: Check other service specific constraints (geographical, user roles, amount...)
 - [ ] Proper keyring (either build one or use peer descriptors
 	- [ ] Given a peer id return the public key

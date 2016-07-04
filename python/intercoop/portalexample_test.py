@@ -41,7 +41,7 @@ privacyPolicyUrl:
 description:
   es: >
     La cooperativa para atrapar correcaminos
-targetUrl: http://localhost:5001/intercoop/
+targetUrl: http://localhost:5001/
 services:
   explosives:
     name:
