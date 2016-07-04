@@ -355,4 +355,13 @@ class Portal_Test(unittest.TestCase):
             "La cooperativa para atrapar correcaminos",
             p.fieldTranslation("somacme","description","es"))            
 
+    def test_fieldTranslation_doesntExistTranslationFirstLevel(self):
+        self.setupApp()
+        self.write("somacme.yaml",somacmeyaml)
+        p = self.setupPortal()
+        with self.assertRaises(Exception) as ctx:
+            p.fieldTranslation("somacme","badfield","es")
+        self.assertEqual(str(ctx.exception),
+            "Invalid field 'badfield'")
+
 # vim: ts=4 sw=4 et
