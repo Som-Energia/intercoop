@@ -372,4 +372,13 @@ class Portal_Test(unittest.TestCase):
             p.fieldTranslation("somacme","description","fr")
         self.assertEqual(str(ctx.exception),
             "Invalid translation 'fr' for field 'description'")
+
+    def test_fieldTranslation_existTranslationManyLevels(self):
+        self.setupApp()
+        self.write("somacme.yaml",somacmeyaml)
+        p = self.setupPortal()
+        self.assertEqual(
+            "Yunques garantizados, siempre caen en una cabeza",
+            p.fieldTranslation("somacme","services/anvil/description","es"))
+
 # vim: ts=4 sw=4 et
