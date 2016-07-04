@@ -10,6 +10,7 @@ from yamlns import namespace as ns
 class ApiClient_Test(unittest.TestCase):
 
     yaml=u"""\
+originpeer: somillusio
 origincode: 666
 name: Perico de los Palotes
 address: Percebe, 13
@@ -68,8 +69,8 @@ country: ES
             for h in m.request_history], [
             ('POST', 'https://api.somacme.coop/intercoop/activateService',
 
-                u"signature: Deo3k7Y9hH9yd3rEmVtLzIMe1ZiqdXGI57FzwVAM4oPDYXHouZS0cAv3f4rqvZ3YDeayoGwFEe8Bh3lr0Z2BSTcsfRLJXXSWDUcJASkxCapXPMF-63_cNXJ5EGyxeFIDlqtXCWGEXUiJgY8n3zh4bgna-QJLVUXAcKQiRVgzlmVS2JnluTp3GjV5g8H5QBIp5TLSfWKkX_wpH7Mmq_Kslo-i3MJoIMnkw_Mi7sKn4kP_GFfpm0RGILTFhYxCL4WkgYqjHW8e8zhu8zBxEhcu4_oQvhLlAsL2l_OUKbZPArdsUm1gZEBVq-bVsGyZDo06pfWI4LUHfCVAGGkXrD6QiQ==\n"
-                u"payload: b3JpZ2luY29kZTogNjY2Cm5hbWU6IFBlcmljbyBkZSBsb3MgUGFsb3RlcwphZGRyZXNzOiBQZXJjZWJlLCAxMwpjaXR5OiBWaWxsYXJyaWJhIGRlbCBBbGNvcm5vcXVlCnN0YXRlOiBBbGJhY2V0ZQpwb3N0YWxjb2RlOiAnMDEwMDEnCmNvdW50cnk6IEVTCg==\n"
+                u"signature: 2PXEJSmGwaIZY4XgWZYcmh8qexmGe-Ve7p45kLmtia5wO4CXrbx3BiCeFMvbi9eiGazOg-Cy9ktdR3SEYuZlwlkPpQ-C2QrVY2c6o1PKNNLFJoJIYkfnIDwTdtlY5qsxbC-kKbWO2WtnhCeBnBNKOwz9-lbIlrLYo470MjuTLheVmoXuyTHp1hOjHDDn2e38kJT-miNtr4knDn-uMYCXdAx3eIGTBOTQ8wGFz55JR_jluZKIN8wEgJQWAHVMY1FbtsutESRqJ_TMLbCbqe0llxWppxgF20XyzleSxTV6v_I2GZyfEWlYlFnOkk5TEjqkk5vZOFGXra2J3Cabzn9QFQ==\n"
+                u"payload: b3JpZ2lucGVlcjogc29taWxsdXNpbwpvcmlnaW5jb2RlOiA2NjYKbmFtZTogUGVyaWNvIGRlIGxvcyBQYWxvdGVzCmFkZHJlc3M6IFBlcmNlYmUsIDEzCmNpdHk6IFZpbGxhcnJpYmEgZGVsIEFsY29ybm9xdWUKc3RhdGU6IEFsYmFjZXRlCnBvc3RhbGNvZGU6ICcwMTAwMScKY291bnRyeTogRVMK\n"
                 u"intercoopVersion: '1.0'\n"
                 )
             ])
