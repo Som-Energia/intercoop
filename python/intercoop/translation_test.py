@@ -98,14 +98,14 @@ class Portal_Test(unittest.TestCase):
             "Yunques garantizados, siempre caen en una cabeza\n",
             t.fieldTranslation(data,"services/anvil/description","es"))
 
-    def test_translateTree_noTranslations(self):
+    def test_translate_noTranslations(self):
         data = notranslation
         t = translation.Translator()
         self.assertEqual(
             data,
             t.translate(notranslation,"es"))
 
-    def test_translateTree_firstLevel(self):
+    def test_translate_firstLevel(self):
         data = i18n1stlevel
         t = translation.Translator()
         tree = ns(data)
@@ -114,7 +114,7 @@ class Portal_Test(unittest.TestCase):
             tree,
             t.translate(data,"es"))
 
-    def test_translateTree_manyLevels(self):
+    def test_translate_manyLevels(self):
         data = i18nmanylevels
         t = translation.Translator()
         tree = ns(data)
@@ -123,6 +123,7 @@ class Portal_Test(unittest.TestCase):
         self.assertEqual(
             tree,
             t.translate(data,"es"))
+
 
 
 
