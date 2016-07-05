@@ -45,7 +45,7 @@ class UserInfo(object):
 
         return ns([
             (key, value)
-            for key,value in userdata.iteritems()
+            for key,value in userdata.items()
             if key in fields
             ])
 
