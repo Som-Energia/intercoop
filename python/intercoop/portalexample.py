@@ -212,13 +212,14 @@ class Portal(Perfume):
         self.peerid = peerid
         self.key = crypto.loadKey(keyfile)
         self.peers = peerdatastorage.PeerDataStorage(peerdatadir)
-        self.translation = translation.TranslatePeers()
+        self.translation = translation.Translator()
         self.users = userinfo.UserInfo(userdatadir)
 
     def translatedPeers(self):
         return (self.translation.translateTree(t,'es') for t in self.peers)
+
+
     @route('/intercoop.css', methods=['GET'])
-    
     def css(self):
         r = make_response(css)
         r.mimetype='text/css'

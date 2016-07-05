@@ -47,21 +47,21 @@ class Portal_Test(unittest.TestCase):
 
     def test_fieldTranslation_existTranslationFirstLevel(self):
         data = ns.loads(i18n1stlevel)
-        t = translation.TranslatePeers()
+        t = translation.Translator()
         self.assertEqual(
             "La cooperativa para atrapar correcaminos",
             t.fieldTranslation(data,"description","es"))
 
     def test_fieldTranslation_fallbackTranslation(self):
         data = ns.loads(i18nfallback)
-        t = translation.TranslatePeers()
+        t = translation.Translator()
         self.assertEqual(
             "The cooperative for catching roadrunners",
             t.fieldTranslation(data,"description","es","en"))
 
     def test_fieldTranslation_doesntExistFallback(self):
         data = ns.loads(i18nfallback)
-        t = translation.TranslatePeers()
+        t = translation.Translator()
         with self.assertRaises(Exception) as ctx:
             t.fieldTranslation(data,"description","fr","ca")
         self.assertEqual(str(ctx.exception),
@@ -70,14 +70,14 @@ class Portal_Test(unittest.TestCase):
 
     def test_fieldTranslation_fallbackLangTranslation(self):
         data = ns.loads(i18nmanylangs)
-        t = translation.TranslatePeers()
+        t = translation.Translator()
         self.assertEqual(
             "La cooperativa para atrapar correcaminos",
             t.fieldTranslation(data,"description","es","en"))
 
     def test_fieldTranslation_doesntExistFieldFirstLevel(self):
         data = ns.loads(i18n1stlevel)
-        t = translation.TranslatePeers()
+        t = translation.Translator()
         with self.assertRaises(Exception) as ctx:
             t.fieldTranslation(data,"badfield","es")
         self.assertEqual(str(ctx.exception),
@@ -85,7 +85,7 @@ class Portal_Test(unittest.TestCase):
 
     def test_fieldTranslation_doesntExistTranslationFirstLevel(self):
         data = ns.loads(i18n1stlevel)
-        t = translation.TranslatePeers()
+        t = translation.Translator()
         with self.assertRaises(Exception) as ctx:
             t.fieldTranslation(data,"description","fr")
         self.assertEqual(str(ctx.exception),
@@ -93,14 +93,14 @@ class Portal_Test(unittest.TestCase):
 
     def test_fieldTranslation_existTranslationManyLevels(self):
         data = ns.loads(i18nmanylevels)
-        t = translation.TranslatePeers()
+        t = translation.Translator()
         self.assertEqual(
             "Yunques garantizados, siempre caen en una cabeza\n",
             t.fieldTranslation(data,"services/anvil/description","es"))
 
     def test_translateTree_noTranslations(self):
         data = ns.loads(notranslation.encode('utf8'))
-        t = translation.TranslatePeers()
+        t = translation.Translator()
         tree = ns(data)
         self.assertEqual(
             tree,
@@ -108,7 +108,7 @@ class Portal_Test(unittest.TestCase):
 
     def test_translateTree_firstLevel(self):
         data = ns.loads(i18n1stlevel)
-        t = translation.TranslatePeers()
+        t = translation.Translator()
         tree = ns(data)
         tree.description = tree.description.es
         self.assertEqual(
@@ -117,7 +117,7 @@ class Portal_Test(unittest.TestCase):
 
     def test_translateTree_manyLevels(self):
         data = ns.loads(i18nmanylevels)
-        t = translation.TranslatePeers()
+        t = translation.Translator()
         tree = ns(data)
         tree.services.anvil.name = tree.services.anvil.name.es
         tree.services.anvil.description = tree.services.anvil.description.es

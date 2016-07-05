@@ -1,6 +1,6 @@
 from yamlns import namespace as ns
 
-class TranslatePeers(object):
+class NsTranslator(object):
     
     def fieldTranslation(self, tree, field, lang, langfallback=None):
         fieldExpanded = field.split("/")
