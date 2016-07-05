@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 
-from . import remoteuserinfo as datastorage
+from . import remoteuserinfo
 from . import packaging
 import unittest
 import os
@@ -24,13 +24,13 @@ class UnsecureDataStorage_Test(unittest.TestCase):
 
     def test_init_badDirectory(self):
         with self.assertRaises(Exception) as ctx:
-            datastorage.DataStorage('badpath')
+            remoteuserinfo.DataStorage('badpath')
 
         self.assertEqual(str(ctx.exception),
             "Storage folder 'badpath' should exist")
 
     def test_tokenfile(self):
-        s = datastorage.DataStorage(self.datadir)
+        s = remoteuserinfo.DataStorage(self.datadir)
         token = (
             '01020304-0506-0708-090a-0b0c0d0e0f10'
             )
@@ -38,7 +38,7 @@ class UnsecureDataStorage_Test(unittest.TestCase):
             os.path.join(self.datadir, token+'.yaml'))
 
     def test_tokenfile_badtoken(self):
-        s = datastorage.DataStorage(self.datadir)
+        s = remoteuserinfo.DataStorage(self.datadir)
         token = '../../etc/passwd'
 
         with self.assertRaises(Exception) as ctx:
@@ -48,19 +48,19 @@ class UnsecureDataStorage_Test(unittest.TestCase):
             "Bad token '{}'".format(token))
 
     def test_store(self):
-        s = datastorage.DataStorage(self.datadir)
+        s = remoteuserinfo.DataStorage(self.datadir)
         token = s.store(dato1='valor1')
         stored = ns.load(s._tokenfile(token))
         self.assertEqual(stored.dato1, 'valor1')
 
     def test_retrieve(self):
-        s = datastorage.DataStorage(self.datadir)
+        s = remoteuserinfo.DataStorage(self.datadir)
         token = s.store(dato1='valor1')
         stored = s.retrieve(token)
         self.assertEqual(stored.dato1, 'valor1')
 
     def test_retrieve_nonExisting(self):
-        s = datastorage.DataStorage(self.datadir)
+        s = remoteuserinfo.DataStorage(self.datadir)
         token = '01020304-0506-0708-090a-0b0c0d0e0f10'
         with self.assertRaises(packaging.NoSuchUuid) as ctx:
             s.retrieve(token)
@@ -69,13 +69,13 @@ class UnsecureDataStorage_Test(unittest.TestCase):
             "'01020304-0506-0708-090a-0b0c0d0e0f10'")
 
     def test_store_usingNs(self):
-        s = datastorage.DataStorage(self.datadir)
+        s = remoteuserinfo.DataStorage(self.datadir)
         token = s.store(ns(dato1='valor1'))
         stored = ns.load(s._tokenfile(token))
         self.assertEqual(stored.dato1, 'valor1')
 
     def test_store_overwritingNsValues(self):
-        s = datastorage.DataStorage(self.datadir)
+        s = remoteuserinfo.DataStorage(self.datadir)
         token = s.store(ns(dato1='valor1'), dato1='valor2')
         stored = ns.load(s._tokenfile(token))
         self.assertEqual(stored.dato1, 'valor2')

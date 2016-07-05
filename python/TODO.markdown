@@ -68,13 +68,14 @@
 - [ ] peerinfo: Own exception types (not just plain Exception)
 - [ ] unsecuredatastorage: Purgue old data
 - [ ] packaging: Protect against unsafe yamls (limit yaml parser features)
-- [ ] packaging: Embed data in errors so that they can be restored in client
-- [ ] api: Return uri instead of (or besides) the uuid
-- [ ] api: Check all required values
-- [ ] api: Check services availability for the peer
-- [ ] api: Check service version is all right
-- [ ] api: Check other service specific constraints (geographical, user roles, amount...)
-- [ ] Proper keyring (either build one or use peer descriptors
+- [x] packaging: Embed data in errors so that they can be restored in client
+- [x] api: Return uri instead of (or besides) the uuid
+- [ ] api: service level checks
+    - [ ] api: Check all required values
+    - [ ] api: Check services availability for the peer
+    - [ ] api: Check service version is all right
+    - [ ] api: Check other service specific constraints (geographical, user roles, amount...)
+- [ ] Nicer keyring (folder based)
 	- [ ] Given a peer id return the public key
 	- [ ] Raise an error if no key available
 	- [ ] Handle error in the case of bad key format
