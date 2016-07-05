@@ -20,7 +20,7 @@ from yamlns import namespace as ns
 
 Roadmap:
 
-- [ ] route activateservice/<peer>/<service>
+- [x] route activateservice/<peer>/<service>
     - [x] fields = portal.requiredFields(peer, service)
         - [x] when service fields, use them
         - [x] when no service fields, use global peer fields
@@ -35,12 +35,13 @@ Roadmap:
         - [+] One level, field exists but translation no
         - [+] One level, field doesn't exist
         - [x] Many level field
-    - [ ] fieldhtml = portal.renderField(fieldLabel, value)
-    - [ ] innerhtml = portal.renderUserData(data)
-- [ ] route confirmactivateservice/<peer>/<service>
+    - [x] fieldhtml = portal.renderField(fieldLabel, value)
+    - [x] innerhtml = portal.renderUserData(data)
+- [x] route confirmactivateservice/<peer>/<service>
 
 Postponed:
 
+- [ ] extract 'providers' as constructor parameters
 - [ ] activateservice: special display for list fields
 - [ ] activateservice: special display for None fields
 - [ ] bad peer in required fields
@@ -222,7 +223,7 @@ class Portal(Perfume):
         return r
 
     def serviceDescription(self, peer, service):
-        data = self.translator.translateTree(peer.services[service],'es') # TODO: Take the language from user
+        data = self.translator.translate(peer.services[service],'es') # TODO: Take the language from user
         return serviceTmpl.format(
             peer = peer,
             serviceid = service,
@@ -230,7 +231,7 @@ class Portal(Perfume):
             )
 
     def peerDescription(self, peer):
-        peer = self.translator.translateTree(peer,'es') # TODO: Take the language from user
+        peer = self.translator.translate(peer,'es') # TODO: Take the language from user
         return peerTmpl.format(
             peer=peer,
             services = "".join(
@@ -256,7 +257,7 @@ class Portal(Perfume):
             )
 
     def requiredFields(self, peer, service):
-        peerData = self.translator.translateTree(self.peers.get(peer),"es")
+        peerData = self.translator.translate(self.peers.get(peer),"es")
         serviceData = peerData.services[service]
 
         if 'fields' in serviceData:
@@ -272,7 +273,7 @@ class Portal(Perfume):
     @route('/activateservice/<peer>/<service>', methods=['GET'])
     def activateService(self, peer, service):
         # TODO: done twice, also in requiredFields
-        peerData = self.translator.translateTree(self.peers.get(peer),"es")
+        peerData = self.translator.translate(self.peers.get(peer),"es")
         serviceData = peerData.services[service]
         fields = self.requiredFields(peer, service)
         data = self.users.getFields('myuser', fields) # TODO: Real user
@@ -294,7 +295,7 @@ class Portal(Perfume):
     @route('/confirmactivateservice/<peer>/<service>', methods=['GET'])
     def confirmActivateService(self, peer, service):
         # TODO: Not under test!!
-        peerData = self.translator.translateTree(self.peers.get(peer),"es")
+        peerData = self.translator.translate(self.peers.get(peer),"es")
         serviceData = peerData.services[service]
         fields = self.requiredFields(peer, service)
         data = self.users.getFields('myuser', fields) # TODO: Real user

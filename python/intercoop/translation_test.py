@@ -104,7 +104,7 @@ class Portal_Test(unittest.TestCase):
         tree = ns(data)
         self.assertEqual(
             tree,
-            t.translateTree(data,"es"))
+            t.translate(data,"es"))
 
     def test_translateTree_firstLevel(self):
         data = ns.loads(i18n1stlevel.encode('utf8'))
@@ -113,7 +113,7 @@ class Portal_Test(unittest.TestCase):
         tree.description = tree.description.es
         self.assertEqual(
             tree,
-            t.translateTree(data,"es"))
+            t.translate(data,"es"))
 
     def test_translateTree_manyLevels(self):
         data = ns.loads(i18nmanylevels.encode('utf8'))
@@ -123,7 +123,7 @@ class Portal_Test(unittest.TestCase):
         tree.services.anvil.description = tree.services.anvil.description.es
         self.assertEqual(
             tree,
-            t.translateTree(data,"es"))
+            t.translate(data,"es"))
 
 
 

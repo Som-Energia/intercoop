@@ -53,7 +53,7 @@ class Translator(object):
                     prefix,
                     lang)
 
-    def translateTree(self, tree, lang):
+    def translate(self, tree, lang):
         transTree = tree.copy()
         for elem in tree:
             if type(tree[elem]) is ns:
