@@ -222,7 +222,7 @@ class Portal(Perfume):
         return r
 
     def serviceDescription(self, peer, service):
-        _ = translation.Translator('es') # TODO: Use user lang
+        _ = self._translator()
         data = _(peer.services[service])
         return serviceTmpl.format(
             peer = peer,
@@ -231,7 +231,7 @@ class Portal(Perfume):
             )
 
     def peerDescription(self, peer):
-        _ = translation.Translator('es') # TODO: Use user lang
+        _ = self._translator()
         peer = _(peer)
         return peerTmpl.format(
             peer=peer,
@@ -257,8 +257,15 @@ class Portal(Perfume):
             field=field,
             )
 
+    def _user(self):
+        return 'myuser' # TODO: take it from login info
+
+    def _translator(self):
+        return translation.Translator('es') # TODO: Use user lang
+        
+
     def requiredFields(self, peer, service):
-        _ = translation.Translator('es') # TODO: Use user lang
+        _ = self._translator()
         peerData = _(self.peers.get(peer))
         serviceData = peerData.services[service]
 
@@ -275,11 +282,11 @@ class Portal(Perfume):
     @route('/activateservice/<peer>/<service>', methods=['GET'])
     def activateService(self, peer, service):
         # TODO: done twice, also in requiredFields
-        _ = translation.Translator('es') # TODO: Use user lang
+        _ = self._translator()
         peerData = _(self.peers.get(peer))
         serviceData = peerData.services[service]
         fields = self.requiredFields(peer, service)
-        data = self.users.getFields('myuser', fields) # TODO: Real user
+        data = self.users.getFields(self._user(), fields) # TODO: Real user
         response = templateActivateService.format(
             peerid=peer,
             peer=peerData,
@@ -298,11 +305,11 @@ class Portal(Perfume):
     @route('/confirmactivateservice/<peer>/<service>', methods=['GET'])
     def confirmActivateService(self, peer, service):
         # TODO: Not under test!!
-        _ = translation.Translator('es') # TODO: Use user lang
+        _ = self._translator()
         peerData = _(self.peers.get(peer))
         serviceData = peerData.services[service]
         fields = self.requiredFields(peer, service)
-        data = self.users.getFields('myuser', fields) # TODO: Real user
+        data = self.users.getFields(self._user(), fields) # TODO: Real user
         api = apiclient.ApiClient(peerData.targetUrl, self.key)
         # TODO: augment personal data keys with source ones
         # TODO: handle errors
