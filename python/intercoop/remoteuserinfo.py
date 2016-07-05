@@ -5,7 +5,7 @@ import os
 from . import crypto
 from . import packaging
 
-class DataStorage(object):
+class RemoteUserInfo(object):
     """
     DO NOT USE THIS IN PRODUCTION.
     This class is a simple testing purpose data storage.

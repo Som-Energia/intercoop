@@ -7,21 +7,20 @@ from intercoop import crypto
 import os
 
 
-try: os.makedirs('instance/somacme/peeruserdata')
+try: os.makedirs('instance/somacme/remoteusers')
 except: pass
 
 
 from intercoop.apiexample_test import KeyRingMock as KeyRing
 
-keyring = KeyRing(dict(
-	somillusio = crypto.loadKey('testkey-public.pem')
-	))
 
 p = apiexample.IntercoopApi(
 	'intercoop',
-	remoteuserinfo.DataStorage('instance/somacme/peeruserdata'),
-	keyring,
-	'http://localhost:5001/activateService/{uuid}'
+	storage = remoteuserinfo.RemoteUserInfo('instance/somacme/remoteusers'),
+    keyring = KeyRing(dict(
+        somillusio = crypto.loadKey('testkey-public.pem')
+        )),
+	continuationUrlTmpl = 'http://localhost:5001/activateService/{uuid}'
 	)
 
 p.run(

@@ -41,7 +41,7 @@ country: ES
         self.datadir='apiexamplestorage'
         try: os.makedirs(self.datadir)
         except: pass
-        self.storage = remoteuserinfo.DataStorage(self.datadir)
+        self.storage = remoteuserinfo.RemoteUserInfo(self.datadir)
         self.api = apiexample.IntercoopApi('testapi', self.storage, self.keyring)
         app = self.api.app
         app.config['TESTING'] = True
