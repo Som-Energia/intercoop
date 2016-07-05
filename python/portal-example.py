@@ -33,5 +33,8 @@ p = portalexample.Portal(
 	userdatadir='instance/somillusio/users',
 	)
 
-p.run(debug=True)
+p.run(
+    debug=True,
+    host='0.0.0.0',
+    )
 

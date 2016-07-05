@@ -273,121 +273,103 @@ class Portal_Test(unittest.TestCase):
         try: shutil.rmtree(self.userdatadir)
         except: pass    
 
-    def test_index_whenEmpty(self):
+    def test_fieldTranslation_existTranslationFirstLevel(self):
         self.setupApp()
-        self.assertMultiLineEqual(
-            header+footer,
-            self.client.get("/").data.decode('utf-8')
-            )
-
-    def test_serviceDescription(self):
-        peer = ns.loads(somacmeyaml.encode('utf-8'))
+        self.write("somacme.yaml", i18n1stlevel)
         p = self.setupPortal()
         t = translation.TranslatePeers()
-        self.assertMultiLineEqual(
-            p.serviceDescription(t.translateTree(peer,"es"), 'explosives'),
-            acmeService)
-
-    def test_peerDescription_singleService(self):
-        peer = ns.loads(sombogusyaml.encode('utf-8'))
-        p = self.setupPortal()
-        t = translation.TranslatePeers()
-        self.assertMultiLineEqual(
-            p.peerDescription(t.translateTree(peer,"es")),
-            bogusPeerHeader + bogusService + peerFooter)
-
-    def test_peerDescription_manyServices(self):
-        peer = ns.loads(somacmeyaml.encode('utf-8'))
-        p = self.setupPortal()
-        t = translation.TranslatePeers()
-        self.assertMultiLineEqual(
-            p.peerDescription(t.translateTree(peer,"es")),
-            acmePeerHeader + acmeService + acmeService2 + peerFooter)
-
-    def test_index_onePeer(self):
-        self.setupApp()
-        self.write('somacme.yaml',somacmeyaml)
-        self.assertMultiLineEqual(
-            header+
-            acmePeerHeader+
-            acmeService+
-            acmeService2+
-            peerFooter+
-            footer,
-            self.client.get("/").data.decode('utf-8')
-            )
-
-    def test_index_many(self):
-        self.setupApp()
-        self.write('somacme.yaml',somacmeyaml)
-        self.write('sombogus.yaml',sombogusyaml)
-        self.assertMultiLineEqual(
-            header+
-            acmePeerHeader+
-            acmeService+
-            acmeService2+
-            peerFooter+
-            bogusPeerHeader+
-            bogusService+
-            peerFooter+
-            footer,
-            self.client.get("/").data.decode('utf-8')
-            )
-
-    def test_renderField(self):
-        p = self.setupPortal()
-        self.assertMultiLineEqual(
-            p.renderField(field="Nombre", value="Bunny, Bugs"),
-            "<div class='field'>\n"
-            "<div class='fieldheader'>Nombre:</div>\n"
-            "<div class='fieldvalue'>Bunny, Bugs</div>\n"
-            "</div>\n"
-            ) 
-
-    def test_requiredFields_justInService_useService(self):
-        self.write("sombogus.yaml",sombogusyaml)
-        p = self.setupPortal()
         self.assertEqual(
-            ['originpeer','name'],
-            p.requiredFields("sombogus","contract")
-        )
+            "La cooperativa para atrapar correcaminos",
+            t.fieldTranslation(p.peers.get("somacme"),"description","es"))            
+
+    def test_fieldTranslation_fallbackTranslation(self):
+        self.setupApp()
+        self.write("somacme.yaml", i18nfallback)
+        p = self.setupPortal()
+        t = translation.TranslatePeers()
+        self.assertEqual(
+            "The cooperative for catching roadrunners",
+            t.fieldTranslation(p.peers.get("somacme"),"description","es","en"))            
     
-    def test_requiredFields_justInPeer_usePeer(self):
-        self.write("somacme.yaml",somacmeyaml)
+    def test_fieldTranslation_doesntExistFallback(self):
+        self.setupApp()
+        self.write("somacme.yaml", i18nfallback)
         p = self.setupPortal()
-        self.assertEqual(
-            ['originpeer','nif'],
-            p.requiredFields("somacme","explosives")
-        )
-    
-    def test_requiredFields_inServiceAndPeer_useService(self):
-        self.write("somacme.yaml",somacmeyaml)
-        p = self.setupPortal()
-        self.assertEqual(
-            ['originpeer', 'innerid'],
-            p.requiredFields("somacme","anvil")
-        )
-
-    def test_requiredFields_noFields(self):
-        bogus = ns.loads(sombogusyaml.encode('utf8'))
-        del bogus.services.contract.fields
-        self.write("sombogus.yaml",bogus.dump().decode('utf8'))
-        p = self.setupPortal()
+        t = translation.TranslatePeers()
         with self.assertRaises(Exception) as ctx:
-            p.requiredFields("sombogus","contract")
-
+            t.fieldTranslation(p.peers.get("somacme"),"description","fr","ca")            
         self.assertEqual(str(ctx.exception),
-            "Peer 'sombogus' does not specify fields for service 'contract'")
-
-    def test_activateService(self):
+            "None of the 'fr' or 'ca' translations exist for field 'description'")
+    
+    
+    def test_fieldTranslation_fallbackLangTranslation(self):
         self.setupApp()
-        self.write("somacme.yaml",somacmeyaml)
-        self.assertMultiLineEqual(
-            acmeExplosivesHeader+
-            originField+
-            nameField+
-            acmeExplosivesFooter, 
-            self.client.get("/activateservice/somacme/explosives").data.decode('utf-8'))
- 
-   
+        self.write("somacme.yaml", i18nmanylangs)
+        p = self.setupPortal()
+        t = translation.TranslatePeers()
+        self.assertEqual(
+            "La cooperativa para atrapar correcaminos",
+            t.fieldTranslation(p.peers.get("somacme"),"description","es","en"))            
+    
+    def test_fieldTranslation_doesntExistFieldFirstLevel(self):
+        self.setupApp()
+        self.write("somacme.yaml", i18n1stlevel)
+        p = self.setupPortal()
+        t = translation.TranslatePeers()
+        with self.assertRaises(Exception) as ctx:
+            t.fieldTranslation(p.peers.get("somacme"),"badfield","es")
+        self.assertEqual(str(ctx.exception),
+            "Invalid field 'badfield'")
+
+    def test_fieldTranslation_doesntExistTranslationFirstLevel(self):
+        self.setupApp()
+        self.write("somacme.yaml", i18n1stlevel)
+        p = self.setupPortal()
+        t = translation.TranslatePeers()
+        with self.assertRaises(Exception) as ctx:
+            t.fieldTranslation(p.peers.get("somacme"),"description","fr")
+        self.assertEqual(str(ctx.exception),
+            "Invalid translation 'fr' for field 'description'")
+
+    def test_fieldTranslation_existTranslationManyLevels(self):
+        self.setupApp()
+        self.write("somacme.yaml",i18nmanylevels)
+        p = self.setupPortal()
+        t = translation.TranslatePeers()
+        self.assertEqual(
+            "Yunques garantizados, siempre caen en una cabeza\n",
+            t.fieldTranslation(p.peers.get("somacme"),"services/anvil/description","es"))
+    
+    def test_translateTree_noTranslations(self):
+        self.setupApp()
+        self.write("somacme.yaml",notranslation)
+        p = self.setupPortal()
+        t = translation.TranslatePeers()
+        tree = ns.load(os.path.join(self.peerdatadir,"somacme.yaml"))
+        self.assertEqual(
+            tree,
+            t.translateTree(p.peers.get("somacme"),"es"))
+
+    def test_translateTree_firstLevel(self):
+        self.setupApp()
+        self.write("somacme.yaml",i18n1stlevel)
+        p = self.setupPortal()
+        t = translation.TranslatePeers()
+        tree = ns.load(os.path.join(self.peerdatadir,"somacme.yaml"))
+        tree.description = tree.description.es
+        self.assertEqual(
+            tree,
+            t.translateTree(p.peers.get("somacme"),"es"))
+    
+    def test_translateTree_manyLevels(self):
+        self.setupApp()
+        self.write("somacme.yaml",i18nmanylevels)
+        p = self.setupPortal()
+        t = translation.TranslatePeers()
+        tree = ns.load(os.path.join(self.peerdatadir,"somacme.yaml"))
+        tree.services.anvil.name = tree.services.anvil.name.es
+        tree.services.anvil.description = tree.services.anvil.description.es
+        self.assertEqual(
+            tree,
+            t.translateTree(p.peers.get("somacme"),"es"))
 # vim: ts=4 sw=4 et
