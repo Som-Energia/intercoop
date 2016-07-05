@@ -222,10 +222,11 @@ class Portal(Perfume):
         return r
 
     def serviceDescription(self, peer, service):
+        data = self.translator.translateTree(peer.services[service],'es') # TODO: Take the language from user
         return serviceTmpl.format(
             peer = peer,
             serviceid = service,
-            service = peer.services[service],
+            service = data,
             )
 
     def peerDescription(self, peer):
