@@ -74,18 +74,11 @@ class PeerDataStorage_Test(unittest.TestCase):
  
     def test_iter(self):
         s = peerdatastorage.PeerDataStorage(self.peerdatadir)
-        try:
-            self.assertCountEqual(list(s),[
-                    ns.loads(somacmeyaml),
-                    ns.loads(sombogusyaml),
-                ]
-            )
-        except AttributeError:
-            self.assertItemsEqual(list(s),[
-                    ns.loads(somacmeyaml),
-                    ns.loads(sombogusyaml),
-                ]
-            )
+        self.assertEqual(list(s),[
+                ns.loads(somacmeyaml),
+                ns.loads(sombogusyaml),
+            ]
+        )
 
 
 # vim: ts=4 sw=4 et
