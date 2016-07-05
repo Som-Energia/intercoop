@@ -229,6 +229,7 @@ class Portal(Perfume):
             )
 
     def peerDescription(self, peer):
+        peer = self.translator.translateTree(peer,'es') # TODO: Take the language from user
         return peerTmpl.format(
             peer=peer,
             services = "".join(
@@ -241,7 +242,7 @@ class Portal(Perfume):
         response = template.format(
             self.name,
             "".join(
-                self.peerDescription(self.translator.translateTree(peer,'es'))
+                self.peerDescription(peer)
                 for peer in self.peers
                 )
             )
