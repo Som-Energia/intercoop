@@ -1,16 +1,10 @@
 from yamlns import namespace as ns
 
-"""
-# TODO
-
-- [ ] Multiple language in constructor
-
-"""
 
 class Translator(object):
 
     def __init__(self, language='es', fallback='es'):
-        self.language = [language] 
+        self.language = language if type(language) == list else[language] 
         self.fallback = fallback
     
     def __call__(self, data):

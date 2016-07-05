@@ -118,5 +118,53 @@ class Translator_Test(unittest.TestCase):
             """
             )
 
+    def test_languageList_single(self):
+        self.assertTranslateEqual(['ca'],
+            """\
+            en: Translated string
+            es: Texto traducido
+            ca: Text traduït
+            """,
+            """\
+            Text traduït
+            """,
+            )
+ 
+    def test_languageList_multiple(self):
+        self.assertTranslateEqual(['ca','en'],
+            """\
+            en: Translated string
+            es: Texto traducido
+            ca: Text traduït
+            """,
+            """\
+            Text traduït
+            """,
+            )
+ 
+    def test_languageList_multiple_missingFirst(self):
+        self.assertTranslateEqual(['eu','en'],
+            """\
+            en: Translated string
+            es: Texto traducido
+            ca: Text traduït
+            """,
+            """\
+            Translated string
+            """,
+            )
+
+    def test_languageList_multiple_missingAll_takesFallback(self):
+        self.assertTranslateEqual(['eu','gl'],
+            """\
+            en: Translated string
+            es: Texto traducido
+            ca: Text traduït
+            """,
+            """\
+            Texto traducido
+            """,
+            )
+ 
 
 # vim: ts=4 sw=4 et
