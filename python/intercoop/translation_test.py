@@ -1,10 +1,6 @@
 # -*- encoding: utf-8 -*-
 
 import unittest
-import os
-import shutil
-from . import portalexample
-from . import peerdatastorage
 from . import translation
 from yamlns import namespace as ns
 
