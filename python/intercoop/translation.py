@@ -1,6 +1,16 @@
 from yamlns import namespace as ns
 
+"""
+# TODO
+
+- [ ] Multiple language in constructor
+
+"""
+
 class Translator(object):
+
+    def __init__(self, fallback='es', language='es'):
+        self.language = language
     
     def fieldTranslation(self, tree, field, lang, langfallback=None):
         fieldExpanded = field.split("/")
@@ -11,16 +21,14 @@ class Translator(object):
         except KeyError:
             raise Exception("Invalid field '{}'".format(field))
         if lang in fieldTraverse:
-            translation = fieldTraverse[lang]
-        elif langfallback in fieldTraverse:
-            translation = fieldTraverse[langfallback]
-        elif langfallback:
+            return fieldTraverse[lang]
+        if langfallback in fieldTraverse:
+            return fieldTraverse[langfallback]
+        if langfallback:
             raise Exception("None of the '{}' or '{}' translations exist for field '{}'".format(
                 lang,langfallback,field))
-        else:
-            raise Exception("Invalid translation '{}' for field '{}'".format(
-                lang,field))
-        return translation
+        raise Exception("Invalid translation '{}' for field '{}'".format(
+            lang,field))
 
     def _translateTree(self,transTree,treeOrig,prefix,lang):
         tree = treeOrig
