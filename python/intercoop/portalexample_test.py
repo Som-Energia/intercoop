@@ -5,6 +5,7 @@ import os
 import shutil
 from . import portalexample
 from . import peerdatastorage
+from . import translation
 from yamlns import namespace as ns
 
 
@@ -415,16 +416,18 @@ class Portal_Test(unittest.TestCase):
         self.setupApp()
         self.write("somacme.yaml", i18nmanylangs)
         p = self.setupPortal()
+        t = translation.TranslatePeers(p.peers)
         self.assertEqual(
             "La cooperativa para atrapar correcaminos",
-            p.fieldTranslation("somacme","description","es","en"))            
+            t.fieldTranslation("somacme","description","es","en"))            
     
     def test_fieldTranslation_doesntExistFieldFirstLevel(self):
         self.setupApp()
         self.write("somacme.yaml", i18n1stlevel)
         p = self.setupPortal()
+        t = translation.TranslatePeers(p.peers)
         with self.assertRaises(Exception) as ctx:
-            p.fieldTranslation("somacme","badfield","es")
+            t.fieldTranslation("somacme","badfield","es")
         self.assertEqual(str(ctx.exception),
             "Invalid field 'badfield'")
 
@@ -432,8 +435,9 @@ class Portal_Test(unittest.TestCase):
         self.setupApp()
         self.write("somacme.yaml", i18n1stlevel)
         p = self.setupPortal()
+        t = translation.TranslatePeers(p.peers)
         with self.assertRaises(Exception) as ctx:
-            p.fieldTranslation("somacme","description","fr")
+            t.fieldTranslation("somacme","description","fr")
         self.assertEqual(str(ctx.exception),
             "Invalid translation 'fr' for field 'description'")
 
@@ -441,37 +445,41 @@ class Portal_Test(unittest.TestCase):
         self.setupApp()
         self.write("somacme.yaml",i18nmanylevels)
         p = self.setupPortal()
+        t = translation.TranslatePeers(p.peers)
         self.assertEqual(
             "Yunques garantizados, siempre caen en una cabeza\n",
-            p.fieldTranslation("somacme","services/anvil/description","es"))
+            t.fieldTranslation("somacme","services/anvil/description","es"))
     
-    def test_translateTree_noTranslations(self):
+    def test_translatePeer_noTranslations(self):
         self.setupApp()
         self.write("somacme.yaml",notranslation)
         p = self.setupPortal()
+        t = translation.TranslatePeers(p.peers)
         tree = ns.load(os.path.join(self.peerdatadir,"somacme.yaml"))
         self.assertEqual(
             tree,
-            p.translateTree("somacme","es"))
+            t.translatePeer("somacme","es"))
 
-    def test_translateTree_firstLevel(self):
+    def test_translatePeer_firstLevel(self):
         self.setupApp()
         self.write("somacme.yaml",i18n1stlevel)
         p = self.setupPortal()
+        t = translation.TranslatePeers(p.peers)
         tree = ns.load(os.path.join(self.peerdatadir,"somacme.yaml"))
         tree.description = tree.description.es
         self.assertEqual(
             tree,
-            p.translateTree("somacme","es"))
+            t.translatePeer("somacme","es"))
     
-    def test_translateTree_manyLevels(self):
+    def test_translatePeer_manyLevels(self):
         self.setupApp()
         self.write("somacme.yaml",i18nmanylevels)
         p = self.setupPortal()
+        t = translation.TranslatePeers(p.peers)
         tree = ns.load(os.path.join(self.peerdatadir,"somacme.yaml"))
         tree.services.anvil.name = tree.services.anvil.name.es
         tree.services.anvil.description = tree.services.anvil.description.es
         self.assertEqual(
             tree,
-            p.translateTree("somacme","es"))
+            t.translatePeer("somacme","es"))
 # vim: ts=4 sw=4 et
