@@ -42,9 +42,8 @@ country: ES
         try: os.makedirs(self.datadir)
         except: pass
         self.storage = unsecuredatastorage.DataStorage(self.datadir)
-
-        app = apiexample.IntercoopApi('testapi', self.storage, self.keyring).app
-
+        self.api = apiexample.IntercoopApi('testapi', self.storage, self.keyring)
+        app = self.api.app
         app.config['TESTING'] = True
         self.client = app.test_client()
 
@@ -74,6 +73,21 @@ country: ES
         data = ns.loads(r.data)
         self.assertEqual(r.status_code, 200)
         self.assertRegex(data.uuid, '^[0-9a-f\-]+$')
+
+    def test__activateService_post__withContinuationUrl(self):
+        g = packaging.Generator(self.key)
+        data = ns.loads(self.yaml)
+        package = g.produce(data)
+        # TODO: Use the constructor param instead
+        self.api.continuationUrlTmpl='/activateService?uuid={uuid}'
+
+        r = self.client.post('/activateService', data=package)
+
+        data = ns.loads(r.data)
+        self.assertEqual(r.status_code, 200)
+        self.assertRegex(data.uuid, '^[0-9a-f\-]+$')
+        self.assertEqual(data.continuationUrl,
+            '/activateService?uuid='+data.uuid)
 
     def test__activateService_post__badPeer(self):
         g = packaging.Generator(self.key)

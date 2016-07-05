@@ -4,7 +4,7 @@
 from flask import (
 	make_response,
 	request,
-    Response
+    Response,
 	)
 
 from . import packaging
@@ -52,10 +52,11 @@ def yaml_response(f):
 
 class IntercoopApi(Perfume):
 
-    def __init__(self, name, storage, keyring):
+    def __init__(self, name, storage, keyring, continuationUrlTmpl=None):
         super(IntercoopApi, self).__init__(name)
         self.storage = storage
         self.keyring = keyring
+        self.continuationUrlTmpl = continuationUrlTmpl
 
 
     @route('/protocolVersion', methods=['GET'])
@@ -76,9 +77,12 @@ class IntercoopApi(Perfume):
         p = packaging.Parser(self.keyring)
         values = p.parse(request.data)
         uuid = self.storage.store(values)
-        return ns(
-            uuid=uuid,
+        result = ns(uuid=uuid)
+        if self.continuationUrlTmpl:
+            result.update(
+                continuationUrl=self.continuationUrlTmpl.format(uuid=uuid),
             )
+        return result
 
     @route('/activateService/<uuid>', methods=['GET'])
     @yaml_response

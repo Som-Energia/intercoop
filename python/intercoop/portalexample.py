@@ -318,7 +318,8 @@ class Portal(Perfume):
         # TODO: handle errors
         try:
             continuationUri = api.activateService(service, data)
-        except:
+        except Exception as e:
+            print(type(e).__name__, e) 
             # TODO: Log the error
             return "Error comunicando con la entidad"
         return redirect(continuationUri, 302)

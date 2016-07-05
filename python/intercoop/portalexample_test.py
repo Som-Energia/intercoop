@@ -42,7 +42,7 @@ privacyPolicyUrl:
 description:
   es: >
     La cooperativa para atrapar correcaminos
-targetUrl: http://localhost:5001/
+targetUrl: http://localhost:5001
 services:
   explosives:
     name:
@@ -77,7 +77,7 @@ privacyPolicyUrl:
 description:
     es: >
       Productos inútiles pero muy éticos
-targetUrl: http://localhost:5002/intercoop/
+targetUrl: http://localhost:5002/intercoop
 services:
   contract:
     name:
