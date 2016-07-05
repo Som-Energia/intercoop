@@ -223,7 +223,8 @@ class Portal(Perfume):
         return r
 
     def serviceDescription(self, peer, service):
-        data = self.translator.translate(peer.services[service],'es') # TODO: Take the language from user
+        _ = translation.Translator('es') # TODO: Use user lang
+        data = _(peer.services[service])
         return serviceTmpl.format(
             peer = peer,
             serviceid = service,
@@ -231,7 +232,8 @@ class Portal(Perfume):
             )
 
     def peerDescription(self, peer):
-        peer = self.translator.translate(peer,'es') # TODO: Take the language from user
+        _ = translation.Translator('es') # TODO: Use user lang
+        peer = _(peer)
         return peerTmpl.format(
             peer=peer,
             services = "".join(
@@ -257,7 +259,8 @@ class Portal(Perfume):
             )
 
     def requiredFields(self, peer, service):
-        peerData = self.translator.translate(self.peers.get(peer),"es")
+        _ = translation.Translator('es') # TODO: Use user lang
+        peerData = _(self.peers.get(peer))
         serviceData = peerData.services[service]
 
         if 'fields' in serviceData:
@@ -273,7 +276,8 @@ class Portal(Perfume):
     @route('/activateservice/<peer>/<service>', methods=['GET'])
     def activateService(self, peer, service):
         # TODO: done twice, also in requiredFields
-        peerData = self.translator.translate(self.peers.get(peer),"es")
+        _ = translation.Translator('es') # TODO: Use user lang
+        peerData = _(self.peers.get(peer))
         serviceData = peerData.services[service]
         fields = self.requiredFields(peer, service)
         data = self.users.getFields('myuser', fields) # TODO: Real user
@@ -295,7 +299,8 @@ class Portal(Perfume):
     @route('/confirmactivateservice/<peer>/<service>', methods=['GET'])
     def confirmActivateService(self, peer, service):
         # TODO: Not under test!!
-        peerData = self.translator.translate(self.peers.get(peer),"es")
+        _ = translation.Translator('es') # TODO: Use user lang
+        peerData = _(self.peers.get(peer))
         serviceData = peerData.services[service]
         fields = self.requiredFields(peer, service)
         data = self.users.getFields('myuser', fields) # TODO: Real user

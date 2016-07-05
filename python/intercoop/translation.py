@@ -9,8 +9,9 @@ from yamlns import namespace as ns
 
 class Translator(object):
 
-    def __init__(self, fallback='es', language='es'):
+    def __init__(self, language='es', fallback='es'):
         self.language = language
+        self.fallback = fallback
     
     def fieldTranslation(self, tree, field, lang, langfallback=None):
         fieldExpanded = field.split("/")
@@ -61,10 +62,29 @@ class Translator(object):
         return transTree
 
     def __call__(self, data):
+
         if type(data) == ns:
-            return data[self.language]
+            # defined language
+            try: return data[self.language]
+            except KeyError: pass
+
+            # fallback language
+            try: return data[self.fallback]
+            except KeyError: pass
+
+            # Non translatable dict
+            return ns(
+                (key, self.__call__(value))
+                for key, value in data.items()
+                )
+
+        if type(data) == list:
+            return [
+                self.__call__(item)
+                for item in data
+                ]
+
         return data
-    
 
 
 

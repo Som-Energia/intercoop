@@ -128,11 +128,79 @@ class Portal_Test(unittest.TestCase):
         return ns.loads(content) #.encode('utf8'))
 
     def assertTranslateEqual(self, lang, orig, expected):
-        t = translation.Translator('es')
+        t = translation.Translator(lang)
         result = t(self.ns(orig))
         self.assertEqual(result, self.ns(expected))
 
-    def _test_translate_multipleKeys(self):
+    def test_plainString(self):
+        self.assertTranslateEqual('es',
+            "Untranslated string",
+            "Untranslated string"
+            )
+ 
+    def test_translatedString(self):
+        self.assertTranslateEqual('es',
+            """\
+            en: Translated string
+            es: Texto traducido
+            """,
+            "Texto traducido"
+            )
+
+    def test_translatedString_otherLanguage(self):
+        self.assertTranslateEqual('en',
+            """\
+            en: Translated string
+            es: Texto traducido
+            """,
+            "Translated string"
+            )
+ 
+    def test_translatedString_missingLanguageTakesFallback(self):
+        self.assertTranslateEqual('ca',
+            """\
+            en: Translated string
+            es: Texto traducido
+            """,
+            "Texto traducido"
+            )
+ 
+    def test_translatedString_noFallbackKeyIgnored(self):
+        self.assertTranslateEqual('eu',
+            """\
+            en: Translated string
+            ca: Text traduït
+            """,
+            """\
+            en: Translated string
+            ca: Text traduït
+            """,
+            )
+ 
+    def test_translatedString_languagePresent(self):
+        self.assertTranslateEqual('ca',
+            """\
+            en: Translated string
+            ca: Text traduït
+            """,
+            """\
+            Text traduït
+            """,
+            )
+ 
+    def test_insideADict(self):
+        self.assertTranslateEqual('ca',
+            """\
+            key:
+                en: Translated string
+                ca: Text traduït
+            """,
+            """\
+            key: Text traduït
+            """,
+            )
+ 
+    def test_translate_multipleKeys(self):
         self.assertTranslateEqual('es',
             """\
             tree1:
@@ -149,17 +217,7 @@ class Portal_Test(unittest.TestCase):
             """
             )
 
-    def _test_translate_singleKeys(self):
-        self.assertTranslateEqual('es',
-            """\
-            key1:
-                es: Mensaje en español
-                ca: Missatge en català
-            """, """\
-            key1: Mensaje en español
-            """
-            )
-    def _test_translate_insideList(self):
+    def test_translate_insideList(self):
         self.assertTranslateEqual('es',
             """\
             listcontainer:
@@ -168,22 +226,9 @@ class Portal_Test(unittest.TestCase):
                     ca: Missatge en català
             """, """\
             listcontainer:
-                - key1: Mensaje en español
+                - key: Mensaje en español
             """
             )
 
-    def test_string(self):
-        self.assertTranslateEqual('es',
-            "Untranslated string",
-            "Untranslated string"
-            )
- 
-    def test_translatedString(self):
-        self.assertTranslateEqual('es',
-            "es: Translated string",
-            "Translated string"
-            )
- 
-    
 
 # vim: ts=4 sw=4 et
