@@ -213,7 +213,6 @@ class Portal(Perfume):
         self.peerid = peerid
         self.key = crypto.loadKey(keyfile)
         self.peers = peerdatastorage.PeerDataStorage(peerdatadir)
-        self.translator = translation.Translator()
         self.users = userinfo.UserInfo(userdatadir)
 
     @route('/intercoop.css', methods=['GET'])
