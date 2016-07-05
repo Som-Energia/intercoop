@@ -99,28 +99,6 @@ services:
        name: César
 """
 
-i18n1stlevel=u"""\
-description:
-  es: La cooperativa para atrapar correcaminos
-"""
-i18nfallback=u"""\
-description:
-  en: The cooperative for catching roadrunners
-"""
-i18nmanylangs=u"""\
-description:
-  es: La cooperativa para atrapar correcaminos
-  en: The cooperative for catching roadrunners
-"""
-i18nmanylevels=u"""\
-services:
-  anvil:
-    name:
-      es: Comprar yunques
-    description:
-      es: >
-        Yunques garantizados, siempre caen en una cabeza
-"""
 header= u"""\
 <html>
 <head>
