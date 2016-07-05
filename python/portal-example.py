@@ -30,7 +30,7 @@ p = portalexample.Portal(
 	'intercoop',
 	peerid='somillusio',
 	keyfile='testkey.pem',
-    peers = peerinfo.PeerDataStorage(
+    peers = peerinfo.PeerInfo(
 	    'instance/somillusio/peers'),
     users = userinfo.UserInfo(
         'instance/somillusio/users'),

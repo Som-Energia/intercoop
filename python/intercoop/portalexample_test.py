@@ -224,7 +224,7 @@ class Portal_Test(unittest.TestCase):
         return portalexample.Portal("Example Portal",
             peerid = self.peerid,
             keyfile=self.keyfile,
-            peers = peerinfo.PeerDataStorage(self.peerdatadir),
+            peers = peerinfo.PeerInfo(self.peerdatadir),
             users = userinfo.UserInfo(self.userdatadir),
             )
 

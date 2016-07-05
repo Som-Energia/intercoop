@@ -52,12 +52,12 @@ class PeerDataStorage_Test(unittest.TestCase):
     def test_get(self):
         self.write('somacme.yaml', somacmeyaml)
 
-        s = peerinfo.PeerDataStorage(self.peerdatadir)
+        s = peerinfo.PeerInfo(self.peerdatadir)
         peerData = s.get("somacme")
         self.assertEqual(peerData,ns.loads(somacmeyaml))
 
     def test_get_badpeer(self):
-        s = peerinfo.PeerDataStorage(self.peerdatadir)
+        s = peerinfo.PeerInfo(self.peerdatadir)
         with self.assertRaises(Exception) as ctx:
             peerData = s.get("badpeer")
 
@@ -65,7 +65,7 @@ class PeerDataStorage_Test(unittest.TestCase):
             "Not such peer 'badpeer'")
  
     def test_get_invalidpeer(self):
-        s = peerinfo.PeerDataStorage(self.peerdatadir)
+        s = peerinfo.PeerInfo(self.peerdatadir)
         with self.assertRaises(Exception) as ctx:
             peerData = s.get("../../etc/passwd")
 
@@ -73,7 +73,7 @@ class PeerDataStorage_Test(unittest.TestCase):
             "Invalid peer '../../etc/passwd'")
  
     def test_iter(self):
-        s = peerinfo.PeerDataStorage(self.peerdatadir)
+        s = peerinfo.PeerInfo(self.peerdatadir)
         self.assertEqual(list(s),[
                 ns.loads(somacmeyaml),
                 ns.loads(sombogusyaml),

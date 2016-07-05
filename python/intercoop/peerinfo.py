@@ -4,7 +4,7 @@ from yamlns import namespace as ns
 import os
 import glob
 
-class PeerDataStorage(object):
+class PeerInfo(object):
     
     def __init__(self,datadir):
         self.datadir=datadir
