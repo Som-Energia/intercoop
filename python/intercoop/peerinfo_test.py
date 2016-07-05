@@ -23,7 +23,7 @@ peerid: sombogus
 name: Som Bogus, SCCL
 """
 
-class PeerDataStorage_Test(unittest.TestCase):
+class PeerInfo_Test(unittest.TestCase):
     
     def setUp(self):
         import os
