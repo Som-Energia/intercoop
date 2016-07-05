@@ -89,6 +89,28 @@ services:
         es: Nombre      
 """
 
+i18n1stlevel=u"""\
+description:
+  es: La cooperativa para atrapar correcaminos
+"""
+i18nfallback=u"""\
+description:
+  en: The cooperative for catching roadrunners
+"""
+i18nmanylangs=u"""\
+description:
+  es: La cooperativa para atrapar correcaminos
+  en: The cooperative for catching roadrunners
+"""
+i18nmanylevels=u"""\
+services:
+  anvil:
+    name:
+      es: Comprar yunques
+    description:
+      es: >
+        Yunques garantizados, siempre caen en una cabeza
+"""
 header= u"""\
 <html>
 <head>
@@ -349,15 +371,41 @@ class Portal_Test(unittest.TestCase):
     
     def test_fieldTranslation_existTranslationFirstLevel(self):
         self.setupApp()
-        self.write("somacme.yaml",somacmeyaml)
+        self.write("somacme.yaml", i18n1stlevel)
         p = self.setupPortal()
         self.assertEqual(
             "La cooperativa para atrapar correcaminos",
             p.fieldTranslation("somacme","description","es"))            
 
+    def test_fieldTranslation_fallbackTranslation(self):
+        self.setupApp()
+        self.write("somacme.yaml", i18nfallback)
+        p = self.setupPortal()
+        self.assertEqual(
+            "The cooperative for catching roadrunners",
+            p.fieldTranslation("somacme","description","es","en"))            
+    
+    def test_fieldTranslation_doesntExistFallback(self):
+        self.setupApp()
+        self.write("somacme.yaml", i18nfallback)
+        p = self.setupPortal()
+        with self.assertRaises(Exception) as ctx:
+            p.fieldTranslation("somacme","description","fr","ca")            
+        self.assertEqual(str(ctx.exception),
+            "None of the 'fr' or 'ca' translations exist for field 'description'")
+    
+    
+    def test_fieldTranslation_fallbackLangTranslation(self):
+        self.setupApp()
+        self.write("somacme.yaml", i18nmanylangs)
+        p = self.setupPortal()
+        self.assertEqual(
+            "La cooperativa para atrapar correcaminos",
+            p.fieldTranslation("somacme","description","es","en"))            
+    
     def test_fieldTranslation_doesntExistFieldFirstLevel(self):
         self.setupApp()
-        self.write("somacme.yaml",somacmeyaml)
+        self.write("somacme.yaml", i18n1stlevel)
         p = self.setupPortal()
         with self.assertRaises(Exception) as ctx:
             p.fieldTranslation("somacme","badfield","es")
@@ -366,7 +414,7 @@ class Portal_Test(unittest.TestCase):
 
     def test_fieldTranslation_doesntExistTranslationFirstLevel(self):
         self.setupApp()
-        self.write("somacme.yaml",somacmeyaml)
+        self.write("somacme.yaml", i18n1stlevel)
         p = self.setupPortal()
         with self.assertRaises(Exception) as ctx:
             p.fieldTranslation("somacme","description","fr")
@@ -375,7 +423,7 @@ class Portal_Test(unittest.TestCase):
 
     def test_fieldTranslation_existTranslationManyLevels(self):
         self.setupApp()
-        self.write("somacme.yaml",somacmeyaml)
+        self.write("somacme.yaml",i18nmanylevels)
         p = self.setupPortal()
         self.assertEqual(
             "Yunques garantizados, siempre caen en una cabeza",
