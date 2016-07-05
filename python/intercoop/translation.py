@@ -4,11 +4,10 @@ class TranslatePeers(object):
     def __init__(self,peers):
         self.peers=peers
     
-    def fieldTranslation(self, peername, field, lang, langfallback=None):
-        peerData = self.peers.get(peername)
+    def fieldTranslation(self, tree, field, lang, langfallback=None):
         fieldExpanded = field.split("/")
         try:
-            fieldTraverse = peerData[fieldExpanded[0]]
+            fieldTraverse = tree[fieldExpanded[0]]
             for fieldElem in fieldExpanded[1:]:
                 fieldTraverse = fieldTraverse[fieldElem]
         except KeyError:
@@ -26,7 +25,8 @@ class TranslatePeers(object):
         return translation
 
     def _translateTree(self,transTree,peer,prefix,lang):
-        tree = self.peers.get(peer)
+        treeOrig = self.peers.get(peer)
+        tree = treeOrig
         prefixChopped = prefix.split("/")
         transTreeTraversed = transTree
         transTreeTraversedParent = transTree
@@ -44,7 +44,7 @@ class TranslatePeers(object):
                     lang)
             elif elem == lang:
                 transTreeTraversedParent[prefixChopped[-1]]=self.fieldTranslation(
-                    peer,
+                    treeOrig,
                     prefix,
                     lang)
 

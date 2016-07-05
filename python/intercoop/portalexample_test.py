@@ -393,7 +393,7 @@ class Portal_Test(unittest.TestCase):
         t = translation.TranslatePeers(p.peers)
         self.assertEqual(
             "La cooperativa para atrapar correcaminos",
-            t.fieldTranslation("somacme","description","es"))            
+            t.fieldTranslation(p.peers.get("somacme"),"description","es"))            
 
     def test_fieldTranslation_fallbackTranslation(self):
         self.setupApp()
@@ -402,7 +402,7 @@ class Portal_Test(unittest.TestCase):
         t = translation.TranslatePeers(p.peers)
         self.assertEqual(
             "The cooperative for catching roadrunners",
-            t.fieldTranslation("somacme","description","es","en"))            
+            t.fieldTranslation(p.peers.get("somacme"),"description","es","en"))            
     
     def test_fieldTranslation_doesntExistFallback(self):
         self.setupApp()
@@ -410,7 +410,7 @@ class Portal_Test(unittest.TestCase):
         p = self.setupPortal()
         t = translation.TranslatePeers(p.peers)
         with self.assertRaises(Exception) as ctx:
-            t.fieldTranslation("somacme","description","fr","ca")            
+            t.fieldTranslation(p.peers.get("somacme"),"description","fr","ca")            
         self.assertEqual(str(ctx.exception),
             "None of the 'fr' or 'ca' translations exist for field 'description'")
     
@@ -422,7 +422,7 @@ class Portal_Test(unittest.TestCase):
         t = translation.TranslatePeers(p.peers)
         self.assertEqual(
             "La cooperativa para atrapar correcaminos",
-            t.fieldTranslation("somacme","description","es","en"))            
+            t.fieldTranslation(p.peers.get("somacme"),"description","es","en"))            
     
     def test_fieldTranslation_doesntExistFieldFirstLevel(self):
         self.setupApp()
@@ -430,7 +430,7 @@ class Portal_Test(unittest.TestCase):
         p = self.setupPortal()
         t = translation.TranslatePeers(p.peers)
         with self.assertRaises(Exception) as ctx:
-            t.fieldTranslation("somacme","badfield","es")
+            t.fieldTranslation(p.peers.get("somacme"),"badfield","es")
         self.assertEqual(str(ctx.exception),
             "Invalid field 'badfield'")
 
@@ -440,7 +440,7 @@ class Portal_Test(unittest.TestCase):
         p = self.setupPortal()
         t = translation.TranslatePeers(p.peers)
         with self.assertRaises(Exception) as ctx:
-            t.fieldTranslation("somacme","description","fr")
+            t.fieldTranslation(p.peers.get("somacme"),"description","fr")
         self.assertEqual(str(ctx.exception),
             "Invalid translation 'fr' for field 'description'")
 
@@ -451,7 +451,7 @@ class Portal_Test(unittest.TestCase):
         t = translation.TranslatePeers(p.peers)
         self.assertEqual(
             "Yunques garantizados, siempre caen en una cabeza\n",
-            t.fieldTranslation("somacme","services/anvil/description","es"))
+            t.fieldTranslation(p.peers.get("somacme"),"services/anvil/description","es"))
     
     def test_translatePeer_noTranslations(self):
         self.setupApp()
