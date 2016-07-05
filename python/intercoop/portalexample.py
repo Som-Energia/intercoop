@@ -283,7 +283,38 @@ class Portal(Perfume):
         else:
             raise Exception("Invalid translation '{}' for field '{}'".format(
                 lang,field))
-        return translation.rstrip()
+        return translation
+
+    def _translateTreeRecur(self,transTree,peer,prefix,lang):
+        tree = self.peers.get(peer)
+        prefixChopped = prefix.split("/")
+        transTreeTraversed = transTree
+        transTreeTraversedParent = transTree
+        for e in prefixChopped:
+            tree = tree[e]
+            transTreeTraversed = transTreeTraversed[e]
+        for e in prefixChopped[:-1]:
+            transTreeTraversedParent = transTreeTraversedParent[e]
+        for elem in tree:
+            if type(tree[elem]) is ns:
+                self._translateTreeRecur(
+                    transTree,
+                    peer,
+                    prefix+"/"+elem,
+                    lang)
+            elif elem == lang:
+                transTreeTraversedParent[prefixChopped[-1]]=self.fieldTranslation(
+                    peer,
+                    prefix,
+                    lang)
+
+    def translateTree(self, peer, lang):
+        tree = self.peers.get(peer)
+        transTree = tree.copy()
+        for elem in tree:
+            if type(tree[elem]) is ns:
+                self._translateTreeRecur(transTree,peer,elem,lang)
+        return transTree
 
     @route('/activateservice/<peer>/<service>', methods=['GET'])
     def activateService(self, peer, service):

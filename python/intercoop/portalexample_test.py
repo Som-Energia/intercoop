@@ -90,6 +90,14 @@ services:
     - name
 """
 
+notranslation=u"""\
+description: This is a description
+services:
+  contract:
+    fields:
+       name: César
+"""
+
 i18n1stlevel=u"""\
 description:
   es: La cooperativa para atrapar correcaminos
@@ -434,7 +442,36 @@ class Portal_Test(unittest.TestCase):
         self.write("somacme.yaml",i18nmanylevels)
         p = self.setupPortal()
         self.assertEqual(
-            "Yunques garantizados, siempre caen en una cabeza",
+            "Yunques garantizados, siempre caen en una cabeza\n",
             p.fieldTranslation("somacme","services/anvil/description","es"))
+    
+    def test_translateTree_noTranslations(self):
+        self.setupApp()
+        self.write("somacme.yaml",notranslation)
+        p = self.setupPortal()
+        tree = ns.load(os.path.join(self.peerdatadir,"somacme.yaml"))
+        self.assertEqual(
+            tree,
+            p.translateTree("somacme","es"))
 
+    def test_translateTree_firstLevel(self):
+        self.setupApp()
+        self.write("somacme.yaml",i18n1stlevel)
+        p = self.setupPortal()
+        tree = ns.load(os.path.join(self.peerdatadir,"somacme.yaml"))
+        tree.description = tree.description.es
+        self.assertEqual(
+            tree,
+            p.translateTree("somacme","es"))
+    
+    def test_translateTree_manyLevels(self):
+        self.setupApp()
+        self.write("somacme.yaml",i18nmanylevels)
+        p = self.setupPortal()
+        tree = ns.load(os.path.join(self.peerdatadir,"somacme.yaml"))
+        tree.services.anvil.name = tree.services.anvil.name.es
+        tree.services.anvil.description = tree.services.anvil.description.es
+        self.assertEqual(
+            tree,
+            p.translateTree("somacme","es"))
 # vim: ts=4 sw=4 et
