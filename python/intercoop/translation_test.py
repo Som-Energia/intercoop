@@ -249,20 +249,6 @@ class Portal_Test(unittest.TestCase):
         os.system("mkdir -p "+self.userdatadir)
         self.write('myuser.yaml', myuseryaml, self.userdatadir)
 
-    def setupPortal(self):
-        return portalexample.Portal("Example Portal",
-            peerid = self.peerid,
-            keyfile=self.keyfile,
-            peerdatadir=self.peerdatadir,
-            userdatadir=self.userdatadir,
-            )
-
-    def setupApp(self):
-        self.portal = self.setupPortal()
-        self.app =  self.portal.app
-        self.app.config['TESTING'] = True
-        self.client = self.app.test_client()
-
 
     def tearDown(self):
         self.cleanUp()
@@ -274,27 +260,21 @@ class Portal_Test(unittest.TestCase):
         except: pass
 
     def test_fieldTranslation_existTranslationFirstLevel(self):
-        self.setupApp()
         data = ns.loads(i18n1stlevel)
-        p = self.setupPortal()
         t = translation.TranslatePeers()
         self.assertEqual(
             "La cooperativa para atrapar correcaminos",
             t.fieldTranslation(data,"description","es"))
 
     def test_fieldTranslation_fallbackTranslation(self):
-        self.setupApp()
         data = ns.loads(i18nfallback)
-        p = self.setupPortal()
         t = translation.TranslatePeers()
         self.assertEqual(
             "The cooperative for catching roadrunners",
             t.fieldTranslation(data,"description","es","en"))
 
     def test_fieldTranslation_doesntExistFallback(self):
-        self.setupApp()
         data = ns.loads(i18nfallback)
-        p = self.setupPortal()
         t = translation.TranslatePeers()
         with self.assertRaises(Exception) as ctx:
             t.fieldTranslation(data,"description","fr","ca")
@@ -303,18 +283,14 @@ class Portal_Test(unittest.TestCase):
 
 
     def test_fieldTranslation_fallbackLangTranslation(self):
-        self.setupApp()
         data = ns.loads(i18nmanylangs)
-        p = self.setupPortal()
         t = translation.TranslatePeers()
         self.assertEqual(
             "La cooperativa para atrapar correcaminos",
             t.fieldTranslation(data,"description","es","en"))
 
     def test_fieldTranslation_doesntExistFieldFirstLevel(self):
-        self.setupApp()
         data = ns.loads(i18n1stlevel)
-        p = self.setupPortal()
         t = translation.TranslatePeers()
         with self.assertRaises(Exception) as ctx:
             t.fieldTranslation(data,"badfield","es")
@@ -322,9 +298,7 @@ class Portal_Test(unittest.TestCase):
             "Invalid field 'badfield'")
 
     def test_fieldTranslation_doesntExistTranslationFirstLevel(self):
-        self.setupApp()
         data = ns.loads(i18n1stlevel)
-        p = self.setupPortal()
         t = translation.TranslatePeers()
         with self.assertRaises(Exception) as ctx:
             t.fieldTranslation(data,"description","fr")
@@ -332,18 +306,14 @@ class Portal_Test(unittest.TestCase):
             "Invalid translation 'fr' for field 'description'")
 
     def test_fieldTranslation_existTranslationManyLevels(self):
-        self.setupApp()
         data = ns.loads(i18nmanylevels)
-        p = self.setupPortal()
         t = translation.TranslatePeers()
         self.assertEqual(
             "Yunques garantizados, siempre caen en una cabeza\n",
             t.fieldTranslation(data,"services/anvil/description","es"))
 
     def test_translateTree_noTranslations(self):
-        self.setupApp()
         data = ns.loads(notranslation.encode('utf8'))
-        p = self.setupPortal()
         t = translation.TranslatePeers()
         tree = ns(data)
         self.assertEqual(
@@ -351,9 +321,7 @@ class Portal_Test(unittest.TestCase):
             t.translateTree(data,"es"))
 
     def test_translateTree_firstLevel(self):
-        self.setupApp()
         data = ns.loads(i18n1stlevel)
-        p = self.setupPortal()
         t = translation.TranslatePeers()
         tree = ns(data)
         tree.description = tree.description.es
@@ -362,9 +330,7 @@ class Portal_Test(unittest.TestCase):
             t.translateTree(data,"es"))
 
     def test_translateTree_manyLevels(self):
-        self.setupApp()
         data = ns.loads(i18nmanylevels)
-        p = self.setupPortal()
         t = translation.TranslatePeers()
         tree = ns(data)
         tree.services.anvil.name = tree.services.anvil.name.es
