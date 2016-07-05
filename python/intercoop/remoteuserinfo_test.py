@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 
-from . import unsecuredatastorage as datastorage
+from . import remoteuserinfo as datastorage
 from . import packaging
 import unittest
 import os

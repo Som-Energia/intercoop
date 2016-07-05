@@ -7,7 +7,7 @@ from yamlns import namespace as ns
 from . import crypto
 from . import apiexample
 from . import packaging
-from . import unsecuredatastorage
+from . import remoteuserinfo
 
 class KeyRingMock(object):
     def __init__(self, keys):
@@ -41,7 +41,7 @@ country: ES
         self.datadir='apiexamplestorage'
         try: os.makedirs(self.datadir)
         except: pass
-        self.storage = unsecuredatastorage.DataStorage(self.datadir)
+        self.storage = remoteuserinfo.DataStorage(self.datadir)
         self.api = apiexample.IntercoopApi('testapi', self.storage, self.keyring)
         app = self.api.app
         app.config['TESTING'] = True

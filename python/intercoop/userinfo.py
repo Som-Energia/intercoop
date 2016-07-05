@@ -3,11 +3,6 @@
 from yamlns import namespace as ns
 import os
 
-"""
-# TODO:
-
-- [ ] process differently unsupported and not pressent fields
-"""
 
 class BadUser(Exception):
     def __init__(self, user):

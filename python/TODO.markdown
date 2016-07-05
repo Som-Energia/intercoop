@@ -31,6 +31,14 @@
 - [x] Keyring
 	- [x] Dummy keyring
 
+- [x] Peer descriptors
+    - [x] Constructor error when no such folder -> Not needed get fails anyway
+	- [x] Get by peer id
+        - [x] present
+        - [x] missing
+        - [x] protection against malicious ids (../../) limit to alphanum
+    - [x] Iterador
+
 ## Phase 4: API example
 
 - [x] API example
@@ -41,20 +49,23 @@
 
 ## Phase 5: Portal example
 
-- [ ] Encapsulate api calling and error handling
+- [x] Encapsulate api calling and error handling
 
-- [ ] Peer descriptors
-	- [ ] Get by peer id
-	- [ ] Get translated string
+- [x] Translations
 
-- [ ] Portal example
-	- [ ] Use package 
-	- [ ] Propagate api side exception
-	- [ ] Handle network error
-	- [ ] Return redirection url
+- [x] Portal example
+	- [x] Use package 
+	- [x] Propagate api side exception
+	- [x] Handle network error
+	- [x] Return redirection url
+
 
 ## TODO Remainders
 
+- [ ] userinfo: Translations for field names
+- [ ] userinfo: process differently unsupported and not pressent fields
+- [ ] peerinfo: consider more semantic accessors
+- [ ] peerinfo: Own exception types (not just plain Exception)
 - [ ] unsecuredatastorage: Purgue old data
 - [ ] packaging: Protect against unsafe yamls (limit yaml parser features)
 - [ ] packaging: Embed data in errors so that they can be restored in client

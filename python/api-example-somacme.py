@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from intercoop import apiexample
-from intercoop import unsecuredatastorage
+from intercoop import remoteuserinfo
 from intercoop import crypto
 
 import os
@@ -19,7 +19,7 @@ keyring = KeyRing(dict(
 
 p = apiexample.IntercoopApi(
 	'intercoop',
-	unsecuredatastorage.DataStorage('instance/somacme/peeruserdata'),
+	remoteuserinfo.DataStorage('instance/somacme/peeruserdata'),
 	keyring,
 	'http://localhost:5001/activateService/{uuid}'
 	)

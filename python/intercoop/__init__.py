@@ -2,7 +2,7 @@
 
 from .crypto import *
 from .packaging import *
-from .unsecuredatastorage import *
+from .remoteuserinfo import *
 
 
 
