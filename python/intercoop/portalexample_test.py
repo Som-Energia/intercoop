@@ -10,6 +10,7 @@ from yamlns import namespace as ns
 
 myuseryaml=u"""\
 originpeer: somillusio
+lang: es
 nif: 12345678Z
 name: Bunny, Bugs
 peerroles:
@@ -354,6 +355,7 @@ class Portal_Test(unittest.TestCase):
             nameField+
             acmeExplosivesFooter, 
             self.client.get("/activateservice/somacme/explosives").data.decode('utf-8'))
+
  
    
 # vim: ts=4 sw=4 et

@@ -28,11 +28,21 @@ class UserInfo(object):
     def __init__(self, datadir):
         self.datadir = datadir
 
-    def getFields(self, user, fields):
+    def _userData(self, user):
         try:
-            userdata = ns.load(os.path.join(self.datadir, user+'.yaml'))
+            return ns.load(os.path.join(self.datadir, user+'.yaml'))
         except Exception:
             raise BadUser(user)
+
+    def language(self, user):
+        userdata = self._userData(user)
+        try:
+            return userdata.lang
+        except AttributeError:
+            return 'es'
+
+    def getFields(self, user, fields):
+        userdata = self._userData(user)
 
         for field in fields:
             if field not in userdata:

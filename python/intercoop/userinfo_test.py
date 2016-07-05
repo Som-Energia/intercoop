@@ -11,6 +11,7 @@ from yamlns import namespace as ns
 useryaml = """\
 name: de los Palotes, Perico
 nif: 12345678Z
+lang: ca
 """
 
 class UserInfo_Test(unittest.TestCase):
@@ -39,9 +40,15 @@ class UserInfo_Test(unittest.TestCase):
         data = storage.getFields('myuser', [
             'name',
             'nif',
+            'lang',
             ])
 
-        self.assertEqual(data, ns.loads(useryaml))
+        self.assertEqual(data, ns.loads("""\
+            name: de los Palotes, Perico
+            nif: 12345678Z
+            lang: ca
+            """
+            ))
 
     def test_getFields_filtering(self):
         storage = userinfo.UserInfo(self.datadir)
@@ -60,6 +67,7 @@ class UserInfo_Test(unittest.TestCase):
         self.assertEqual(str(ctx.exception),
             "User not found 'baduser'")
 
+
     def test_getFields_badfield(self):
         storage = userinfo.UserInfo(self.datadir)
         with self.assertRaises(userinfo.BadField) as ctx:
@@ -67,6 +75,20 @@ class UserInfo_Test(unittest.TestCase):
         self.assertEqual(str(ctx.exception),
             "Unrecognized user field 'badfield'")
 
+    def test_language(self):
+        storage = userinfo.UserInfo(self.datadir)
+        lang = storage.language('myuser')
+        self.assertEqual(lang, 'ca')
+
+    def test_language_ifMissingLangEsDefault(self):
+        useryaml = """\
+        name: de los Palotes, Perico
+        nif: 12345678Z
+        """
+        self.write('myuser.yaml', useryaml)
+        storage = userinfo.UserInfo(self.datadir)
+        lang = storage.language('myuser')
+        self.assertEqual(lang, 'es')
 
 
 # vim: ts=4 sw=4 et
