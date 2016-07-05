@@ -59,3 +59,14 @@ class Translator(object):
             if type(tree[elem]) is ns:
                 self._translateTree(transTree,tree,elem,lang)
         return transTree
+
+    def __call__(self, data):
+        if type(data) == ns:
+            return data[self.language]
+        return data
+    
+
+
+
+
+

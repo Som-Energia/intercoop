@@ -124,7 +124,66 @@ class Portal_Test(unittest.TestCase):
             tree,
             t.translate(data,"es"))
 
+    def ns(self, content):
+        return ns.loads(content) #.encode('utf8'))
 
+    def assertTranslateEqual(self, lang, orig, expected):
+        t = translation.Translator('es')
+        result = t(self.ns(orig))
+        self.assertEqual(result, self.ns(expected))
 
+    def _test_translate_multipleKeys(self):
+        self.assertTranslateEqual('es',
+            """\
+            tree1:
+                key1:
+                    es: Mensaje en español
+                    ca: Missatge en català
+                key2:
+                    es: En Español
+                    ca: En Català
+            """, """\
+            tree1:
+                key1: Mensaje en español
+                key2: En Español
+            """
+            )
+
+    def _test_translate_singleKeys(self):
+        self.assertTranslateEqual('es',
+            """\
+            key1:
+                es: Mensaje en español
+                ca: Missatge en català
+            """, """\
+            key1: Mensaje en español
+            """
+            )
+    def _test_translate_insideList(self):
+        self.assertTranslateEqual('es',
+            """\
+            listcontainer:
+                - key:
+                    es: Mensaje en español
+                    ca: Missatge en català
+            """, """\
+            listcontainer:
+                - key1: Mensaje en español
+            """
+            )
+
+    def test_string(self):
+        self.assertTranslateEqual('es',
+            "Untranslated string",
+            "Untranslated string"
+            )
+ 
+    def test_translatedString(self):
+        self.assertTranslateEqual('es',
+            "es: Translated string",
+            "Translated string"
+            )
+ 
+    
 
 # vim: ts=4 sw=4 et
