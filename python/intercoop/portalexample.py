@@ -9,7 +9,7 @@ from flask import (
 
 from . import crypto
 from . import apiclient
-from . import peerdatastorage
+from . import peerinfo
 from . import userinfo
 from . import translation
 from .perfume import Perfume, route

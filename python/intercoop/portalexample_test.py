@@ -5,7 +5,7 @@ import os
 import shutil
 from . import userinfo
 from . import portalexample
-from . import peerdatastorage
+from . import peerinfo
 from yamlns import namespace as ns
 
 
@@ -224,7 +224,7 @@ class Portal_Test(unittest.TestCase):
         return portalexample.Portal("Example Portal",
             peerid = self.peerid,
             keyfile=self.keyfile,
-            peers = peerdatastorage.PeerDataStorage(self.peerdatadir),
+            peers = peerinfo.PeerDataStorage(self.peerdatadir),
             users = userinfo.UserInfo(self.userdatadir),
             )
 
