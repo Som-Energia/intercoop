@@ -390,24 +390,27 @@ class Portal_Test(unittest.TestCase):
         self.setupApp()
         self.write("somacme.yaml", i18n1stlevel)
         p = self.setupPortal()
+        t = translation.TranslatePeers(p.peers)
         self.assertEqual(
             "La cooperativa para atrapar correcaminos",
-            p.fieldTranslation("somacme","description","es"))            
+            t.fieldTranslation("somacme","description","es"))            
 
     def test_fieldTranslation_fallbackTranslation(self):
         self.setupApp()
         self.write("somacme.yaml", i18nfallback)
         p = self.setupPortal()
+        t = translation.TranslatePeers(p.peers)
         self.assertEqual(
             "The cooperative for catching roadrunners",
-            p.fieldTranslation("somacme","description","es","en"))            
+            t.fieldTranslation("somacme","description","es","en"))            
     
     def test_fieldTranslation_doesntExistFallback(self):
         self.setupApp()
         self.write("somacme.yaml", i18nfallback)
         p = self.setupPortal()
+        t = translation.TranslatePeers(p.peers)
         with self.assertRaises(Exception) as ctx:
-            p.fieldTranslation("somacme","description","fr","ca")            
+            t.fieldTranslation("somacme","description","fr","ca")            
         self.assertEqual(str(ctx.exception),
             "None of the 'fr' or 'ca' translations exist for field 'description'")
     
