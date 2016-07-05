@@ -69,9 +69,9 @@ country: ES
             for h in m.request_history], [
             ('POST', 'https://api.somacme.coop/intercoop/activateService',
 
-                u"signature: 2PXEJSmGwaIZY4XgWZYcmh8qexmGe-Ve7p45kLmtia5wO4CXrbx3BiCeFMvbi9eiGazOg-Cy9ktdR3SEYuZlwlkPpQ-C2QrVY2c6o1PKNNLFJoJIYkfnIDwTdtlY5qsxbC-kKbWO2WtnhCeBnBNKOwz9-lbIlrLYo470MjuTLheVmoXuyTHp1hOjHDDn2e38kJT-miNtr4knDn-uMYCXdAx3eIGTBOTQ8wGFz55JR_jluZKIN8wEgJQWAHVMY1FbtsutESRqJ_TMLbCbqe0llxWppxgF20XyzleSxTV6v_I2GZyfEWlYlFnOkk5TEjqkk5vZOFGXra2J3Cabzn9QFQ==\n"
-                u"payload: b3JpZ2lucGVlcjogc29taWxsdXNpbwpvcmlnaW5jb2RlOiA2NjYKbmFtZTogUGVyaWNvIGRlIGxvcyBQYWxvdGVzCmFkZHJlc3M6IFBlcmNlYmUsIDEzCmNpdHk6IFZpbGxhcnJpYmEgZGVsIEFsY29ybm9xdWUKc3RhdGU6IEFsYmFjZXRlCnBvc3RhbGNvZGU6ICcwMTAwMScKY291bnRyeTogRVMK\n"
                 u"intercoopVersion: '1.0'\n"
+                u"payload: b3JpZ2lucGVlcjogc29taWxsdXNpbwpvcmlnaW5jb2RlOiA2NjYKbmFtZTogUGVyaWNvIGRlIGxvcyBQYWxvdGVzCmFkZHJlc3M6IFBlcmNlYmUsIDEzCmNpdHk6IFZpbGxhcnJpYmEgZGVsIEFsY29ybm9xdWUKc3RhdGU6IEFsYmFjZXRlCnBvc3RhbGNvZGU6ICcwMTAwMScKY291bnRyeTogRVMK\n"
+                u"signature: 2PXEJSmGwaIZY4XgWZYcmh8qexmGe-Ve7p45kLmtia5wO4CXrbx3BiCeFMvbi9eiGazOg-Cy9ktdR3SEYuZlwlkPpQ-C2QrVY2c6o1PKNNLFJoJIYkfnIDwTdtlY5qsxbC-kKbWO2WtnhCeBnBNKOwz9-lbIlrLYo470MjuTLheVmoXuyTHp1hOjHDDn2e38kJT-miNtr4knDn-uMYCXdAx3eIGTBOTQ8wGFz55JR_jluZKIN8wEgJQWAHVMY1FbtsutESRqJ_TMLbCbqe0llxWppxgF20XyzleSxTV6v_I2GZyfEWlYlFnOkk5TEjqkk5vZOFGXra2J3Cabzn9QFQ==\n"
                 )
             ])
 

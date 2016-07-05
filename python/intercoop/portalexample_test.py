@@ -74,7 +74,7 @@ name: Som Bogus, SCCL
 url:
   es: https://es.sombogus.coop
 logo: http://www.linpictures.com/images/indevimgs/acme.jpg
-privacyPolicyUrl: 
+privacyPolicyUrl:
     es: http://www.wallpapersonly.net/wallpapers/thats-all-folks-1680x1050.jpg
 description:
     es: >
@@ -83,7 +83,7 @@ targetUrl: http://localhost:5002/intercoop
 services:
   contract:
     name:
-        es: Contrata 
+        es: Contrata
     description:
         es: >
           Productos con marcas tipo Panone, Grifons, Pas Natural, Reacciona...
@@ -110,7 +110,7 @@ footer = u"""\
 </html>
 """
 
-acmePeerHeader = """\
+acmePeerHeader = u"""\
 <div class='peer'>
 <div class='peerlogo'><img src='http://www.linpictures.com/images/indevimgs/acme.jpg' /></div>
 <div class='peerheader'><a href='http://somacme.coop/es'>Som Acme, SCCL</a></div>
@@ -207,8 +207,12 @@ class Portal_Test(unittest.TestCase):
     def write(self, filename, content, folder=None):
         fullname = os.path.join(folder or self.peerdatadir,filename)
         with open(fullname, 'wb') as f:
-            f.write(content.encode('utf-8'))
-        
+            try:
+                f.write(content.encode('utf-8'))
+            except UnicodeDecodeError:
+                f.write(content)
+
+
     def setUp(self):
         self.maxDiff=None
         self.peerid= 'somillusio'
@@ -240,9 +244,9 @@ class Portal_Test(unittest.TestCase):
 
     def cleanUp(self):
         try: shutil.rmtree(self.peerdatadir)
-        except: pass    
+        except: pass
         try: shutil.rmtree(self.userdatadir)
-        except: pass    
+        except: pass
 
     def test_index_whenEmpty(self):
         self.setupApp()
@@ -310,7 +314,7 @@ class Portal_Test(unittest.TestCase):
             "<div class='fieldheader'>Nombre:</div>\n"
             "<div class='fieldvalue'>Bunny, Bugs</div>\n"
             "</div>\n"
-            ) 
+            )
 
     def test_requiredFields_justInService_useService(self):
         self.write("sombogus.yaml",sombogusyaml)
@@ -319,7 +323,7 @@ class Portal_Test(unittest.TestCase):
             ['originpeer','name'],
             p.requiredFields("sombogus","contract")
         )
-    
+
     def test_requiredFields_justInPeer_usePeer(self):
         self.write("somacme.yaml",somacmeyaml)
         p = self.setupPortal()
@@ -327,7 +331,7 @@ class Portal_Test(unittest.TestCase):
             ['originpeer','nif'],
             p.requiredFields("somacme","explosives")
         )
-    
+
     def test_requiredFields_inServiceAndPeer_useService(self):
         self.write("somacme.yaml",somacmeyaml)
         p = self.setupPortal()
@@ -339,7 +343,7 @@ class Portal_Test(unittest.TestCase):
     def test_requiredFields_noFields(self):
         bogus = ns.loads(sombogusyaml.encode('utf8'))
         del bogus.services.contract.fields
-        self.write("sombogus.yaml",bogus.dump().decode('utf8'))
+        self.write("sombogus.yaml",bogus.dump())
         p = self.setupPortal()
         with self.assertRaises(Exception) as ctx:
             p.requiredFields("sombogus","contract")
@@ -354,9 +358,9 @@ class Portal_Test(unittest.TestCase):
             acmeExplosivesHeader+
             originField+
             nameField+
-            acmeExplosivesFooter, 
+            acmeExplosivesFooter,
             self.client.get("/activateservice/somacme/explosives").data.decode('utf-8'))
 
- 
-   
+
+
 # vim: ts=4 sw=4 et

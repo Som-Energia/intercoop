@@ -55,11 +55,11 @@ class Generator(object):
     def produce(self, values):
         payload = ns(values).dump()
         signature = sign(self.key, payload)
-        return ns(
-            intercoopVersion = protocolVersion,
-            payload = encode(payload),
-            signature = signature,
-            ).dump()
+        result = ns()
+        result.intercoopVersion = protocolVersion
+        result.payload = encode(payload)
+        result.signature = signature
+        return result.dump()
 
 class Parser(object):
 
