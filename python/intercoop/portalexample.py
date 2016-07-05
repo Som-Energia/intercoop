@@ -3,7 +3,8 @@
 from flask import (
     make_response,
     request,
-    Response
+    Response,
+    redirect,
     )
 
 from . import crypto
@@ -317,11 +318,11 @@ class Portal(Perfume):
         # TODO: augment personal data keys with source ones
         # TODO: handle errors
         try:
-            continuationUri = api.activateService(service, data)
+            continuationUrl = api.activateService(service, data)
         except Exception as e:
             print(type(e).__name__, e) 
             # TODO: Log the error
             return "Error comunicando con la entidad"
-        return redirect(continuationUri, 302)
+        return redirect(continuationUrl, 302)
 
 # vim: ts=4 sw=4 et

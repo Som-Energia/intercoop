@@ -21,6 +21,7 @@ p = apiexample.IntercoopApi(
 	'intercoop',
 	unsecuredatastorage.DataStorage('instance/somacme/peeruserdata'),
 	keyring,
+	'http://localhost:5001/activateService/{uuid}'
 	)
 
 p.run(debug=True, port=5001)
