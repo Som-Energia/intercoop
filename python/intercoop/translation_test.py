@@ -233,31 +233,8 @@ originField = u"""\
 
 class Portal_Test(unittest.TestCase):
 
-    def write(self, filename, content, folder=None):
-        fullname = os.path.join(folder or self.peerdatadir,filename)
-        with open(fullname, 'wb') as f:
-            f.write(content.encode('utf-8'))
-
     def setUp(self):
         self.maxDiff=None
-        self.peerid= 'somillusio'
-        self.keyfile = 'testkey.pem'
-        self.peerdatadir='peerdatadir'
-        self.userdatadir='userdatadir'
-        self.cleanUp()
-        os.system("mkdir -p "+self.peerdatadir)
-        os.system("mkdir -p "+self.userdatadir)
-        self.write('myuser.yaml', myuseryaml, self.userdatadir)
-
-
-    def tearDown(self):
-        self.cleanUp()
-
-    def cleanUp(self):
-        try: shutil.rmtree(self.peerdatadir)
-        except: pass
-        try: shutil.rmtree(self.userdatadir)
-        except: pass
 
     def test_fieldTranslation_existTranslationFirstLevel(self):
         data = ns.loads(i18n1stlevel)
