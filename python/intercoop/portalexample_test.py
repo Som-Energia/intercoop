@@ -390,7 +390,7 @@ class Portal_Test(unittest.TestCase):
         self.setupApp()
         self.write("somacme.yaml", i18n1stlevel)
         p = self.setupPortal()
-        t = translation.TranslatePeers(p.peers)
+        t = translation.TranslatePeers()
         self.assertEqual(
             "La cooperativa para atrapar correcaminos",
             t.fieldTranslation(p.peers.get("somacme"),"description","es"))            
@@ -399,7 +399,7 @@ class Portal_Test(unittest.TestCase):
         self.setupApp()
         self.write("somacme.yaml", i18nfallback)
         p = self.setupPortal()
-        t = translation.TranslatePeers(p.peers)
+        t = translation.TranslatePeers()
         self.assertEqual(
             "The cooperative for catching roadrunners",
             t.fieldTranslation(p.peers.get("somacme"),"description","es","en"))            
@@ -408,7 +408,7 @@ class Portal_Test(unittest.TestCase):
         self.setupApp()
         self.write("somacme.yaml", i18nfallback)
         p = self.setupPortal()
-        t = translation.TranslatePeers(p.peers)
+        t = translation.TranslatePeers()
         with self.assertRaises(Exception) as ctx:
             t.fieldTranslation(p.peers.get("somacme"),"description","fr","ca")            
         self.assertEqual(str(ctx.exception),
@@ -419,7 +419,7 @@ class Portal_Test(unittest.TestCase):
         self.setupApp()
         self.write("somacme.yaml", i18nmanylangs)
         p = self.setupPortal()
-        t = translation.TranslatePeers(p.peers)
+        t = translation.TranslatePeers()
         self.assertEqual(
             "La cooperativa para atrapar correcaminos",
             t.fieldTranslation(p.peers.get("somacme"),"description","es","en"))            
@@ -428,7 +428,7 @@ class Portal_Test(unittest.TestCase):
         self.setupApp()
         self.write("somacme.yaml", i18n1stlevel)
         p = self.setupPortal()
-        t = translation.TranslatePeers(p.peers)
+        t = translation.TranslatePeers()
         with self.assertRaises(Exception) as ctx:
             t.fieldTranslation(p.peers.get("somacme"),"badfield","es")
         self.assertEqual(str(ctx.exception),
@@ -438,7 +438,7 @@ class Portal_Test(unittest.TestCase):
         self.setupApp()
         self.write("somacme.yaml", i18n1stlevel)
         p = self.setupPortal()
-        t = translation.TranslatePeers(p.peers)
+        t = translation.TranslatePeers()
         with self.assertRaises(Exception) as ctx:
             t.fieldTranslation(p.peers.get("somacme"),"description","fr")
         self.assertEqual(str(ctx.exception),
@@ -448,41 +448,41 @@ class Portal_Test(unittest.TestCase):
         self.setupApp()
         self.write("somacme.yaml",i18nmanylevels)
         p = self.setupPortal()
-        t = translation.TranslatePeers(p.peers)
+        t = translation.TranslatePeers()
         self.assertEqual(
             "Yunques garantizados, siempre caen en una cabeza\n",
             t.fieldTranslation(p.peers.get("somacme"),"services/anvil/description","es"))
     
-    def test_translatePeer_noTranslations(self):
+    def test_translateTree_noTranslations(self):
         self.setupApp()
         self.write("somacme.yaml",notranslation)
         p = self.setupPortal()
-        t = translation.TranslatePeers(p.peers)
+        t = translation.TranslatePeers()
         tree = ns.load(os.path.join(self.peerdatadir,"somacme.yaml"))
         self.assertEqual(
             tree,
-            t.translatePeer("somacme","es"))
+            t.translateTree(p.peers.get("somacme"),"es"))
 
-    def test_translatePeer_firstLevel(self):
+    def test_translateTree_firstLevel(self):
         self.setupApp()
         self.write("somacme.yaml",i18n1stlevel)
         p = self.setupPortal()
-        t = translation.TranslatePeers(p.peers)
+        t = translation.TranslatePeers()
         tree = ns.load(os.path.join(self.peerdatadir,"somacme.yaml"))
         tree.description = tree.description.es
         self.assertEqual(
             tree,
-            t.translatePeer("somacme","es"))
+            t.translateTree(p.peers.get("somacme"),"es"))
     
-    def test_translatePeer_manyLevels(self):
+    def test_translateTree_manyLevels(self):
         self.setupApp()
         self.write("somacme.yaml",i18nmanylevels)
         p = self.setupPortal()
-        t = translation.TranslatePeers(p.peers)
+        t = translation.TranslatePeers()
         tree = ns.load(os.path.join(self.peerdatadir,"somacme.yaml"))
         tree.services.anvil.name = tree.services.anvil.name.es
         tree.services.anvil.description = tree.services.anvil.description.es
         self.assertEqual(
             tree,
-            t.translatePeer("somacme","es"))
+            t.translateTree(p.peers.get("somacme"),"es"))
 # vim: ts=4 sw=4 et

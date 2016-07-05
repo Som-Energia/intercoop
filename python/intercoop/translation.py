@@ -1,8 +1,6 @@
 from yamlns import namespace as ns
 
 class TranslatePeers(object):
-    def __init__(self,peers):
-        self.peers=peers
     
     def fieldTranslation(self, tree, field, lang, langfallback=None):
         fieldExpanded = field.split("/")
@@ -24,8 +22,7 @@ class TranslatePeers(object):
                 lang,field))
         return translation
 
-    def _translateTree(self,transTree,peer,prefix,lang):
-        treeOrig = self.peers.get(peer)
+    def _translateTree(self,transTree,treeOrig,prefix,lang):
         tree = treeOrig
         prefixChopped = prefix.split("/")
         transTreeTraversed = transTree
@@ -39,7 +36,7 @@ class TranslatePeers(object):
             if type(tree[elem]) is ns:
                 self._translateTree(
                     transTree,
-                    peer,
+                    treeOrig,
                     prefix+"/"+elem,
                     lang)
             elif elem == lang:
@@ -48,10 +45,9 @@ class TranslatePeers(object):
                     prefix,
                     lang)
 
-    def translatePeer(self, peer, lang):
-        tree = self.peers.get(peer)
+    def translateTree(self, tree, lang):
         transTree = tree.copy()
         for elem in tree:
             if type(tree[elem]) is ns:
-                self._translateTree(transTree,peer,elem,lang)
+                self._translateTree(transTree,tree,elem,lang)
         return transTree
