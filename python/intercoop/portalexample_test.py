@@ -283,22 +283,25 @@ class Portal_Test(unittest.TestCase):
     def test_serviceDescription(self):
         peer = ns.loads(somacmeyaml.encode('utf-8'))
         p = self.setupPortal()
+        t = translation.TranslatePeers()
         self.assertMultiLineEqual(
-            p.serviceDescription(peer, 'explosives'),
+            p.serviceDescription(t.translateTree(peer,"es"), 'explosives'),
             acmeService)
 
     def test_peerDescription_singleService(self):
         peer = ns.loads(sombogusyaml.encode('utf-8'))
         p = self.setupPortal()
+        t = translation.TranslatePeers()
         self.assertMultiLineEqual(
-            p.peerDescription(peer),
+            p.peerDescription(t.translateTree(peer,"es")),
             bogusPeerHeader + bogusService + peerFooter)
 
     def test_peerDescription_manyServices(self):
         peer = ns.loads(somacmeyaml.encode('utf-8'))
         p = self.setupPortal()
+        t = translation.TranslatePeers()
         self.assertMultiLineEqual(
-            p.peerDescription(peer),
+            p.peerDescription(t.translateTree(peer,"es")),
             acmePeerHeader + acmeService + acmeService2 + peerFooter)
 
     def test_index_onePeer(self):

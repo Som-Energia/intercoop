@@ -11,6 +11,7 @@ from . import crypto
 from . import apiclient
 from . import peerdatastorage
 from . import userinfo
+from . import translation
 from .perfume import Perfume, route
 from yamlns import namespace as ns
 
@@ -73,8 +74,8 @@ template = u"""\
 peerTmpl = u"""\
 <div class='peer'>
 <div class='peerlogo'><img src='{peer.logo}' /></div>
-<div class='peerheader'><a href='{peer.url.es}'>{peer.name}</a></div>
-<div class='peerdescription'>{peer.description.es}</div>
+<div class='peerheader'><a href='{peer.url}'>{peer.name}</a></div>
+<div class='peerdescription'>{peer.description}</div>
 <div class='services'>
 {services}\
 </div>
@@ -83,8 +84,8 @@ peerTmpl = u"""\
 
 serviceTmpl = u"""\
 <div class='service'>
-<div class='service_header'>{service.name.es}</div>
-<div class='service_description'>{service.description.es}</div>
+<div class='service_header'>{service.name}</div>
+<div class='service_description'>{service.description}</div>
 <a class='service_activation_bt' href='activateservice/{peer.peerid}/{serviceid}'>Activa</a>
 </div>
 """
@@ -93,20 +94,20 @@ templateActivateService = u"""\
 <html>
 <head>
 <meta encoding='utf-8' />
-<title>Activación del servicio '{service.name.es}' en '{peer.name}'</title>
+<title>Activación del servicio '{service.name}' en '{peer.name}'</title>
 <link rel="stylesheet" type="text/css" href="/intercoop.css">
 </head>
 <body>
 <h1>Autorización de transferencia de datos personales a <em>{peer.name}</em></h1>
 <div class='privacywarning'>
-Para activar el servicio <em>{service.name.es}</em>
+Para activar el servicio <em>{service.name}</em>
 en <em>{peer.name}</em>,
 transferiremos a dicha entidad los siguientes datos:
 <div class='transferfields'>
 {fields}\
 </div>
 Dicha entidad tratará dichos datos según su propia
-<a href='{peer.privacyPolicyUrl.es}' target='_blank'>política de privacidad</a>.
+<a href='{peer.privacyPolicyUrl}' target='_blank'>política de privacidad</a>.
 </div>
 <a class='privacy_accept_bt' href='/confirmactivateservice/{peerid}/{serviceid}'>
 Acepto
@@ -211,9 +212,13 @@ class Portal(Perfume):
         self.peerid = peerid
         self.key = crypto.loadKey(keyfile)
         self.peers = peerdatastorage.PeerDataStorage(peerdatadir)
+        self.translation = translation.TranslatePeers()
         self.users = userinfo.UserInfo(userdatadir)
 
+    def translatedPeers(self):
+        return (self.translation.translateTree(t,'es') for t in self.peers)
     @route('/intercoop.css', methods=['GET'])
+    
     def css(self):
         r = make_response(css)
         r.mimetype='text/css'
@@ -240,7 +245,7 @@ class Portal(Perfume):
             self.name,
             "".join(
                 self.peerDescription(peer)
-                for peer in self.peers
+                for peer in self.translatedPeers()
                 )
             )
         return response
@@ -252,7 +257,7 @@ class Portal(Perfume):
             )
 
     def requiredFields(self, peer, service):
-        peerData = self.peers.get(peer)
+        peerData = self.translation.translateTree(self.peers.get(peer),"es")
         serviceData = peerData.services[service]
 
         if 'fields' in serviceData:
@@ -268,7 +273,7 @@ class Portal(Perfume):
     @route('/activateservice/<peer>/<service>', methods=['GET'])
     def activateService(self, peer, service):
         # TODO: done twice, also in requiredFields
-        peerData = self.peers.get(peer)
+        peerData = self.translation.translateTree(self.peers.get(peer),"es")
         serviceData = peerData.services[service]
         fields = self.requiredFields(peer, service)
         data = self.users.getFields('myuser', fields) # TODO: Real user
@@ -290,7 +295,7 @@ class Portal(Perfume):
     @route('/confirmactivateservice/<peer>/<service>', methods=['GET'])
     def confirmActivateService(self, peer, service):
         # TODO: Not under test!!
-        peerData = self.peers.get(peer)
+        peerData = self.translation.translateTree(self.peers.get(peer))
         serviceData = peerData.services[service]
         fields = self.requiredFields(peer, service)
         data = self.users.getFields('myuser', fields) # TODO: Real user
