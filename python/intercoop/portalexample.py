@@ -212,11 +212,11 @@ class Portal(Perfume):
         self.peerid = peerid
         self.key = crypto.loadKey(keyfile)
         self.peers = peerdatastorage.PeerDataStorage(peerdatadir)
-        self.translation = translation.Translator()
+        self.translator = translation.Translator()
         self.users = userinfo.UserInfo(userdatadir)
 
     def translatedPeers(self):
-        return (self.translation.translateTree(t,'es') for t in self.peers)
+        return (self.translator.translateTree(t,'es') for t in self.peers)
 
 
     @route('/intercoop.css', methods=['GET'])
@@ -258,7 +258,7 @@ class Portal(Perfume):
             )
 
     def requiredFields(self, peer, service):
-        peerData = self.translation.translateTree(self.peers.get(peer),"es")
+        peerData = self.translator.translateTree(self.peers.get(peer),"es")
         serviceData = peerData.services[service]
 
         if 'fields' in serviceData:
@@ -274,7 +274,7 @@ class Portal(Perfume):
     @route('/activateservice/<peer>/<service>', methods=['GET'])
     def activateService(self, peer, service):
         # TODO: done twice, also in requiredFields
-        peerData = self.translation.translateTree(self.peers.get(peer),"es")
+        peerData = self.translator.translateTree(self.peers.get(peer),"es")
         serviceData = peerData.services[service]
         fields = self.requiredFields(peer, service)
         data = self.users.getFields('myuser', fields) # TODO: Real user
@@ -296,7 +296,7 @@ class Portal(Perfume):
     @route('/confirmactivateservice/<peer>/<service>', methods=['GET'])
     def confirmActivateService(self, peer, service):
         # TODO: Not under test!!
-        peerData = self.translation.translateTree(self.peers.get(peer),"es")
+        peerData = self.translator.translateTree(self.peers.get(peer),"es")
         serviceData = peerData.services[service]
         fields = self.requiredFields(peer, service)
         data = self.users.getFields('myuser', fields) # TODO: Real user

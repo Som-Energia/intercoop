@@ -10,7 +10,9 @@ in a way users control which third party services get enabled and transfer their
 
 Some intended goals:
 
-- Ease extending intercooperation to new entities by sharing a common protocol
+- Ease extending intercooperation to new entities by sharing a common protocol,
+    - single implementation for our users to use services from many other entities,
+    - single implementation to offer our services to users of many other entities
 - Be certain that the services request comes from the source entity 
 - Keep users in control of how and whom their personal data is transferred to
 - Still avoid the user from having to type personal data again and again
@@ -38,7 +40,7 @@ Preconditions:
 
 Main course scenario:
 
-- User indicates to entity A's Portal (Portal A) the intent to activate services on entity B
+- User indicates to entity A's Portal (Portal A) the intent of activating a service on entity B
 - Portal A shows the user which data will be transferred to entity B (member number, national id, name, address, emal...) and **asks for consent**
 - User consents the transfer
 - Portal A builds a message cointaining trasferred data and signs it using A's private key.
