@@ -10,7 +10,7 @@ import os
 - [x] Hacer el setUp
 - [x] Get cuando funciona
 - [x] Get cuando no está
-- [ ] Constructor error when no such folder
+- [x] Constructor error when no such folder -> Not needed
 - [x] Proteger contra peerid's maliciosos (../../) limitando a letras numeros y signos de separacion validos
 - [ ] Own exception types (not just plain Exception)
 - [x] Iterador

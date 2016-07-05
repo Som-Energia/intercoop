@@ -10,7 +10,7 @@ from yamlns import namespace as ns
 class Translator(object):
 
     def __init__(self, language='es', fallback='es'):
-        self.language = language
+        self.language = [language] 
         self.fallback = fallback
     
     def __call__(self, data):
@@ -20,8 +20,9 @@ class Translator(object):
 
         if type(data) == ns:
             # defined language
-            try: return data[self.language]
-            except KeyError: pass
+            for lang in self.language:
+                try: return data[lang]
+                except KeyError: pass
 
             # fallback language
             try: return data[self.fallback]
