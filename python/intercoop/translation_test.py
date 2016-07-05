@@ -6,31 +6,31 @@ from yamlns import namespace as ns
 
 
 
-notranslation=u"""\
+notranslation=ns.loads("""\
 description: This is a description
 services:
   contract:
     fields:
        name: César
-"""
+""")
 
-i18n1stlevel=u"""\
+i18n1stlevel=ns.loads("""\
 description:
   es: Mensaje en español
-"""
+""")
 
-i18nfallback=u"""\
+i18nfallback=ns.loads("""\
 description:
   en: Message in English
-"""
+""")
 
-i18nmanylangs=u"""\
+i18nmanylangs=ns.loads("""\
 description:
   es: Mensaje en español
   en: Message in English
-"""
+""")
 
-i18nmanylevels=u"""\
+i18nmanylevels=ns.loads("""\
 services:
   anvil:
     name:
@@ -38,7 +38,7 @@ services:
     description:
       es: >
         Yunques garantizados, siempre caen en una cabeza
-"""
+""")
 
 class Portal_Test(unittest.TestCase):
 
@@ -46,21 +46,21 @@ class Portal_Test(unittest.TestCase):
         self.maxDiff=None
 
     def test_fieldTranslation_existTranslationFirstLevel(self):
-        data = ns.loads(i18n1stlevel.encode('utf8'))
+        data = i18n1stlevel
         t = translation.Translator()
         self.assertEqual(
             u"Mensaje en español",
             t.fieldTranslation(data,"description","es"))
 
     def test_fieldTranslation_fallbackTranslation(self):
-        data = ns.loads(i18nfallback.encode('utf8'))
+        data = i18nfallback
         t = translation.Translator()
         self.assertEqual(
             "Message in English",
             t.fieldTranslation(data,"description","es","en"))
 
     def test_fieldTranslation_doesntExistFallback(self):
-        data = ns.loads(i18nfallback.encode('utf8'))
+        data = i18nfallback
         t = translation.Translator()
         with self.assertRaises(Exception) as ctx:
             t.fieldTranslation(data,"description","fr","ca")
@@ -69,14 +69,14 @@ class Portal_Test(unittest.TestCase):
 
 
     def test_fieldTranslation_fallbackLangTranslation(self):
-        data = ns.loads(i18nmanylangs.encode('utf8'))
+        data = i18nmanylangs
         t = translation.Translator()
         self.assertEqual(
             u"Mensaje en español",
             t.fieldTranslation(data,"description","es","en"))
 
     def test_fieldTranslation_doesntExistFieldFirstLevel(self):
-        data = ns.loads(i18n1stlevel.encode('utf8'))
+        data = i18n1stlevel
         t = translation.Translator()
         with self.assertRaises(Exception) as ctx:
             t.fieldTranslation(data,"badfield","es")
@@ -84,7 +84,7 @@ class Portal_Test(unittest.TestCase):
             "Invalid field 'badfield'")
 
     def test_fieldTranslation_doesntExistTranslationFirstLevel(self):
-        data = ns.loads(i18n1stlevel.encode('utf8'))
+        data = i18n1stlevel
         t = translation.Translator()
         with self.assertRaises(Exception) as ctx:
             t.fieldTranslation(data,"description","fr")
@@ -92,22 +92,21 @@ class Portal_Test(unittest.TestCase):
             "Invalid translation 'fr' for field 'description'")
 
     def test_fieldTranslation_existTranslationManyLevels(self):
-        data = ns.loads(i18nmanylevels.encode('utf8'))
+        data = i18nmanylevels
         t = translation.Translator()
         self.assertEqual(
             "Yunques garantizados, siempre caen en una cabeza\n",
             t.fieldTranslation(data,"services/anvil/description","es"))
 
     def test_translateTree_noTranslations(self):
-        data = ns.loads(notranslation.encode('utf8'))
+        data = notranslation
         t = translation.Translator()
-        tree = ns(data)
         self.assertEqual(
-            tree,
-            t.translate(data,"es"))
+            data,
+            t.translate(notranslation,"es"))
 
     def test_translateTree_firstLevel(self):
-        data = ns.loads(i18n1stlevel.encode('utf8'))
+        data = i18n1stlevel
         t = translation.Translator()
         tree = ns(data)
         tree.description = tree.description.es
@@ -116,7 +115,7 @@ class Portal_Test(unittest.TestCase):
             t.translate(data,"es"))
 
     def test_translateTree_manyLevels(self):
-        data = ns.loads(i18nmanylevels.encode('utf8'))
+        data = i18nmanylevels
         t = translation.Translator()
         tree = ns(data)
         tree.services.anvil.name = tree.services.anvil.name.es
@@ -124,9 +123,6 @@ class Portal_Test(unittest.TestCase):
         self.assertEqual(
             tree,
             t.translate(data,"es"))
-
-
-
 
 
 
