@@ -91,14 +91,6 @@ services:
     - name
 """
 
-notranslation=u"""\
-description: This is a description
-services:
-  contract:
-    fields:
-       name: César
-"""
-
 header= u"""\
 <html>
 <head>

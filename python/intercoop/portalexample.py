@@ -215,10 +215,6 @@ class Portal(Perfume):
         self.translator = translation.Translator()
         self.users = userinfo.UserInfo(userdatadir)
 
-    def translatedPeers(self):
-        return (self.translator.translateTree(t,'es') for t in self.peers)
-
-
     @route('/intercoop.css', methods=['GET'])
     def css(self):
         r = make_response(css)
@@ -245,8 +241,8 @@ class Portal(Perfume):
         response = template.format(
             self.name,
             "".join(
-                self.peerDescription(peer)
-                for peer in self.translatedPeers()
+                self.peerDescription(self.translator.translateTree(peer,'es'))
+                for peer in self.peers
                 )
             )
         return response
