@@ -42,6 +42,9 @@ Roadmap:
 Postponed:
 
 - [ ] extract 'providers' as constructor parameters
+    - [x] extract peers info
+    - [x] extract user info
+    - [ ] extract key
 - [ ] activateservice: special display for list fields
 - [ ] activateservice: special display for None fields
 - [ ] bad peer in required fields
@@ -207,13 +210,13 @@ css = """\
 
 class Portal(Perfume):
 
-    def __init__(self, name, peerid, peerdatadir, userdatadir, keyfile):
+    def __init__(self, name, peerid, keyfile, users=None, peers=None, peerdatadir=None, userdatadir=None):
         super(Portal, self).__init__(name)
         self.name = name
         self.peerid = peerid
         self.key = crypto.loadKey(keyfile)
-        self.peers = peerdatastorage.PeerDataStorage(peerdatadir)
-        self.users = userinfo.UserInfo(userdatadir)
+        self.peers = peers
+        self.users = users
 
     @route('/intercoop.css', methods=['GET'])
     def css(self):
@@ -261,7 +264,8 @@ class Portal(Perfume):
         return 'myuser' # TODO: take it from login info
 
     def _translator(self):
-        return translation.Translator('es') # TODO: Use user lang
+        lang = self.users.language(self._user())
+        return translation.Translator(lang)
         
 
     def requiredFields(self, peer, service):
@@ -286,7 +290,7 @@ class Portal(Perfume):
         peerData = _(self.peers.get(peer))
         serviceData = peerData.services[service]
         fields = self.requiredFields(peer, service)
-        data = self.users.getFields(self._user(), fields) # TODO: Real user
+        data = self.users.getFields(self._user(), fields)
         response = templateActivateService.format(
             peerid=peer,
             peer=peerData,
@@ -309,7 +313,7 @@ class Portal(Perfume):
         peerData = _(self.peers.get(peer))
         serviceData = peerData.services[service]
         fields = self.requiredFields(peer, service)
-        data = self.users.getFields(self._user(), fields) # TODO: Real user
+        data = self.users.getFields(self._user(), fields)
         api = apiclient.ApiClient(peerData.targetUrl, self.key)
         # TODO: augment personal data keys with source ones
         # TODO: handle errors
@@ -320,5 +324,6 @@ class Portal(Perfume):
             # TODO: Log the error
             return "Error comunicando con la entidad"
         return redirect(continuationUrl, 302)
+
 
 # vim: ts=4 sw=4 et

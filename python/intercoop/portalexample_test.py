@@ -3,6 +3,7 @@
 import unittest
 import os
 import shutil
+from . import userinfo
 from . import portalexample
 from . import peerdatastorage
 from yamlns import namespace as ns
@@ -223,8 +224,8 @@ class Portal_Test(unittest.TestCase):
         return portalexample.Portal("Example Portal",
             peerid = self.peerid,
             keyfile=self.keyfile,
-            peerdatadir=self.peerdatadir,
-            userdatadir=self.userdatadir,
+            peers = peerdatastorage.PeerDataStorage(self.peerdatadir),
+            users = userinfo.UserInfo(self.userdatadir),
             )
 
     def setupApp(self):

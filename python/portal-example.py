@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
 from intercoop import portalexample
-
 from intercoop import portalexample_test
+from intercoop import peerdatastorage
+from intercoop import userinfo
 
 import os
 
@@ -29,8 +30,10 @@ p = portalexample.Portal(
 	'intercoop',
 	peerid='somillusio',
 	keyfile='testkey.pem',
-	peerdatadir='instance/somillusio/peers',
-	userdatadir='instance/somillusio/users',
+    peers = peerdatastorage.PeerDataStorage(
+	    'instance/somillusio/peers'),
+    users = userinfo.UserInfo(
+        'instance/somillusio/users'),
 	)
 
 p.run(
