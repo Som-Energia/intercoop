@@ -60,23 +60,40 @@ Main course scenario:
 	- Source entity has no intercooperation agreement with target one
 	- Bad signature
 
-
-## Code examples
-
-
-datadict = memberDataForIntercoopEntity(member, peer)
-package = signPackage(datadict, privatekey, format='yaml')
-try:
-	redirectUrl=sendPackage(package, entity)
-	
+- Service errors
+    - Service unavailable (at all, for peer, for user, for role)
+    - Missing payload fields (because the application needs)
 
 
 
+## Python library
 
-def sendSignedPackage(datadict, privatekey, format='yaml'):
+- Examples:
 
+    - portalexample: Flask based example of a source entity portal
+    - apiexample: Flask based example of a target entity api
 
+- Fully reusable modules:
 
+    - crypto: cryptography primitives:
+        - hides actual algorithms compexity under simple action names
+    - package: encapsulates package marshalling/umarshalling, signing/verification
+    - apiclient: encapsulates remote acces to the target API
+
+- Data sources: You normally want to rewrite those, for example to take data from a database or similar. Reference implementation use a directory full of YAML files.
+
+    - Source Portal:
+        - peerinfo: access yaml info provided by the available targets
+        - userinfo: access source user personal dataa
+
+    - Target API:
+        - keyring: provided a peer 
+        - remoteuserinfo: temporary stores the transferred data
+
+- Utilities:
+
+    - translator: rewrites yamls by picking language on translatable strings
+    - perfume: a utility to make Flask apps dependency injectable
 
 
 
