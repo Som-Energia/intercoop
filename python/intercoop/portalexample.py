@@ -295,7 +295,7 @@ class Portal(Perfume):
     @route('/confirmactivateservice/<peer>/<service>', methods=['GET'])
     def confirmActivateService(self, peer, service):
         # TODO: Not under test!!
-        peerData = self.translation.translateTree(self.peers.get(peer))
+        peerData = self.translation.translateTree(self.peers.get(peer),"es")
         serviceData = peerData.services[service]
         fields = self.requiredFields(peer, service)
         data = self.users.getFields('myuser', fields) # TODO: Real user
