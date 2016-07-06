@@ -6,9 +6,10 @@
 
 In the context of intercooperation among social economy entities,
 these libraries implement a protocol to enable a user of a given entity
-to use services provided by other entities having a bilateral agreement,
-in a way users control which services get enabled and which entities
-transfer their personal data to.
+to use services provided by other entities having a bilateral agreement.
+This is done keeping the users in control of which are the enabled
+services and, most important, which entities will be transferred
+their personal data to.
 
 Some intended goals:
 

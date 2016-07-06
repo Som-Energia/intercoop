@@ -13,49 +13,6 @@ from . import translation
 from .perfume import Perfume, route
 from yamlns import namespace as ns
 
-"""
-# TODO:
-
-Roadmap:
-
-- [x] route activateservice/<peer>/<service>
-    - [x] fields = portal.requiredFields(peer, service)
-        - [x] when service fields, use them
-        - [x] when no service fields, use global peer fields
-        - [x] when no fields anywhere, raise
-    - [+] data = portal.userInfo(userid, fields)
-        - [+] all fields
-        - [+] filtering
-        - [+] no such user
-        - [+] no such field
-    - [x] translations = portal.fieldTranslation(fields)
-        - [+] One level, translation and field exist
-        - [+] One level, field exists but translation no
-        - [+] One level, field doesn't exist
-        - [x] Many level field
-    - [x] fieldhtml = portal.renderField(fieldLabel, value)
-    - [x] innerhtml = portal.renderUserData(data)
-- [x] route confirmactivateservice/<peer>/<service>
-
-Postponed:
-
-- [ ] extract 'providers' as constructor parameters
-    - [x] extract peers info
-    - [x] extract user info
-    - [ ] extract key
-- [ ] activateservice: special display for list fields
-- [ ] activateservice: special display for None fields
-- [ ] bad peer in required fields
-- [ ] bad service in required fields
-- [ ] Solve translations
-- [ ] Should different types in field be rendered differently
-- [ ] No service description
-- [ ] No service name
-- [ ] No such service
-- [ ] Include peer.info optionally
-- [ ] require login
-"""
-
 
 
 template = u"""\
