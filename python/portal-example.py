@@ -24,6 +24,7 @@ write('instance/somillusio/peers/somenergia.yaml', somenergiayaml)
 write('instance/somillusio/peers/sombogus.yaml', portalexample_test.sombogusyaml)
 write('instance/somillusio/peers/somacme.yaml', portalexample_test.somacmeyaml)
 write('instance/somillusio/users/_labels.yaml', portalexample_test.labelsyaml)
+write('instance/somillusio/users/myuser.yaml', portalexample_test.myuseryaml)
 
 
 p = portalexample.Portal(
