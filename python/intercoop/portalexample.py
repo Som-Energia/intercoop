@@ -84,12 +84,17 @@ fieldTmpl = u"""\
 
 css = """\
 
+body {
+    max-width: 80ex;
+    margin-left: auto;
+    margin-right: auto;
+}
 
 .peer {
     clear: right;
     margin: 3ex 1ex;
     font-family: sans;
-    width: 70ex;
+    max-width: 70ex;
     margin-left: auto;
     margin-right: auto;
 }
@@ -119,26 +124,28 @@ css = """\
 }
 
 
-.service_activation_bt, .privacy_accept_bt {
+.service_activation_bt,
+.privacy_accept_bt {
     display: block;
-    position: relative;
     width: 20ex;
     text-decoration: none;
     padding: 1ex;
     background: #586;
     color: white;
     font-weight: bold;
-    margin: 2ex 2ex 2ex 45ex;
-    text-shadow: 1pt 1pt 1pt black;
+    margin: 2ex 2ex 2ex auto;
+    text-shadow: 2px 2px 2px black;
     border: 1pt solid #aaa;
-    border-radius: 1ex;
+    border-radius: 4px;
     text-align: center;
 }
 
-.service_activation_bt:active, .privacy_accept_bt:active {
+.service_activation_bt:active,
+.privacy_accept_bt:active {
     border: 1pt solid #eee;
 }
-.service_activation_bt:hover, .privacy_accept_bt:hover {
+.service_activation_bt:hover,
+.privacy_accept_bt:hover {
     border: 1pt solid #333;
     background: #687;
 }
@@ -158,6 +165,7 @@ css = """\
 .transferfields .fieldheader {
     font-weight: bold;
     border-bottom: solid 1pt #eee;
+    padding: 1ex;
 }
 
 """
