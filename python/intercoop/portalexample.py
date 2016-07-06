@@ -10,9 +10,9 @@ from flask import (
 from . import crypto
 from . import apiclient
 from . import translation
+from . import packaging
 from .perfume import Perfume, route
 from yamlns import namespace as ns
-
 
 
 template = u"""\
@@ -301,6 +301,71 @@ class Portal(Perfume):
             # TODO: Log the error
             return "Error comunicando con la entidad"
         return redirect(continuationUrl, 302)
+
+
+
+    def qrcode(self, format='svg'):
+        fields = [
+            'originpeer',
+            'name',
+            'nif',
+            'innerid',
+            ]
+        data = self.users.getFields(self._user(), fields)
+        signed = packaging.Generator(self.key).produce(data)
+        print (signed)
+        import qrcode
+        import qrcode.image.svg
+
+        qr = qrcode.QRCode(image_factory=qrcode.image.svg.SvgImage)
+        qr.add_data(signed)
+        im = qr.make_image()
+        import io
+        output = io.BytesIO()
+        im.save(output)
+        return output.getvalue()
+
+    @route('/personalid', methods=['GET'])
+    def personalid(self):
+        svg = self.qrcode()
+        r = make_response(svg)
+        r.mimetype='image/svg+xml'
+        return r
+
+    @route('/personalid/validate', methods=['GET'])
+    def validatePersonalId(self):
+        return """\
+<form action='' method='post' enctype="multipart/form-data">
+<input type='file' name="qrcapture" size="80"> 
+<input type='submit' value='Upload'>
+</form>
+"""
+        
+        
+    @route('/personalid/validate', methods=['POST'])
+    def validatePersonalId_post(self):
+
+        from werkzeug import secure_filename
+        import os
+        capture = request.files['qrcapture']
+        if capture.filename == '': return
+        filename = os.path.join('.', secure_filename(capture.filename))
+        capture.save(filename)
+
+        import qrtools
+        qr = qrtools.QR()
+        qr.decode(filename)
+
+        p = packaging.Parser({self.peerid: self.key})
+        try:
+            result = p.parse(qr.data).dump()
+        except Exception as e:
+            print(e)
+            return "El carnet es invalido"
+        r = make_response(p.parse(qr.data).dump())
+        r.mimetype='text/plain'
+        return r
+
 
 
 # vim: ts=4 sw=4 et

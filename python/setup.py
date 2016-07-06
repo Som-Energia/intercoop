@@ -15,7 +15,8 @@ setup(
 	license = 'GNU Affero General Public License v3 or later (AGPLv3+)',
 	packages=find_packages(exclude=['*[tT]est*']),
 	scripts=[
-		'intercoop/apiexample.py',
+		'api-example.py',
+		'portal-example.py',
 		],
 	install_requires=[
 		'pycrypto',
@@ -23,6 +24,10 @@ setup(
 		'requests',
         'requests-mock',
 		'flask',
+        'qrcode',
+        'lxml',
+        'qrtools',
+        'zbar',
 	],
 	include_package_data = True,
 	test_suite = 'intercoop',
