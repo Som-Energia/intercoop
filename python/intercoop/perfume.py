@@ -14,11 +14,11 @@ from flask import (
 	Flask,
 	)
 
-def route(regex, methods=None):
+def route(regex, **kwds):
     'Decorates your function with a route as "function.route = ..."'
     def decorator(func):
         func.perfume_route = regex
-        func.perfume_methods = methods
+        func.perfume_route_args = kwds
         return func
     return decorator
 
@@ -39,7 +39,7 @@ class Perfume(object):
             except AttributeError: continue
             self.app.route(
                 method.perfume_route,
-                methods=method.perfume_methods,
+                **method.perfume_route_args
                 )(method)
 
     def run(self, *args, **kwd):
