@@ -254,6 +254,7 @@ class Portal(Perfume):
         serviceData = peerData.services[service]
         fields = self.requiredFields(peer, service)
         data = self.users.getFields(self._user(), fields)
+        labels = _(self.users.fieldLabels(fields))
         response = templateActivateService.format(
             peerid=peer,
             peer=peerData,
@@ -261,7 +262,7 @@ class Portal(Perfume):
             service=serviceData,
             fields="".join(
                 self.renderField(
-                    field = field, # TODO: Translate the field
+                    field = labels[field],
                     value = value,
                     )
                 for field, value in data.items()

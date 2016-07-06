@@ -49,6 +49,20 @@ class UserInfo(object):
             if key in fields
             ])
 
+    def fieldLabels(self, fields):
+        userdata = self._userData('_labels')
+        
+        for field in fields:
+            if field not in userdata:
+                raise BadField(field)
+
+        return ns([
+            (key, value)
+            for key,value in userdata.items()
+            if key in fields
+            ])
+
+
 
 
 # vim: ts=4 sw=4 et

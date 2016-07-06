@@ -8,6 +8,7 @@ from . import portalexample
 from . import peerinfo
 from yamlns import namespace as ns
 
+from .userinfo_test import labelsyaml
 
 myuseryaml=u"""\
 originpeer: somillusio
@@ -191,13 +192,13 @@ Acepto
 
 nameField = u"""\
 <div class='field'>
-<div class='fieldheader'>nif:</div>
+<div class='fieldheader'>NIF:</div>
 <div class='fieldvalue'>12345678Z</div>
 </div>
 """
 originField = u"""\
 <div class='field'>
-<div class='fieldheader'>originpeer:</div>
+<div class='fieldheader'>Entidad de procedencia:</div>
 <div class='fieldvalue'>somillusio</div>
 </div>
 """
@@ -223,6 +224,7 @@ class Portal_Test(unittest.TestCase):
         os.system("mkdir -p "+self.peerdatadir)
         os.system("mkdir -p "+self.userdatadir)
         self.write('myuser.yaml', myuseryaml, self.userdatadir)
+        self.write('_labels.yaml', labelsyaml, self.userdatadir)
 
     def setupPortal(self):
         return portalexample.Portal("Example Portal",
