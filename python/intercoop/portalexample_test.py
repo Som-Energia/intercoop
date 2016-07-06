@@ -315,6 +315,31 @@ class Portal_Test(unittest.TestCase):
             "</div>\n"
             )
 
+    def test_renderField_list(self):
+        p = self.setupPortal()
+        self.assertMultiLineEqual(
+            p.renderField(field=u"Teléfono", value=["5550000", "5554455"]),
+            "<div class='field'>\n"
+            u"<div class='fieldheader'>Teléfono:</div>\n"
+            "<div class='fieldvalue'>\n"
+                "<ul>\n"
+                "<li>5550000</li>\n"
+                "<li>5554455</li>\n"
+                "</ul>\n"
+            "</div>\n"
+            "</div>\n"
+            )
+
+    def test_renderField_none(self):
+        p = self.setupPortal()
+        self.assertMultiLineEqual(
+            p.renderField(field=u"Attribute label", value=None),
+            "<div class='field'>\n"
+            "<div class='fieldheader'>Attribute label:</div>\n"
+            "<div class='fieldvalue'>---</div>\n"
+            "</div>\n"
+            )
+
     def test_requiredFields_justInService_useService(self):
         self.write("sombogus.yaml",sombogusyaml)
         p = self.setupPortal()

@@ -2,17 +2,14 @@
 
 ## Current
 
-- [ ] portal: extract 'providers' as constructor parameters
-    - [x] portal: extract peers info
-    - [x] portal: extract user info
-- [x] packaging: Embed data in errors so that they can be restored in client
-- [x] api: Return uri instead of (or besides) the uuid
-- [ ] portal: enhance appearance
 
 ## Later
 
+- [ ] portal: require login
+    - [ ] portal: integrate flask-login
+    - [ ] portal: use login to get the current user
+    - [ ] portal: add a dummy catalan user to test translations
 - [ ] api: continuation page different from info getter api
-- [ ] userinfo: Translations for field names
 - [ ] userinfo: process differently unsupported and not pressent fields
 - [ ] peerinfo: consider more semantic accessors
 - [ ] peerinfo: Own exception types (not just plain Exception)
@@ -28,17 +25,25 @@
 	- [ ] Raise an error if no key available
 	- [ ] Handle error in the case of bad key format
 - [ ] portal: extract key as constructor parameter
-- [ ] portal: activateservice: special display for list fields
-- [ ] portal: activateservice: special display for None fields
 - [ ] portal: bad peer in required fields
 - [ ] portal: bad service in required fields
-- [ ] portal: Solve translations
-- [ ] portal: Should different types in field be rendered differently
 - [ ] portal: No service description
 - [ ] portal: No service name
 - [ ] portal: No such service
 - [ ] portal: Include peer.info optionally
-- [ ] portal: require login
+
+
+## DONE
+
+- [x] portal: extract 'providers' as constructor parameters
+    - [x] portal: extract peers info
+    - [x] portal: extract user info
+- [x] packaging: Embed data in errors so that they can be restored in client
+- [x] api: Return uri instead of (or besides) the uuid
+- [x] portal: enhance appearance
+- [x] portal: activateservice: special display for list fields
+- [x] portal: activateservice: special display for None fields
+- [x] userinfo: Translations for field names
 
 
 ## DONE: Initial Roadmap

@@ -168,6 +168,11 @@ body {
     padding: 1ex;
 }
 
+.transferfields .fieldvalue ul {
+    padding-left: 0ex;
+    list-style-type: none;
+}
+
 """
 
 
@@ -217,7 +222,15 @@ class Portal(Perfume):
             )
         return response
 
-    def renderField(self, value, field):
+    def renderField(self, field, value):
+        if type(value) == list:
+            value = "\n<ul>\n"+''.join(
+                u"<li>{}</li>\n".format(item)
+                for item in value
+                ) + "</ul>\n"
+        if value is None:
+            value = '---'
+
         return fieldTmpl.format(
             value=value,
             field=field,
