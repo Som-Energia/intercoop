@@ -63,7 +63,9 @@ $ pip install .
 
 ## Example scripts
 
-- 
+- portal-example.py: _somillusio_ portal
+- api-example.py: _somacme_ api
+
 
 
 
