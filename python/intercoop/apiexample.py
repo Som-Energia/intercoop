@@ -94,7 +94,7 @@ class IntercoopApi(Perfume):
     @route('/continuation/<uuid>', methods=['GET'])
     def continuation(self, uuid):
         return (
-            "<h1>Portal de contractacio de {}</h1>".format(self.name) +
+            "<h1>Portal de contración de {}</h1>".format(self.name) +
             """<p>For demo purposes. Continuation page should be
             a page at the portal of the destination entity, not part of the API.
             </p>
