@@ -5,7 +5,7 @@ readme = open("README.md").read()
 
 setup(
 	name = "intercoop",
-	version = "1.3",
+	version = "0.1",
 	description =
 		"Intercooperation library",
 	author = "Som Energia SCCL",
