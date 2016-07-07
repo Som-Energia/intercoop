@@ -4,6 +4,9 @@ python:
 - "3.3"
 - "3.4"
 - "3.5"
+before_install:
+- sudo apt-get -qq update
+- sudo apt-get install -y libzbar-dev
 install:
 - pip install coveralls
 script: cd python; coverage run --source . ./setup.py test
