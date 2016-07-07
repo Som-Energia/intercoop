@@ -15,12 +15,12 @@ from intercoop.apiexample_test import KeyRingMock as KeyRing
 
 
 p = apiexample.IntercoopApi(
-	'intercoop',
+	'somacme',
 	storage = remoteuserinfo.RemoteUserInfo('instance/somacme/remoteusers'),
     keyring = KeyRing(dict(
         somillusio = crypto.loadKey('testkey-public.pem')
         )),
-	continuationUrlTmpl = 'http://localhost:5001/activateService/{uuid}'
+	continuationUrlTmpl = 'http://localhost:5001/continuation/{uuid}'
 	)
 
 p.run(

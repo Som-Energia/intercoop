@@ -54,6 +54,7 @@ class IntercoopApi(Perfume):
 
     def __init__(self, name, storage, keyring, continuationUrlTmpl=None):
         super(IntercoopApi, self).__init__(name)
+        self.name = name
         self.storage = storage
         self.keyring = keyring
         self.continuationUrlTmpl = continuationUrlTmpl
@@ -89,6 +90,27 @@ class IntercoopApi(Perfume):
     def activateService_get(self, uuid):
         values = self.storage.retrieve(uuid)
         return values
+
+    @route('/continuation/<uuid>', methods=['GET'])
+    def continuation(self, uuid):
+        return (
+            "<h1>Portal de contractacio de {}</h1>".format(self.name) +
+            """<p>For demo purposes. Continuation page should be
+            a page at the portal of the destination entity, not part of the API.
+            </p>
+            """
+            "<p>Info retrieved from original entity:</p>"
+            "<table>"+ ''.join(
+            "<tr><th>{name}</th><td>{value}</td></tr>".format(
+                name=name,
+                value=value,
+                )
+            for name, value in self.storage.retrieve(uuid).items()
+            ) + "</table>"
+        )
+
+
+
 
 if __name__ == '__main__':
     IntercoopApi().run()
