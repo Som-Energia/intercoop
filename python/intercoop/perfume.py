@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 """
 This is a modified copy of https://github.com/hoh/perfume/
@@ -15,10 +15,10 @@ from flask import (
 	)
 
 def route(regex, **kwds):
-    'Decorates your function with a route as "function.route = ..."'
+    'Decorates your function with a route as "function.perfume_route = ..."'
     def decorator(func):
         func.perfume_route = regex
-        func.perfume_route_args = kwds
+        func.perfume_args = kwds
         return func
     return decorator
 
@@ -35,15 +35,16 @@ class Perfume(object):
         "Updates the app's routes with all methods."
         for name in dir(self):
             method = self.__getattribute__(name)
-            try : method.perfume_route
-            except AttributeError: continue
-            self.app.route(
-                method.perfume_route,
-                **method.perfume_route_args
-                )(method)
+            try:
+                route = method.perfume_route
+                args = method.perfume_args
+            except AttributeError:
+                continue
 
-    def run(self, *args, **kwd):
-        self.app.run(*args, **kwd)
+            self.app.route(route, **args)(method)
+
+    def run(self, *args, **kwds):
+        self.app.run(*args, **kwds)
 
 
 
