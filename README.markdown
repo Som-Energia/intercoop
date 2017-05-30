@@ -13,10 +13,10 @@ their personal data to.
 
 Some intended goals:
 
-- Ease extending intercooperation to new entities by sharing a common protocol,
-    - single implementation for our users to use services from many other entities,
-    - single implementation to offer our services to users of many other entities
-- Be certain that the services request comes from the source entity 
+- Easely extend intercooperation to new entities by sharing a common protocol, so that:
+    - You implement once how your users access services provided by many other entities
+    - You implement once how to offer our services to users coming from many other entities
+- Be certain that the services request comes from a user of the source entity
 - Keep users in control of how and whom their personal data is transferred to
 - Still avoid the user from having to type personal data again and again
 
@@ -29,7 +29,7 @@ Some intended goals:
 - Source entity: The entity a member has rights on.
 - Target entity: The entity whose services are enabled for members of the source entity.
 - Portal: a website for validated users of an entity
-- API: B2B web API
+- API: B2B web API between the two entities.
 
 ## Main protocol sequence
 
