@@ -15,8 +15,8 @@ setup(
 	license = 'GNU Affero General Public License v3 or later (AGPLv3+)',
 	packages=find_packages(exclude=['*[tT]est*']),
 	scripts=[
-		'api-example.py',
-		'portal-example.py',
+		'api-example-somacme.py',
+		'portal-example-somillusio.py',
 		],
 	install_requires=[
 		'pycrypto',
