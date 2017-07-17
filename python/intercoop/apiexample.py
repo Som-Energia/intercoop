@@ -96,9 +96,10 @@ class IntercoopApi(Perfume):
         return (
             "<h1>Portal de contración de {}</h1>".format(self.name) +
             """<p>For demo purposes. Continuation page should be
-            a page at the portal of the destination entity, not part of the API.
+            a page at the destination entity portal, not part of the API.
             Usually a form asking for more information that is
             required to proceed with the service.
+            Maybe presenting the transfered data for further edition.
             </p>
             """
             "<p>Info retrieved from original entity:</p>"
