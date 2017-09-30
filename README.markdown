@@ -28,8 +28,8 @@ Some intended goals:
 - Role: A set of rights a user might have within an entity (pe. member, worker, different kind of members...)
 - Source entity: The entity a member has rights on.
 - Target entity: The entity whose services are enabled for members of the source entity.
-- Portal: a website for validated users of an entity
-- API: B2B web API between the two entities.
+- Portal: Website for validated users of the source entity
+- API: B2B web API offered by the target entity to the source entity.
 
 ## Main protocol sequence
 
@@ -43,14 +43,14 @@ Preconditions:
 
 Main course scenario:
 
-- User indicates to entity A's Portal (Portal A) the intent of activating a service on entity B
-- Portal A shows the user which data will be transferred to entity B (member number, national id, name, address, emal...) and **asks for consent**
+- User indicates to _source Portal_ the intent of activating a service on _target entity_
+- _Source portal_ shows the user which data will be transferred to _target entity_ (member number, national id, name, address, emal...) and **asks for consent**
 - User consents the transfer
-- Portal A builds a message cointaining trasferred data and signs it using A's private key.
-- Portal A sends the message to https API on entity B
-- API B validates the signature with A's public key, stores the transferred data and generates a token for later reference
-- API B responds to Portal A with an url on B having the token embedded inside.
-- Portal A redirects user's browser to that url, where the process to get the service can continue.
+- _Source portal_ builds a message cointaining trasferred data and signs it using Source's private key.
+- _Source portal_ sends the message to https API on _target entity_
+- _Target API_ validates the signature with source's public key, stores the transferred data and generates a token for later reference
+- _Target API_ responds to _Source Portal_ with an url on B having the token embedded inside.
+- _Source Portal_ redirects user's browser to that url, where the process to get the service can continue.
 
 
 ## Errors
