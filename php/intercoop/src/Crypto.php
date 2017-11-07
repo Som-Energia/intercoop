@@ -1,8 +1,10 @@
 <?php 
 namespace SomLabs\Intercoop;
 
-class Crypto{}
-
-function encode($text){
+class Crypto{
+	static function encode($text){
 		return base64_encode($text);
+	}
 }
+
+

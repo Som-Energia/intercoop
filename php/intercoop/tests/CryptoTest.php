@@ -16,8 +16,10 @@ class CryptoTest extends PHPUnit_Framework_TestCase{
         "da9k4vdM2zoPDtGTAxZQz68suevbGbAM_fYnBge2FA=="
         );
 	
+
+	
 	public function test_encode_unicode(){
-		$encoded = crypto\encode($this->plain);
+		$encoded = crypto\Crypto::encode($this->plain);
         	$this->assertEquals($this->base64, $encoded);		
 	}
   
