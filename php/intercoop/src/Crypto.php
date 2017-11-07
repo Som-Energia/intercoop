@@ -31,7 +31,7 @@ class Crypto{
    }
 
 	public function encode($text){
-		return "dGhpcyBpcyB0aGUgY29udGVudAo=";
+		return base64_encode($text);
 	}
 
 
