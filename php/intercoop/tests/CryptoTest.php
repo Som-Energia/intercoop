@@ -1,13 +1,8 @@
 <?php 
+use SomLabs\Intercoop as crypto;
+$crypto = new SomLabs\Intercoop\Crypto;
+  
 
-/**
-*  Corresponding Class to test YourClass class
-*
-*  For each class in your library, there should be a corresponding Unit-Test for it
-*  Unit-Tests should be as much as possible independent from other test going on.
-*
-*  @author yourname
-*/
 class CryptoTest extends PHPUnit_Framework_TestCase{
 
 	public $plain = "this is the content\n";
@@ -20,24 +15,10 @@ class CryptoTest extends PHPUnit_Framework_TestCase{
         "csN_0H76uzEZTbJf3GwH8m5lCjNkWKVufBP_J2aQ-LvtgKiuyZI6lP9TcffV".
         "da9k4vdM2zoPDtGTAxZQz68suevbGbAM_fYnBge2FA=="
         );
-
-  public function testIsThereAnySyntaxError(){
-	$var = new SomLabs\Intercoop\Crypto;
-	$this->assertTrue(is_object($var));
-	unset($var);
-  }
-  
-
-  public function testMethod1(){
-	$var = new SomLabs\Intercoop\Crypto;
-	$this->assertTrue($var->method1("hey") == 'Hello World');
-	unset($var);
-  }
-
+	
 	public function test_encode_unicode(){
-		$crypto = new SomLabs\Intercoop\Crypto;
-		$encoded = $crypto->encode($this->plain);
-        $this->assertEquals($this->base64, $encoded);		
+		$encoded = crypto\encode($this->plain);
+        	$this->assertEquals($this->base64, $encoded);		
 	}
   
 }
