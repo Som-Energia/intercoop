@@ -1,7 +1,5 @@
 <?php 
-use SomLabs\Intercoop as crypto;
-$crypto = new SomLabs\Intercoop\Crypto;
-  
+use SomLabs\Intercoop\Crypto as crypto;  
 
 class CryptoTest extends PHPUnit_Framework_TestCase{
 
@@ -19,7 +17,7 @@ class CryptoTest extends PHPUnit_Framework_TestCase{
 
 	
 	public function test_encode_unicode(){
-		$encoded = crypto\Crypto::encode($this->plain);
+		$encoded = crypto::encode($this->plain);
         	$this->assertEquals($this->base64, $encoded);		
 	}
   
