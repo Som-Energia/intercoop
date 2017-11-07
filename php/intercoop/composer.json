@@ -1,12 +1,16 @@
 {
-    "name": "buonzz/composer-library-template",
-    "description": "Boilerplate package for creating other packages.",
-    "keywords": ["template", "composer", "package"],
-    "license": "DBAD",
+    "name": "somlabs/intercoop",
+    "description": "Intercooperation library",
+    "keywords": ["business2business","socialeconomy"],
+    "license": "AGPL-3.0",
     "authors": [
         {
-            "name": "Darwin Biler",
-            "email": "buonzz@gmail.com"
+            "name": "Martí Casas",
+            "email": "mcasas@madsystems.coop"
+        },
+	{
+            "name": "Roman Quintero",
+            "email": "rquintero@madsystems.coop"
         }
     ],
     "type": "project",
@@ -18,7 +22,7 @@
     },
 	"autoload": {
         "psr-4": {
-            "Buonzz\\Template\\": "src/"
+            "SomLabs\\Intercoop\\": "src/"
         }
     }
 }

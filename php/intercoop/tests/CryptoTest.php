@@ -18,7 +18,7 @@ class YourClassTest extends PHPUnit_Framework_TestCase{
   *
   */
   public function testIsThereAnySyntaxError(){
-	$var = new Buonzz\Template\YourClass;
+	$var = new SomLabs\Intercoop\Crypto;
 	$this->assertTrue(is_object($var));
 	unset($var);
   }
@@ -31,7 +31,7 @@ class YourClassTest extends PHPUnit_Framework_TestCase{
   *
   */
   public function testMethod1(){
-	$var = new Buonzz\Template\YourClass;
+	$var = new SomLabs\Intercoop\Crypto;
 	$this->assertTrue($var->method1("hey") == 'Hello World');
 	unset($var);
   }

@@ -1,4 +1,4 @@
-<?php namespace Buonzz\Template;
+<?php namespace SomLabs\Intercoop;
 
 /**
 *  A sample class
@@ -8,7 +8,7 @@
 *
 *  @author yourname
 */
-class YourClass{
+class Crypto{
 
    /**  @var string $m_SampleProperty define here what this variable is for, do this for every instance variable */
    private $m_SampleProperty = '';
