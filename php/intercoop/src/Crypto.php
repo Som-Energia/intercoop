@@ -10,8 +10,11 @@
 */
 class Crypto{
 
+	public $plain = "this is the content\n";
+	
    /**  @var string $m_SampleProperty define here what this variable is for, do this for every instance variable */
    private $m_SampleProperty = '';
+	
  
   /**
   * Sample method 
@@ -26,4 +29,10 @@ class Crypto{
    public function method1($param1){
 			return "Hello World";
    }
+
+	public function encode($text){
+		return "dGhpcyBpcyB0aGUgY29udGVudAo=";
+	}
+
+
 }
