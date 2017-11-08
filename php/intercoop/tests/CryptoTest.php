@@ -51,3 +51,5 @@ class CryptoTest extends PHPUnit_Framework_TestCase{
 
 
 }
+
+// vim: noet ts=4
