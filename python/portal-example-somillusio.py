@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 
+"""
+Creates a dummy Portal with some peers offering services.
+A single user is always logged, in a real portal,
+users should log-in.
+"""
+
 from intercoop import portalexample
 from intercoop import portalexample_test
 from intercoop import peerinfo
