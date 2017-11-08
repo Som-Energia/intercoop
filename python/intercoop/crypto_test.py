@@ -17,6 +17,7 @@ class Crypto_Test(unittest.TestCase):
         "csN_0H76uzEZTbJf3GwH8m5lCjNkWKVufBP_J2aQ-LvtgKiuyZI6lP9TcffV"
         "da9k4vdM2zoPDtGTAxZQz68suevbGbAM_fYnBge2FA=="
         )
+    shahex = 'a567f5414a110729344c395089d87821310b22f4'
 
     def setUp(self):
         self.maxDiff = None
@@ -53,6 +54,11 @@ class Crypto_Test(unittest.TestCase):
             "'utf-8' codec can't decode byte 0x83 "
             "in position 2: invalid start byte")
 
+    def test_sha(self):
+        self.assertEqual(
+            crypto.sha(self.plain).hexdigest(),
+            self.shahex)
+
     def test_sign(self):
         signature = crypto.sign(self.key, self.plain)
         self.assertMultiLineEqual(signature, self.signed)
@@ -85,6 +91,7 @@ class CryptoUnicode_Test(Crypto_Test):
 
     plain = u"ñáéíóúç\n"
     base64 = u"w7HDocOpw63Ds8O6w6cK"
+    shahex = '7d426ba2a4c4820ab2c16465da66fabec9ae7527'
     signed = (
         "H-4O0KH70jaYshXHcmROBZW09wCpsHb_gbaCrmnxbm3pdV3XYDRwLkY_YmPTab"
         "TizhImcwMCFO-MI4d9dQprS-tbb28hx5xlxZhHhYusSoTkDqMgjjPLBD_WjNvh"
