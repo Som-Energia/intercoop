@@ -19,10 +19,11 @@ class Crypto_Test(unittest.TestCase):
         )
     shahex = 'a567f5414a110729344c395089d87821310b22f4'
 
+    keyfile = 'testkey.pem'
+    pubfile = 'testkey-public.pem'
+
     def setUp(self):
         self.maxDiff = None
-        self.keyfile = 'testkey.pem'
-        self.pubfile = 'testkey-public.pem'
 
         if not os.access(self.keyfile, os.F_OK):
             crypto.generateKey(self.keyfile, self.pubfile)
