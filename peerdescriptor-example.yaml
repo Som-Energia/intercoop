@@ -2,9 +2,9 @@
 # Describes how users of portal can access services of the peer entity
 # and how to present it.
 
-protocolVersion: 1.0
-peerVersion: 1
-peerid: somenergia
+protocolVersion: 1.0  # Version of the protocol
+peerVersion: 1 # Version of the descriptor data
+peerid: somenergia # readable text identifier for the 
 name: Som Energia SCCL
 logo: https://www.somenergia.coop/wp-content/uploads/2014/07/logohdmi.png
 description: 
