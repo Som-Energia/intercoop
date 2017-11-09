@@ -10,7 +10,10 @@ class KeyRingMock {
 		$this->keymap = $keymap;
 	}
 	public function get($key) {
-		return $this->keymap[$key];
+		if (array_key_exists($key, $this->keymap))
+			return $this->keymap[$key];
+
+		return null;
 	}
 }
 
@@ -115,6 +118,19 @@ EOT;
 		} catch (SomLabs\Intercoop\Packaging\BadSignature $e) {
 			$this->assertExceptionMessage($e,
 				'Signature verification failed, untrusted content');
+		}
+	}
+
+	public function test_parse_unrecognizedPeer() {
+		$this->values['originpeer'] = 'badpeer';
+		$message = $this->setupMessage();
+
+		try {
+			packaging::parse($this->keyring, $message);
+			$this->fail("Expected exception not thrown");
+		} catch (SomLabs\Intercoop\Packaging\BadPeer $e) {
+			$this->assertExceptionMessage($e,
+				'The entity \'badpeer\' is not a recognized one');
 		}
 	}
 }

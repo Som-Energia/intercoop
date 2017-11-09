@@ -11,6 +11,9 @@ class MessageError extends \Exception {
 class BadSignature extends MessageError {
 	protected $message = 'Signature verification failed, untrusted content';
 }
+class BadPeer extends MessageError {
+	protected $message = 'The entity \'%s\' is not a recognized one';
+}
 
 namespace SomLabs\Intercoop;
 
@@ -40,7 +43,10 @@ class Packaging {
 		$valuesYaml = crypto::decode($payload);
 		$values = Yaml::parse($valuesYaml);
 		$peer = $values["originpeer"];
+
 		$pubkey = $keyring->get($peer);
+		if (is_null($pubkey))
+			throw new Packaging\BadPeer($peer);
 
 		if (!crypto::isAuthentic($pubkey, $valuesYaml, $signature))
 			throw new Packaging\BadSignature();
