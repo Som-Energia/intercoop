@@ -5,6 +5,7 @@ class MessageError extends \Exception {
 	public function __construct(...$args) {
 		$message = sprintf($this->message, ...$args);
 		parent::__construct($message);
+		$this->arguments = $args;
 	}
 }
 
