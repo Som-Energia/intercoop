@@ -2,6 +2,7 @@
 namespace SomLabs\Intercoop;
 
 use phpseclib\Crypt\RSA;
+use Ramsey\Uuid\Uuid;
 
 class Crypto{
 
@@ -73,6 +74,11 @@ class Crypto{
 		$publickey->setSignatureMode(RSA::SIGNATURE_PKCS1);
 		return $publickey->verify($text,self::bdecode($signature));
 	}
+
+	static function uuid(){
+		return (string) Uuid::uuid4();
+	}
+
 }
 
 

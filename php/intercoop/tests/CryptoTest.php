@@ -119,6 +119,13 @@ class CryptoTest extends PHPUnit_Framework_TestCase{
 			$this->assertExceptionMessage($e, "No public key available");
 		}
 	}
+
+	public function test_uuid(){
+		$uuid = crypto::uuid();
+		$this->assertRegExp(
+			'/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/',
+			$uuid);
+	}
 }
 
 // vim: noet ts=4 sw=4
