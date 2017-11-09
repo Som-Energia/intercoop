@@ -74,7 +74,7 @@ class Packaging {
 		$signature = $packageField('signature');
 		try {
 			$valuesYaml = crypto::decode($payload);
-		} catch(\Exception $e) {
+		} catch(crypto\UnicodeError $e) {
 			throw new Packaging\BadMessage(
 				"Payload is not base64 coded UTF8");
 		}
