@@ -112,7 +112,7 @@ EOT;
 			packaging::parse($this->keyring, $message);
 			$this->fail("Expected exception not thrown");
 		} catch (Exception $e) {
-			$this->assertInstanceOf($exceptionClass, $e);
+			if (get_class($e) != $exceptionClass) throw $e;
 			$this->assertExceptionMessage($e, $errorMessage);
 		}
 	}
