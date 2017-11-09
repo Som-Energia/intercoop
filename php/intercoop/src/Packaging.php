@@ -14,6 +14,9 @@ class BadSignature extends MessageError {
 class BadPeer extends MessageError {
 	protected $message = 'The entity \'%s\' is not a recognized one';
 }
+class MissingField extends MessageError {
+	protected $message = 'Required field \'%s\' missing on the payload';
+}
 
 namespace SomLabs\Intercoop;
 
@@ -42,6 +45,9 @@ class Packaging {
 		$signature = $package['signature'];
 		$valuesYaml = crypto::decode($payload);
 		$values = Yaml::parse($valuesYaml);
+
+		if (!isset($values["originpeer"]))
+			throw new Packaging\MissingField('originpeer');
 		$peer = $values["originpeer"];
 
 		$pubkey = $keyring->get($peer);

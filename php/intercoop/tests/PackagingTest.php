@@ -134,6 +134,15 @@ EOT;
 			SomLabs\Intercoop\Packaging\BadPeer::class,
 			'The entity \'badpeer\' is not a recognized one');
 	}
+
+	public function test_parse_missingPeerField() {
+		unset($this->values['originpeer']);
+		$message = $this->setupMessage();
+
+		$this->assertParserRaises($message,
+			SomLabs\Intercoop\Packaging\MissingField::class,
+			'Required field \'originpeer\' missing on the payload');
+	}
 }
 
 // vim: noet ts=4 sw=4
