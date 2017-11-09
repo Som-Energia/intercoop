@@ -38,6 +38,7 @@ EOT;
 		$this->public = crypto::loadKey($this->pubfile);
 
 		$this->values = Yaml::parse(self::YAML_SAMPLE);
+		// yaml sorts by key so lets dump it again
 		$this->yaml = Yaml::dump($this->values);
 		$this->encodedPayload1 = crypto::encode($this->yaml);
 		$this->signedPayload1 = crypto::sign($this->key, $this->yaml);
@@ -56,6 +57,41 @@ EOT;
 				'signature' => $this->signedPayload1,
 				'payload' => $this->encodedPayload1,
 			));
+	}
+
+	public function setupMessage(
+			$values=null,
+			$yaml=null,
+			$signedyaml=null,
+			$payload=null,
+			$removedFromMessage=array(),
+			$version=null
+			) {
+		if (!$values) $values = $this->values;
+		if (!$yaml) $yaml = Yaml::dump($values);
+		if (!$version) $version = packaging::$protocolVersion;
+		if (!$signedyaml) $signedyaml = $yaml;
+		if (!$payload) $payload = crypto::encode($yaml);
+
+		$messageValues = array(
+			'intercoopVersion' => $version,
+			'signature' => crypto::sign($this->key, $signedyaml),
+			'payload' => $payload,
+			);
+		// TODO: use array_diff($messageValues, $removedFromMessage)
+		foreach ($removedFromMessage as $field)
+			unset($messageValues[$field]);
+
+		return Yaml::dump($messageValues);
+	}
+
+
+	public function test_parse() {
+		$message = $this->setupMessage();
+
+		$values = packaging::parse($this->keyring, $message);
+
+		$this->assertEquals($this->values, $values);
 	}
 
 }
