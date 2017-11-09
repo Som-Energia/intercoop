@@ -28,6 +28,6 @@
         }
     },
     "scripts": {
-        "test": "phpunit --colors=always"
+        "test": "phpunit"
     }
 }
