@@ -210,6 +210,15 @@ EOT;
 			'Malformed message: Payload is not base64 coded UTF8');
 	}
 
+	public function TODO_test_parse_payloadIsNotBase64() {
+		$message = $this->setupMessage(array(
+			'payload' => 'SO'
+			));
+		$this->assertParserRaises($message,
+			SomLabs\Intercoop\Packaging\BadMessage::class,
+			'Malformed message: Payload is invalid base64: Incorrect padding');
+	}
+
 
 
 }
