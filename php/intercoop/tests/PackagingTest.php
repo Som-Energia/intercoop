@@ -7,6 +7,10 @@ use Symfony\Component\Yaml\Yaml;
 
 class KeyRingMock {
 	function __construct($keymap) {
+		$this->keymap = $keymap;
+	}
+	public function get($key) {
+		return $this->keymap[$key];
 	}
 }
 
@@ -59,19 +63,25 @@ EOT;
 			));
 	}
 
-	public function setupMessage(
-			$values=null,
-			$yaml=null,
-			$signedyaml=null,
-			$payload=null,
-			$removedFromMessage=array(),
-			$version=null
-			) {
+	public function setupMessage(array $overrides=array()) {
+		$defaults = [
+			'values' => null,
+			'yaml' => null,
+			'signedyaml' => null,
+			'payload' => null,
+			'removedFromMessage' => array(),
+			'version' => null,
+			];
+
+		extract(array_merge($defaults, array_intersect_key($overrides, $defaults)));
+
+		if (!$version) $version = packaging::$protocolVersion;
+
 		if (!$values) $values = $this->values;
 		if (!$yaml) $yaml = Yaml::dump($values);
-		if (!$version) $version = packaging::$protocolVersion;
-		if (!$signedyaml) $signedyaml = $yaml;
 		if (!$payload) $payload = crypto::encode($yaml);
+		if (!$signedyaml) $signedyaml = $yaml;
+
 
 		$messageValues = array(
 			'intercoopVersion' => $version,
@@ -94,6 +104,19 @@ EOT;
 		$this->assertEquals($this->values, $values);
 	}
 
+	public function test_parse_invalidSignature() {
+		$message = $this->setupMessage(array(
+			'signedyaml' => Yaml::dump($this->values)."\n\n"
+			));
+
+		try {
+			packaging::parse($this->keyring, $message);
+			$this->fail("Expected exception not thrown");
+		} catch (SomLabs\Intercoop\Packaging\BadSignature $e) {
+			$this->assertExceptionMessage($e,
+				'Signature verification failed, untrusted content');
+		}
+	}
 }
 
 // vim: noet ts=4 sw=4

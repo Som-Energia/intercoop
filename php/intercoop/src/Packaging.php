@@ -1,8 +1,22 @@
 <?php 
+namespace SomLabs\Intercoop\Packaging;
+
+class MessageError extends \Exception {
+	public function __construct(...$args) {
+		$message = sprintf($this->message, ...$args);
+		parent::__construct($message);
+	}
+}
+
+class BadSignature extends MessageError {
+	protected $message = 'Signature verification failed, untrusted content';
+}
+
 namespace SomLabs\Intercoop;
 
 use SomLabs\Intercoop\Crypto as crypto;
 use Symfony\Component\Yaml\Yaml;
+
 
 class Packaging {
 
@@ -22,8 +36,14 @@ class Packaging {
 	static function parse($keyring, $message) {
 		$package = Yaml::parse($message);
 		$payload = $package['payload'];
+		$signature = $package['signature'];
 		$valuesYaml = crypto::decode($payload);
 		$values = Yaml::parse($valuesYaml);
+		$peer = $values["originpeer"];
+		$pubkey = $keyring->get($peer);
+
+		if (!crypto::isAuthentic($pubkey, $valuesYaml, $signature))
+			throw new Packaging\BadSignature();
 		return $values;
 	}
 
