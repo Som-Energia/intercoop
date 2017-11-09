@@ -155,6 +155,52 @@ EOT;
 			"A YAML file cannot contain tabs as indentation".
 			" at line 1 (near \"\t\").");
 	}
+
+	public function test_parse_missingPayload() {
+		$message = $this->setupMessage(array(
+			'removedFromMessage' => ['payload']
+			));
+		$this->assertParserRaises($message,
+			SomLabs\Intercoop\Packaging\BadMessage::class,
+			'Malformed message: missing payload');
+	}
+
+	public function test_parse_missingSignature() {
+		$message = $this->setupMessage(array(
+			'removedFromMessage' => ['signature']
+			));
+		$this->assertParserRaises($message,
+			SomLabs\Intercoop\Packaging\BadMessage::class,
+			'Malformed message: missing signature');
+	}
+
+	public function test_parse_wrongVersion() {
+		$message = $this->setupMessage(array(
+			'version' => '0.0'
+			));
+		$this->assertParserRaises($message,
+			SomLabs\Intercoop\Packaging\WrongVersion::class,
+			'Wrong protocol version, expected 1.0, received 0.0');
+	}
+
+	public function test_parse_missingVersion() {
+		$message = $this->setupMessage(array(
+			'removedFromMessage' => ['intercoopVersion']
+			));
+		$this->assertParserRaises($message,
+			SomLabs\Intercoop\Packaging\BadMessage::class,
+			'Malformed message: missing intercoopVersion');
+	}
+
+	public function test_parse_badContainerYaml() {
+		$this->assertParserRaises("\t",
+			SomLabs\Intercoop\Packaging\BadMessage::class,
+			'Malformed message: '.
+			"Error while parsing message as YAML:\n".
+			"A YAML file cannot contain tabs as indentation".
+			" at line 1 (near \"\t\").");
+	}
+
 }
 
 // vim: noet ts=4 sw=4

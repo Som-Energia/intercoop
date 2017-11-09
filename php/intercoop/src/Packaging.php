@@ -21,6 +21,12 @@ class MissingField extends MessageError {
 class BadFormat extends MessageError {
 	protected $message = "Error while parsing message as YAML:\n%s";
 }
+class BadMessage extends MessageError {
+	protected $message = "Malformed message: %s";
+}
+class WrongVersion extends MessageError {
+	protected $message = "Wrong protocol version, expected %s, received %s";
+}
 
 namespace SomLabs\Intercoop;
 
@@ -45,9 +51,27 @@ class Packaging {
 	}
 
 	static function parse($keyring, $message) {
-		$package = Yaml::parse($message);
-		$payload = $package['payload'];
-		$signature = $package['signature'];
+		try {
+			$package = Yaml::parse($message);
+		} catch (YamlException\ParseException $e) {
+			throw new Packaging\BadMessage(
+				"Error while parsing message as YAML:\n".
+				$e->getMessage());
+		}
+
+		$packageField = function($name) use ($package) {
+			if (isset($package[$name]))
+				return $package[$name];
+			throw new Packaging\BadMessage("missing ".$name);
+		};
+
+		$version = $packageField('intercoopVersion');
+		if ($version != self::$protocolVersion)
+			throw new Packaging\WrongVersion(
+				self::$protocolVersion, $version);
+
+		$payload = $packageField('payload');
+		$signature = $packageField('signature');
 		$valuesYaml = crypto::decode($payload);
 
 		try {
