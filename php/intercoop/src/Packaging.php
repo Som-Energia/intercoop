@@ -71,13 +71,14 @@ class Packaging {
 				self::$protocolVersion, $version);
 
 		$payload = $packageField('payload');
-		$signature = $packageField('signature');
 		try {
 			$valuesYaml = crypto::decode($payload);
 		} catch(crypto\UnicodeError $e) {
 			throw new Packaging\BadMessage(
 				"Payload is not base64 coded UTF8");
 		}
+
+		$signature = $packageField('signature');
 
 		try {
 			$values = Yaml::parse($valuesYaml);
