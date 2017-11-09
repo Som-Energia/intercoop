@@ -17,11 +17,15 @@ class BadPeer extends MessageError {
 class MissingField extends MessageError {
 	protected $message = 'Required field \'%s\' missing on the payload';
 }
+class BadFormat extends MessageError {
+	protected $message = "Error while parsing message as YAML:\n%s";
+}
 
 namespace SomLabs\Intercoop;
 
 use SomLabs\Intercoop\Crypto as crypto;
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Yaml\Exception as YamlException;
 
 
 class Packaging {
@@ -44,7 +48,12 @@ class Packaging {
 		$payload = $package['payload'];
 		$signature = $package['signature'];
 		$valuesYaml = crypto::decode($payload);
-		$values = Yaml::parse($valuesYaml);
+
+		try {
+			$values = Yaml::parse($valuesYaml);
+		} catch (YamlException\ParseException $e) {
+			throw new Packaging\BadFormat($e->getMessage());
+		}
 
 		if (!isset($values["originpeer"]))
 			throw new Packaging\MissingField('originpeer');

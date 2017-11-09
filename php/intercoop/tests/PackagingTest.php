@@ -143,6 +143,18 @@ EOT;
 			SomLabs\Intercoop\Packaging\MissingField::class,
 			'Required field \'originpeer\' missing on the payload');
 	}
+
+	public function test_parse_badYaml() {
+		$message = $this->setupMessage(array(
+			'yaml' => "\t"
+			));
+
+		$this->assertParserRaises($message,
+			SomLabs\Intercoop\Packaging\BadFormat::class,
+			"Error while parsing message as YAML:\n".
+			"A YAML file cannot contain tabs as indentation".
+			" at line 1 (near \"\t\").");
+	}
 }
 
 // vim: noet ts=4 sw=4
