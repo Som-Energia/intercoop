@@ -4,6 +4,9 @@
 			convertNoticesToExceptions="true"
 			convertWarningsToExceptions="true"
 			>
+			<logging>
+				<log type='testdox-html' target='log-test.html' />
+			</logging>
 			<testsuites>
 				<testsuite name="Unit Tests">
 					<directory>tests</directory>
