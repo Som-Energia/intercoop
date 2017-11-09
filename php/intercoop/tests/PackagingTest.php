@@ -15,7 +15,7 @@ class PackagingTest extends PHPUnit_Framework_TestCase{
 	protected $keyfile = "testkey.pem";
 	protected $pubfile = "testkey-public.pem";
 
-	protected $yaml = <<<EOT
+	const YAML_SAMPLE = <<<EOT
 intercoopVersion: '1.0'
 originpeer: testpeer
 origincode: 666
@@ -37,8 +37,7 @@ EOT;
 		$this->key = crypto::loadKey($this->keyfile);
 		$this->public = crypto::loadKey($this->pubfile);
 
-		$this->values = Yaml::parse($this->yaml);
-		// Required redump to sort elements
+		$this->values = Yaml::parse(self::YAML_SAMPLE);
 		$this->yaml = Yaml::dump($this->values);
 		$this->encodedPayload1 = crypto::encode($this->yaml);
 		$this->signedPayload1 = crypto::sign($this->key, $this->yaml);
