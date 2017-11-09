@@ -55,6 +55,26 @@ class Crypto_Test(unittest.TestCase):
             "'utf-8' codec can't decode byte 0x83 "
             "in position 2: invalid start byte")
 
+    def test_encode_nonUnicode(self):
+        with self.assertRaises(UnicodeError) as ctx:
+            crypto.encode('\x00\x10\x83')
+        errormsg = str(ctx.exception)
+        # Py2 does not have hyphen
+        errormsg = errormsg.replace('utf8', 'utf-8')
+        self.assertEqual(errormsg,
+            "'ascii' codec can't decode byte 0x83 "
+            "in position 2: ordinal not in range(128)")
+
+    def test_bencode(self):
+        binary = '\x00\x10\x83'
+        b64 = 'ABCD'
+        self.assertEqual(b64, crypto.bencode(binary))
+
+    def test_bdecode(self):
+        binary = '\x00\x10\x83'
+        b64 = 'ABCD'
+        self.assertEqual(binary, crypto.bdecode(b64))
+
     def test_sha(self):
         self.assertEqual(
             crypto.sha(self.plain).hexdigest(),
