@@ -121,7 +121,7 @@ EOT;
 		$message = $this->setupMessage(array(
 			'signedyaml' => Yaml::dump($this->values)."\n\n"
 			));
-		$this->assertParserRaises($message, 
+		$this->assertParserRaises($message,
 			SomLabs\Intercoop\Packaging\BadSignature::class,
 			'Signature verification failed, untrusted content');
 	}
@@ -130,7 +130,7 @@ EOT;
 		$this->values['originpeer'] = 'badpeer';
 		$message = $this->setupMessage();
 
-		$this->assertParserRaises($message, 
+		$this->assertParserRaises($message,
 			SomLabs\Intercoop\Packaging\BadPeer::class,
 			'The entity \'badpeer\' is not a recognized one');
 	}
