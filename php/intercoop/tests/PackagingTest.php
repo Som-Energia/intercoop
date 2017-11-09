@@ -107,31 +107,32 @@ EOT;
 		$this->assertEquals($this->values, $values);
 	}
 
+	public function assertParserRaises($message, $exceptionClass, $errorMessage) {
+		try {
+			packaging::parse($this->keyring, $message);
+			$this->fail("Expected exception not thrown");
+		} catch (Exception $e) {
+			$this->assertInstanceOf($exceptionClass, $e);
+			$this->assertExceptionMessage($e, $errorMessage);
+		}
+	}
+
 	public function test_parse_invalidSignature() {
 		$message = $this->setupMessage(array(
 			'signedyaml' => Yaml::dump($this->values)."\n\n"
 			));
-
-		try {
-			packaging::parse($this->keyring, $message);
-			$this->fail("Expected exception not thrown");
-		} catch (SomLabs\Intercoop\Packaging\BadSignature $e) {
-			$this->assertExceptionMessage($e,
-				'Signature verification failed, untrusted content');
-		}
+		$this->assertParserRaises($message, 
+			SomLabs\Intercoop\Packaging\BadSignature::class,
+			'Signature verification failed, untrusted content');
 	}
 
 	public function test_parse_unrecognizedPeer() {
 		$this->values['originpeer'] = 'badpeer';
 		$message = $this->setupMessage();
 
-		try {
-			packaging::parse($this->keyring, $message);
-			$this->fail("Expected exception not thrown");
-		} catch (SomLabs\Intercoop\Packaging\BadPeer $e) {
-			$this->assertExceptionMessage($e,
-				'The entity \'badpeer\' is not a recognized one');
-		}
+		$this->assertParserRaises($message, 
+			SomLabs\Intercoop\Packaging\BadPeer::class,
+			'The entity \'badpeer\' is not a recognized one');
 	}
 }
 
