@@ -51,8 +51,8 @@ class CryptoTest extends PHPUnit_Framework_TestCase{
 		try {
 			crypto::decode($encoded);
 			$this->fail("Exception not thrown");
-		} catch (Exception $e) {
-			$this->assertExceptionMessage($e, "Not UTF-8 unicode");
+		} catch (Crypto\UnicodeError $e) {
+			$this->assertExceptionMessage($e, "Bad UTF-8 stream");
 		}
 	}
 
@@ -61,8 +61,8 @@ class CryptoTest extends PHPUnit_Framework_TestCase{
 		try {
 			crypto::encode($binary);
 			$this->fail("Exception not thrown");
-		} catch (Exception $e) {
-			$this->assertExceptionMessage($e,"Not UTF-8 unicode");
+		} catch (Crypto\UnicodeError $e) {
+			$this->assertExceptionMessage($e,"Bad UTF-8 stream");
 		}
 	}
 

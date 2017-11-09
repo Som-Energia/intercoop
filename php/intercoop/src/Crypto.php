@@ -1,4 +1,18 @@
 <?php 
+namespace SomLabs\Intercoop\Crypto;
+
+class MessageError extends \Exception {
+	public function __construct(...$args) {
+		$message = sprintf($this->message, ...$args);
+		parent::__construct($message);
+		$this->arguments = $args;
+	}
+}
+
+class UnicodeError extends MessageError {
+	protected $message = 'Bad UTF-8 stream';
+}
+
 namespace SomLabs\Intercoop;
 
 use phpseclib\Crypt\RSA;
@@ -9,7 +23,7 @@ class Crypto{
 	/// Encode text into base64 (as text)
 	static function encode($text){
 		if (!\mb_check_encoding($text, 'UTF-8'))
-			throw new \Exception('Not UTF-8 unicode');
+			throw new Crypto\UnicodeError();
 		return self::bencode($text);
 	}
 
@@ -17,7 +31,7 @@ class Crypto{
 	static function decode($b64string){
 		$text = self::bdecode($b64string);
 		if (!\mb_check_encoding($text, 'UTF-8'))
-			throw new \Exception('Not UTF-8 unicode');
+			throw new Crypto\UnicodeError();
 		return $text;
 	}
 
