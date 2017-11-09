@@ -40,7 +40,7 @@ class Crypto{
 	}
 
 	/// Generates a public/private key pair
-	static function generateKeys($filename, $publicFilename){
+	static function generateKeys($filename=null, $publicFilename=null){
 		$rsa = new RSA();
 		$key = $rsa->createKey(2048);
 		if ($filename)
