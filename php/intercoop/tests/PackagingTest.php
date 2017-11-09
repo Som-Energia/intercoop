@@ -193,7 +193,8 @@ EOT;
 	}
 
 	public function test_parse_badContainerYaml() {
-		$this->assertParserRaises("\t",
+		$message = "\t";
+		$this->assertParserRaises($message,
 			SomLabs\Intercoop\Packaging\BadMessage::class,
 			'Malformed message: '.
 			"Error while parsing message as YAML:\n".
