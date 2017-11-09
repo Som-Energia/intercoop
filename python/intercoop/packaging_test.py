@@ -177,7 +177,7 @@ country: ES
             "  in \"<file>\", line 1, column 1"
             )
 
-    def test_parse_badContainerUnicode(self):
+    def test_parse_payloadIsNotUtf8(self):
         g = packaging.Parser(keyring = self.keyring)
         message = self.setupMessage(
             payload = "SAFASLDFKJASLK==",

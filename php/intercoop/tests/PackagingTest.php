@@ -201,6 +201,17 @@ EOT;
 			" at line 1 (near \"\t\").");
 	}
 
+	public function test_parse_payloadIsNotUtf8() {
+		$message = $this->setupMessage(array(
+			'payload' => 'SAFASLDFKJASLK=='
+			));
+		$this->assertParserRaises($message,
+			SomLabs\Intercoop\Packaging\BadMessage::class,
+			'Malformed message: Payload is not base64 coded UTF8');
+	}
+
+
+
 }
 
 // vim: noet ts=4 sw=4
