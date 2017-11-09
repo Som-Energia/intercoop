@@ -18,7 +18,8 @@
 		"php": ">=5.4",
 		"ext-mbstring": "*",
 		"phpseclib/phpseclib": "2.0.*",
-		"ramsey/uuid": "*"
+		"ramsey/uuid": "*",
+		"symfony/yaml": "*"
     },
 	"require-dev": {
 		"phpunit/phpunit": "5.2.*"
