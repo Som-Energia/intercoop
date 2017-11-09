@@ -104,7 +104,7 @@ class Crypto_Test(unittest.TestCase):
     def test_uuid(self):
         uuid = crypto.uuid()
         self.assertRegex(str(uuid),
-            '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}')
+            '[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}')
 
 
 
