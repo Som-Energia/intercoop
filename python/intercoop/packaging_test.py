@@ -73,53 +73,48 @@ country: ES
             del messageValues[field]
         return messageValues.dump()
 
-    def assertParseRaises(self, parser, message, exception, errorMessage):
+    def assertParseRaises(self, message, exception, errorMessage):
         with self.assertRaises(exception) as ctx:
-            parser.parse(message)
+            packaging.parse(self.keyring, message)
         self.assertEqual(ctx.exception.args[0], errorMessage)
 
 
     def test_parse(self):
         message = self.setupMessage()
 
-        g = packaging.Parser(keyring = self.keyring)
-        values = g.parse(message)
+        values = packaging.parse(self.keyring, message)
         self.assertEqual(
             dict(self.values),
             dict(values),
             )
 
     def test_parse_invalidSignature(self):
-        g = packaging.Parser(keyring = self.keyring)
         message = self.setupMessage(
             signedyaml = self.yaml + "\n",
             )
-        self.assertParseRaises(g, message,
+        self.assertParseRaises(message,
             packaging.BadSignature,
             "Signature verification failed, untrusted content")
 
     def test_parse_unrecognizedPeer(self):
-        g = packaging.Parser(keyring = self.keyring)
         message = self.setupMessage(
             values=ns(self.values, originpeer='badpeer')
             )
-        self.assertParseRaises(g,message,
+        self.assertParseRaises(message,
             packaging.BadPeer,
             "The entity 'badpeer' is not a recognized one")
 
     def test_parse_missingPeerField(self):
-        g = packaging.Parser(keyring = self.keyring)
         values= ns(self.values)
         del values.originpeer
         message = self.setupMessage(values=values)
-        self.assertParseRaises(g, message,
+        self.assertParseRaises(message,
             packaging.MissingField,
             "Required field 'originpeer' missing on the payload")
 
     def test_parse_badYaml(self):
-        g = packaging.Parser(keyring = self.keyring)
         message = self.setupMessage(yaml='\t')
-        self.assertParseRaises(g, message,
+        self.assertParseRaises(message,
             packaging.BadFormat,
             "Error while parsing message as YAML:\n"
             "while scanning for the next token\n"
@@ -128,48 +123,43 @@ country: ES
             )
 
     def test_parse_missingPayload(self):
-        g = packaging.Parser(keyring = self.keyring)
         message = self.setupMessage(
             removedFromMessage=['payload']
             )
-        self.assertParseRaises(g, message,
+        self.assertParseRaises(message,
             packaging.BadMessage,
             "Malformed message: missing payload"
             )
 
     def test_parse_missingSignature(self):
-        g = packaging.Parser(keyring = self.keyring)
         message = self.setupMessage(
             removedFromMessage=['signature']
             )
-        self.assertParseRaises(g, message,
+        self.assertParseRaises(message,
             packaging.BadMessage,
             "Malformed message: missing signature"
             )
 
     def test_parse_wrongVersion(self):
-        g = packaging.Parser(keyring = self.keyring)
         message = self.setupMessage(
             version='0.0',
             )
-        self.assertParseRaises(g, message,
+        self.assertParseRaises(message,
             packaging.WrongVersion,
             "Wrong protocol version, expected 1.0, received 0.0"
             )
 
     def test_parse_missingVersion(self):
-        g = packaging.Parser(keyring = self.keyring)
         message = self.setupMessage(
             removedFromMessage=['intercoopVersion']
             )
-        self.assertParseRaises(g, message,
+        self.assertParseRaises(message,
             packaging.BadMessage,
             "Malformed message: missing intercoopVersion"
             )
 
     def test_parse_badContainerYaml(self):
-        g = packaging.Parser(keyring = self.keyring)
-        self.assertParseRaises(g, '\t',
+        self.assertParseRaises('\t',
             packaging.BadMessage,
             "Malformed message: Bad message YAML format\n"
             "while scanning for the next token\n"
@@ -178,21 +168,19 @@ country: ES
             )
 
     def test_parse_payloadIsNotUtf8(self):
-        g = packaging.Parser(keyring = self.keyring)
         message = self.setupMessage(
             payload = "SAFASLDFKJASLK==",
             )
-        self.assertParseRaises(g, message,
+        self.assertParseRaises(message,
             packaging.BadMessage,
             'Malformed message: Payload is not base64 coded UTF8'
             )
 
     def test_parse_badPayloadBase64(self):
-        g = packaging.Parser(keyring = self.keyring)
         message = self.setupMessage(
             payload = "SO",
             )
-        self.assertParseRaises(g, message,
+        self.assertParseRaises(message,
             packaging.BadMessage,
             'Malformed message: Payload is invalid Base64: Incorrect padding'
             )

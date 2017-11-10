@@ -48,71 +48,80 @@ def error(exceptionType, *args):
     return ExceptionClass(*args)
 
 
+def generate(ownKeyPair, values):
+    payload = ns(values).dump()
+    signature = sign(ownKeyPair, payload)
+    result = ns()
+    result.intercoopVersion = protocolVersion
+    result.payload = encode(payload)
+    result.signature = signature
+    return result.dump()
+
+def parse(keyring, message):
+    def packageField(field):
+        if field in package:
+            return package[field]
+        raise BadMessage("missing {}".format(field))
+
+    try:
+        package = ns.loads(message)
+    except Exception as e:
+        raise BadMessage("Bad message YAML format\n{}".format(e))
+
+    version = packageField('intercoopVersion')
+    if version != protocolVersion:
+        raise WrongVersion(protocolVersion, version)
+
+    payload = packageField('payload')
+    signature = packageField('signature')
+
+    try:
+        valuesYaml = decode(payload)
+    except UnicodeError:
+        raise BadMessage("Payload is not base64 coded UTF8")
+    except Exception as e:
+        raise BadMessage(
+            "Payload is invalid Base64: {}".format(e))
+
+    try:
+        values = ns.loads(valuesYaml)
+    except Exception as e:
+        raise BadFormat(e)
+
+    try:
+        peer = values.originpeer
+    except AttributeError:
+        raise MissingField('originpeer')
+
+    try:
+        pubkey = keyring.get(peer)
+    except KeyError:
+        raise BadPeer(peer)
+
+    if not isAuthentic(pubkey, valuesYaml, signature):
+        raise BadSignature()
+
+    return values
+
+    
+
 class Generator(object):
+    "deprecated"
+
     def __init__(self, ownKeyPair):
         self.key = ownKeyPair
 
     def produce(self, values):
-        payload = ns(values).dump()
-        signature = sign(self.key, payload)
-        result = ns()
-        result.intercoopVersion = protocolVersion
-        result.payload = encode(payload)
-        result.signature = signature
-        return result.dump()
+        return generate(self.key, values)
 
 class Parser(object):
+    "deprecated"
 
     def __init__(self, keyring):
         self.keyring = keyring
 
     def parse(self, message):
-        def packageField(field):
-            if field in package:
-                return package[field]
-            raise BadMessage("missing {}".format(field))
-
-        try:
-            package = ns.loads(message)
-        except Exception as e:
-            raise BadMessage("Bad message YAML format\n{}".format(e))
-
-        version = packageField('intercoopVersion')
-        if version != protocolVersion:
-            raise WrongVersion(protocolVersion, version)
-
-        payload = packageField('payload')
-        signature = packageField('signature')
-
-        try:
-            valuesYaml = decode(payload)
-        except UnicodeError:
-            raise BadMessage("Payload is not base64 coded UTF8")
-        except Exception as e:
-            raise BadMessage(
-                "Payload is invalid Base64: {}".format(e))
-
-        try:
-            values = ns.loads(valuesYaml)
-        except Exception as e:
-            raise BadFormat(e)
-
-        try:
-            peer = values.originpeer
-        except AttributeError:
-            raise MissingField('originpeer')
-
-        try:
-            pubkey = self.keyring.get(peer)
-        except KeyError:
-            raise BadPeer(peer)
-
-        if not isAuthentic(pubkey, valuesYaml, signature):
-            raise BadSignature()
-
-        return values
-        
-        
+        return parse(self.keyring, message)
 
 
 
