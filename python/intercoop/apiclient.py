@@ -14,7 +14,7 @@ class ApiClient(object):
         self.key = key
 
     def activateService(self, service, personalData):
-        package = packaging.Generator(self.key).produce(personalData)
+        package = packaging.generate(self.key,personalData)
         response = requests.post(self.apiurl+'/activateService', data=package)
         r = ns.loads(response.text)
         if response.status_code == 200:

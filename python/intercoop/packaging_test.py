@@ -42,9 +42,8 @@ country: ES
             testpeer=self.public,
             ))
 
-    def test_produce(self):
-        g = packaging.Generator(ownKeyPair = self.key)
-        message = g.produce(self.values)
+    def test_generate(self):
+        message = packaging.generate(self.key, self.values)
         self.assertEqual(
             dict(ns.loads(message)),
             dict(

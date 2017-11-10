@@ -75,8 +75,7 @@ class IntercoopApi(Perfume):
         browser should redirect to fully activate the service.
         Data is signed by the source entity and should conform specs.
         """
-        p = packaging.Parser(self.keyring)
-        values = p.parse(request.data)
+        values = packaging.parse(self.keyring, request.data)
         uuid = self.storage.store(values)
         result = ns(uuid=uuid)
         if self.continuationUrlTmpl:

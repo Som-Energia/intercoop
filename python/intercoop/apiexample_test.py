@@ -64,9 +64,8 @@ country: ES
             )
 
     def test__activateService_post__ok(self):
-        g = packaging.Generator(self.key)
         data = ns.loads(self.yaml)
-        package = g.produce(data)
+        package = packaging.generate(self.key, data)
 
         r = self.client.post('/activateService', data=package)
 
@@ -75,9 +74,8 @@ country: ES
         self.assertRegex(data.uuid, '^[0-9a-f\-]+$')
 
     def test__activateService_post__withContinuationUrl(self):
-        g = packaging.Generator(self.key)
         data = ns.loads(self.yaml)
-        package = g.produce(data)
+        package = packaging.generate(self.key, data)
         # TODO: Use the constructor param instead
         self.api.continuationUrlTmpl='/activateService?uuid={uuid}'
 
@@ -90,10 +88,9 @@ country: ES
             '/activateService?uuid='+data.uuid)
 
     def test__activateService_post__badPeer(self):
-        g = packaging.Generator(self.key)
         data = ns.loads(self.yaml)
         data.originpeer = 'badpeer'
-        package = g.produce(data)
+        package = packaging.generate(self.key, data)
 
         r = self.client.post('activateService', data=package)
 
@@ -105,9 +102,8 @@ country: ES
             ))
 
     def test__activateService_post__badSignature(self):
-        g = packaging.Generator(self.key)
         data = ns.loads(self.yaml)
-        package = ns.loads(g.produce(data))
+        package = ns.loads(packaging.generate(self.key, data))
         package.payload = crypto.encode(self.yaml+'\n')
         package = package.dump()
 
@@ -121,10 +117,9 @@ country: ES
         self.assertEqual(r.status_code, 403)
 
     def test__activateService_post__missingField(self):
-        g = packaging.Generator(self.key)
         data = ns.loads(self.yaml)
         del data.originpeer
-        package = g.produce(data)
+        package = packaging.generate(self.key, data)
 
         r = self.client.post('/activateService', data=package)
 
