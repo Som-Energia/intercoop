@@ -57,7 +57,7 @@ class Crypto_Test(unittest.TestCase):
 
     def test_encode_nonUnicode(self):
         with self.assertRaises(UnicodeError) as ctx:
-            crypto.encode('\x00\x10\x83')
+            crypto.encode(b'\x00\x10\x83')
         errormsg = str(ctx.exception)
         # Py2 does not have hyphen
         errormsg = errormsg.replace('utf8', 'utf-8')
@@ -66,12 +66,12 @@ class Crypto_Test(unittest.TestCase):
             "in position 2: ordinal not in range(128)")
 
     def test_bencode(self):
-        binary = '\x00\x10\x83'
+        binary = b'\x00\x10\x83'
         b64 = 'ABCD'
         self.assertEqual(b64, crypto.bencode(binary))
 
     def test_bdecode(self):
-        binary = '\x00\x10\x83'
+        binary = b'\x00\x10\x83'
         b64 = 'ABCD'
         self.assertEqual(binary, crypto.bdecode(b64))
 

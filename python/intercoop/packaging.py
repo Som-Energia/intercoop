@@ -103,7 +103,7 @@ def parse(keyring, message):
 
     return values
 
-    
+ 
 
 class Generator(object):
     "deprecated"
