@@ -17,7 +17,11 @@ def uuid():
 
 def encode(text):
     "Encode text into base64 (as text)"
-    return bencode(text.encode('utf8'))
+    if (hasattr(text, 'encode')):
+        text = text.encode('utf8')
+    else:
+        text.decode('utf8') # just check
+    return bencode(text)
 
 def decode(b64string):
     "Decode base64 (as text) back into text"

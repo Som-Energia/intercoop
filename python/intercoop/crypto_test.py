@@ -61,9 +61,12 @@ class Crypto_Test(unittest.TestCase):
         errormsg = str(ctx.exception)
         # Py2 does not have hyphen
         errormsg = errormsg.replace('utf8', 'utf-8')
-        self.assertEqual(errormsg,
+        self.assertIn(errormsg, [
+            "'utf-8' codec can't decode byte 0x83 "
+            "in position 2: invalid start byte", # Py3
             "'ascii' codec can't decode byte 0x83 "
-            "in position 2: ordinal not in range(128)")
+            "in position 2: ordinal not in range(128)", # Py2
+            ])
 
     def test_bencode(self):
         binary = b'\x00\x10\x83'

@@ -96,6 +96,7 @@ class Packaging {
 
 		if (!crypto::isAuthentic($pubkey, $valuesYaml, $signature))
 			throw new Packaging\BadSignature();
+
 		return $values;
 	}
 
