@@ -30,7 +30,8 @@
     },
     "autoload": {
         "psr-4": {
-            "SomLabs\\Intercoop\\": "src/"
+            "SomLabs\\Intercoop\\": "src/",
+            "SomLabs\\Intercoop\\Test\\": "tests/"
         }
     },
     "scripts": {

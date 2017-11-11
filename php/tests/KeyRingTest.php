@@ -1,22 +1,11 @@
 <?php 
+
 use SomLabs\Intercoop\ApiClient as apiclient;
 use SomLabs\Intercoop\Crypto as crypto;
 use SomLabs\Intercoop\KeyRing as keyring;
+use SomLabs\Intercoop\Test\AssertThrows;
 use PHPUnit\Framework\TestCase;
 
-trait AssertThrows {
-
-	public function assertThrows($callable, $exceptionClass, $message) {
-		try {
-			$callable();
-			$this->fail("Expected exception not thrown");
-		} catch (Exception $e) {
-			if (get_class($e) != $exceptionClass) throw $e;
-			$this->assertEquals($message, $e->getMessage());
-		}
-	}
-
-}
 
 class KeyRing_Test extends PHPUnit_Framework_TestCase {
 
