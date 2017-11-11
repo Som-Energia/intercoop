@@ -52,7 +52,7 @@ class Packaging {
 		return Yaml::dump($result);
 	}
 
-	static function parse($keyring, $message) {
+	static function parse(KeyRing\KeyRingInterface $keyring, $message) {
 		try {
 			$package = Yaml::parse($message);
 		} catch (YamlException\ParseException $e) {

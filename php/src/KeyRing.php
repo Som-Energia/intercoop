@@ -13,12 +13,23 @@ class NotFound extends MessageError {
 	protected $message = "Entity not found '%s'";
 }
 
+use phpseclib\Crypt\RSA;
+
+interface KeyRingInterface {
+	/**
+		Given a key name returns the key in the keyring.
+		Returns null if no such key.
+		@todo force to return RSA or null by iface
+	*/
+	public function get(string $key) : RSA;
+}
 
 namespace SomLabs\Intercoop;
 
 use phpseclib\Crypt\RSA;
 
-class KeyRing {
+
+class KeyRing implements KeyRing\KeyRingInterface{
 
 	public function __construct(array $keys) {
 		$this->keys = $keys;
