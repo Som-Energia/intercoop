@@ -2,6 +2,7 @@
 use PHPUnit\Framework\TestCase;
 use SomLabs\Intercoop\Packaging as packaging;
 use SomLabs\Intercoop\Crypto as crypto;
+use SomLabs\Intercoop\Test\AssertThrows;
 use Symfony\Component\Yaml\Yaml;
 
 
@@ -19,6 +20,8 @@ class KeyRingMock {
 
 class PackagingTest extends PHPUnit_Framework_TestCase{
 
+	use AssertThrows;
+
 	protected $keyfile = "testkey.pem";
 	protected $pubfile = "testkey-public.pem";
 
@@ -34,10 +37,6 @@ postalcode: '01001'
 country: ES
 EOT;
 
-
-	public function assertExceptionMessage($e, $expected) {
-		$this->assertEquals($expected, $e->getMessage());
-	}
 
 	public function setUp() {
 		//crypto::generateKeys($this->keyfile, $this->pubfile);
@@ -108,13 +107,12 @@ EOT;
 	}
 
 	public function assertParserRaises($message, $exceptionClass, $errorMessage) {
-		try {
+		$this->assertThrows(function() use($message) {
 			packaging::parse($this->keyring, $message);
-			$this->fail("Expected exception not thrown");
-		} catch (Exception $e) {
-			if (get_class($e) != $exceptionClass) throw $e;
-			$this->assertExceptionMessage($e, $errorMessage);
-		}
+		},
+			$exceptionClass,
+			$errorMessage
+		);
 	}
 
 	public function test_parse_invalidSignature() {
