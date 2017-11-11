@@ -1,22 +1,10 @@
 <?php 
 use PHPUnit\Framework\TestCase;
+use SomLabs\Intercoop\Test\AssertThrows;
 use SomLabs\Intercoop\Packaging as packaging;
 use SomLabs\Intercoop\Crypto as crypto;
-use SomLabs\Intercoop\Test\AssertThrows;
+use SomLabs\Intercoop\KeyRing;
 use Symfony\Component\Yaml\Yaml;
-
-
-class KeyRingMock {
-	function __construct($keymap) {
-		$this->keymap = $keymap;
-	}
-	public function get($key) {
-		if (array_key_exists($key, $this->keymap))
-			return $this->keymap[$key];
-
-		return null;
-	}
-}
 
 class PackagingTest extends PHPUnit_Framework_TestCase{
 
@@ -48,7 +36,7 @@ EOT;
 		$this->yaml = Yaml::dump($this->values);
 		$this->encodedPayload1 = crypto::encode($this->yaml);
 		$this->signedPayload1 = crypto::sign($this->key, $this->yaml);
-		$this->keyring = new KeyRingMock(array(
+		$this->keyring = new KeyRing(array(
 			'testpeer' => $this->public,
 			));
 	}

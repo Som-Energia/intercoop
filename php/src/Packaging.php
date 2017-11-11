@@ -28,9 +28,11 @@ class WrongVersion extends MessageError {
 	protected $message = "Wrong protocol version, expected %s, received %s";
 }
 
+
 namespace SomLabs\Intercoop;
 
 use SomLabs\Intercoop\Crypto as crypto;
+use SomLabs\Intercoop\KeyRing;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Exception as YamlException;
 
@@ -90,9 +92,11 @@ class Packaging {
 			throw new Packaging\MissingField('originpeer');
 		$peer = $values["originpeer"];
 
-		$pubkey = $keyring->get($peer);
-		if (is_null($pubkey))
+		try {
+			$pubkey = $keyring->get($peer);
+		} catch (KeyRing\NotFound $e) {
 			throw new Packaging\BadPeer($peer);
+		}
 
 		if (!crypto::isAuthentic($pubkey, $valuesYaml, $signature))
 			throw new Packaging\BadSignature();
