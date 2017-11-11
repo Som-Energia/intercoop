@@ -1,8 +1,11 @@
 <?php 
 use SomLabs\Intercoop\Crypto as crypto;
+use SomLabs\Intercoop\Test\AssertThrows;
 use PHPUnit\Framework\TestCase;
 
 class CryptoTest extends PHPUnit_Framework_TestCase{
+
+	use AssertThrows;
 
 	protected $plain = "this is the content\n";
 	protected $base64 = "dGhpcyBpcyB0aGUgY29udGVudAo=";
@@ -39,31 +42,31 @@ class CryptoTest extends PHPUnit_Framework_TestCase{
 	}
 
 	public function TODO_test_decode_incorrectBase64Padding(){
-		try {
+		$this->assertThrows(function() {
 			crypto::decode("AA");
-			$this->fail("Exception not thrown");
-		} catch (Exception $e) {
-			$this->assertExceptionMessage($e, "Incorrect Padding");
-		}
+		},
+			Exception::class,
+			"Incorrect Padding"
+		);
 	}
 	public function test_decode_notUnicode(){
-		$encoded = "ABCD";
-		try {
+		$this->assertThrows(function() {
+			$encoded = "ABCD";
 			crypto::decode($encoded);
-			$this->fail("Exception not thrown");
-		} catch (Crypto\UnicodeError $e) {
-			$this->assertExceptionMessage($e, "Bad UTF-8 stream");
-		}
+		},
+			Crypto\UnicodeError::class,
+			"Bad UTF-8 stream"
+		);
 	}
 
 	public function test_encode_notUnicode(){
-		$binary = "\x00\x01\x83";
-		try {
+		$this->assertThrows(function() {
+			$binary = "\x00\x01\x83";
 			crypto::encode($binary);
-			$this->fail("Exception not thrown");
-		} catch (Crypto\UnicodeError $e) {
-			$this->assertExceptionMessage($e,"Bad UTF-8 stream");
-		}
+		},
+			Crypto\UnicodeError::class,
+			"Bad UTF-8 stream"
+		);
 	}
 
 	public function test_bencode() {
@@ -91,12 +94,12 @@ class CryptoTest extends PHPUnit_Framework_TestCase{
 	}
 
 	public function test_sign_withNoPrivate_fails(){
-		try {
+		$this->assertThrows(function() {
 			crypto::sign($this->public, $this->plain);
-			$this->fail("Exception not thrown");
-		} catch (Exception $e) {
-			$this->assertExceptionMessage($e, "No private key available");
-		}
+		},
+			Exception::class,
+			"No private key available"
+		);
 	}
 
 	public function test_isAuthentic_whenOk(){
@@ -112,12 +115,13 @@ class CryptoTest extends PHPUnit_Framework_TestCase{
 
 	public function test_isAuthentic_withNoPublic_fails(){
 		$key = new phpseclib\Crypt\RSA();
-		try {
-			$result = crypto::isAuthentic($key, $this->plain, $this->signed);
-			$this->fail("Exception not thrown");
-		} catch (Exception $e) {
-			$this->assertExceptionMessage($e, "No public key available");
-		}
+
+		$this->assertThrows(function() use($key) {
+			crypto::isAuthentic($key, $this->plain, $this->signed);
+		},
+			Exception::class,
+			"No public key available"
+		);
 	}
 
 	public function test_uuid(){
