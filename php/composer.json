@@ -1,5 +1,6 @@
 {
     "name": "somlabs/intercoop",
+    "version": "1.0.0",
     "description": "Intercooperation library",
     "keywords": ["business2business","socialeconomy"],
     "license": "AGPL-3.0",
