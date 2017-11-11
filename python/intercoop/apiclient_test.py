@@ -35,7 +35,6 @@ country: ES
             key=self.key,
         )
 
-
     def respondToPost(self, status, text=None):
         text = text or ns(
             continuationUrl = self.continuationUrl
@@ -75,8 +74,7 @@ country: ES
                 )
             ])
 
-
-    def test_activateService_receivesUrl(self):
+    def test_activateService_badPeer(self):
         error = ns()
         error.type='BadPeer'
         error.message="The entity 'badpeer' is not a recognized one"
