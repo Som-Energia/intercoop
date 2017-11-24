@@ -92,23 +92,59 @@ class IntercoopApi(Perfume):
 
     @route('/continuation/<uuid>', methods=['GET'])
     def continuation(self, uuid):
-        return (
-            "<h1>Portal de contración de {}</h1>".format(self.name) +
-            """<p>For demo purposes. Continuation page should be
-            a page at the destination entity portal, not part of the API.
-            Usually a form asking for more information that is
-            required to proceed with the service.
-            Maybe presenting the transfered data for further edition.
+        remoteUser = self.storage.retrieve(uuid)
+        return self.fullPage(
+            "<h1>Service form</h1>" +
+            """<p>This continuation page is part of the api,
+            just for demo purposes. The usual scenario is to
+            redirect to a form at the destination entity portal,
+            asking for missing the remaining information
+            that must be submitted to complete the service request.
+            Transferred data could be presented for further edition.
             </p>
             """
             "<p>Info retrieved from original entity:</p>"
             "<table>"+ ''.join(
-            "<tr><th>{name}</th><td>{value}</td></tr>".format(
+            "<tr><th>{name}</th><td><input value='{value}' /></td></tr>".format(
                 name=name,
                 value=value,
                 )
-            for name, value in self.storage.retrieve(uuid).items()
+            for name, value in remoteUser.items()
             ) + "</table>"
+        )
+
+    def style(self):
+        return ("""\
+            body {
+                background: #eee;
+                padding-top: 2ex;
+            }
+            .head {
+                padding: 1ex 15px;
+                background-color: #a11;
+                color: white;
+                position: fixed;
+                right: 0;
+                top: 0;
+                left: 0;
+                text-align: left;
+            }
+
+            h1 {
+                color: #a11;
+            }
+        """)
+
+    def fullPage(self, content):
+        return (
+            "<html><head>"
+            "<style>"
+            + self.style() +
+            "</style>"
+            "</head><body>"
+            "<div class='head'>{}</div>".format(self.name)
+            + content +
+            "</body><html>"
         )
 
 

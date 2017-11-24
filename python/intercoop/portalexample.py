@@ -19,13 +19,16 @@ template = u"""\
 <html>
 <head>
 <meta encoding='utf-8' />
-<title>{}</title>
+<title>Portal {company}: Intercooperación</title>
 <link rel="stylesheet" type="text/css" href="/intercoop.css">
 </head>
 <body>
+<div class='head'>{company}: Área de usuario
+<div class='loginTag'>Validado como {login}</div>
+</div>
 <h1>Intercooperación</h1>
 <ul>
-{}</ul>
+{content}</ul>
 </body>
 </html>
 """
@@ -53,10 +56,13 @@ templateActivateService = u"""\
 <html>
 <head>
 <meta encoding='utf-8' />
-<title>Activación del servicio '{service.name}' en '{peer.name}'</title>
+<title>{company}: Activación del servicio '{service.name}' en '{peer.name}'</title>
 <link rel="stylesheet" type="text/css" href="/intercoop.css">
 </head>
 <body>
+<div class='head'>{company}: Área de usuario
+<div class='loginTag'>Logged as {login}</div>
+</div>
 <h1>Autorización de transferencia de datos personales a <em>{peer.name}</em></h1>
 <div class='privacywarning'>
 Para activar el servicio <em>{service.name}</em>
@@ -88,6 +94,32 @@ body {
     max-width: 80ex;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 3x;
+    padding: 4ex;
+}
+
+h1 {
+    color: #352;
+}
+
+.loginTag {
+    padding: 1ex 2px;
+    position: absolute;
+    right: 2ex;
+    top: 0;
+    left: 2ex;
+    text-align: right;
+}
+
+.head {
+    padding: 1ex 15px;
+    background-color: #152;
+    color: white;
+    position: fixed;
+    right: 0;
+    top: 0;
+    left: 0;
+    text-align: left;
 }
 
 .peer {
@@ -214,8 +246,9 @@ class Portal(Perfume):
     @route('/', methods=['GET'])
     def index(self):
         response = template.format(
-            self.name,
-            "".join(
+            login=self._user(),
+            company=self.peerid,
+            content="".join(
                 self.peerDescription(peer)
                 for peer in self.peers
                 )
@@ -269,6 +302,8 @@ class Portal(Perfume):
         data = self.users.getFields(self._user(), fields)
         labels = _(self.users.fieldLabels(fields))
         response = templateActivateService.format(
+            login=self._user(),
+            company=self.peerid,
             peerid=peer,
             peer=peerData,
             serviceid=service,
