@@ -1,5 +1,10 @@
 <?php
+namespace SomLabs\Intercoop\PortalExample;
 
+use SomLabs\Intercoop\Crypto;
+use SomLabs\Intercoop\Packaging;
+
+use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -9,7 +14,10 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 //Request::setTrustedProxies(array('127.0.0.1'));
 
 $app->get('/', function () use ($app) {
-    return $app['twig']->render('index.html.twig', array());
+    $title="titol";
+    $name="obtain this name from class";
+          
+    return $app['twig']->render('index.html.twig', array('title' => $title,'name' => $name));
 })
 ->bind('homepage')
 ;

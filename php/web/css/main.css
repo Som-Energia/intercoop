@@ -1,0 +1,88 @@
+body {
+    max-width: 80ex;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.peer {
+    clear: right;
+    margin: 3ex 1ex;
+    font-family: sans;
+    max-width: 70ex;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.peer .peerlogo {
+    float: right;
+}
+
+.peerdescription {
+    padding: 3ex;
+}
+
+.peerheader {
+    font-weight: bold;
+}
+
+.service {
+    clear: right;
+    border: 2pt solid #ddd;
+    background: #eee;
+}
+
+.service_header {
+    font-weight: bold;
+    display: block;
+    border-bottom: 1pt solid #ddd;
+}
+
+
+.service_activation_bt,
+.privacy_accept_bt {
+    display: block;
+    width: 20ex;
+    text-decoration: none;
+    padding: 1ex;
+    background: #586;
+    color: white;
+    font-weight: bold;
+    margin: 2ex 2ex 2ex auto;
+    text-shadow: 2px 2px 2px black;
+    border: 1pt solid #aaa;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.service_activation_bt:active,
+.privacy_accept_bt:active {
+    border: 1pt solid #eee;
+}
+.service_activation_bt:hover,
+.privacy_accept_bt:hover {
+    border: 1pt solid #333;
+    background: #687;
+}
+
+.transferfields {
+    margin: 1ex;
+    box-shadow: 2px 4px 5px #444;
+    padding: 1ex;
+}
+.transferfields .field {
+    display: table-row;
+}
+.transferfields .fieldvalue,
+.transferfields .fieldheader {
+    display: table-cell;
+}
+.transferfields .fieldheader {
+    font-weight: bold;
+    border-bottom: solid 1pt #eee;
+    padding: 1ex;
+}
+
+.transferfields .fieldvalue ul {
+    padding-left: 0ex;
+    list-style-type: none;
+}
