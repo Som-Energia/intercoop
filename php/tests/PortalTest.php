@@ -1,13 +1,11 @@
 <?php 
-use SomLabs\Intercoop\Crypto as crypto;
 use SomLabs\Intercoop\Portal;
-use SomLabs\Intercoop\Test\AssertThrows;
 use PHPUnit\Framework\TestCase;
 use Silex\WebTestCase;
 use App\Application;
 
 class PortalTest extends WebTestCase{
-	
+
 	private $name="Més opcions";
     private $peerid="mesopcions";
     private $key="testkey.pem";
