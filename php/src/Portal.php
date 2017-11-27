@@ -1,90 +1,47 @@
 <?php
-
 namespace SomLabs\Intercoop;
 
 use Silex\Application as App;
 
-use Silex\Provider\DoctrineServiceProvider;
-use Silex\Provider\FormServiceProvider;
-use Silex\Provider\HttpCacheServiceProvider;
-use Silex\Provider\HttpFragmentServiceProvider;
-use Silex\Provider\MonologServiceProvider;
-use Silex\Provider\SecurityServiceProvider;
-use Silex\Provider\ServiceControllerServiceProvider;
-use Silex\Provider\SessionServiceProvider;
-use Silex\Provider\TranslationServiceProvider;
-use Silex\Provider\TwigServiceProvider;
-use Silex\Provider\ValidatorServiceProvider;
-use Silex\Provider\WebProfilerServiceProvider;
+use SomLabs\Intercoop\Crypto as crypto;
+use SomLabs\Intercoop\Packaging as packaging;
 
-use Symfony\Component\Security\Core\Encoder\PlaintextPasswordEncoder;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Component\Translation\Loader\YamlFileLoader;
-use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
-use Crypto;
-use Packaging;
-
-class Portal extends App
-{
+class Portal extends App {
+    //config var
     private $rootDir;
     private $env;
 
-    public function __construct($env) {
+    //class var
+    private $name;
+    private $peerid;
+    private $key;
+    //private $peers;
+    //private $users;
 
-        //|-----------------|
-        //|  configuration  |
-        //|-----------------|
-        $this->rootDir = __DIR__.'/../';
-        $this->env = $env;
-
+    public function __construct($name,$peerid,$keyfile) {
         parent::__construct();
-
         $app = $this;
+        $this->rootDir=__DIR__.'/../';
+        $this->env='prod';
 
-        // Override these values in resources/config/prod.php file
-        $app['var_dir'] = $this->rootDir.'/var';
-        $app['locale'] = 'fr';
-        $app['http_cache.cache_dir'] = function (Portal $app) {
-            return $app['var_dir'].'/cache/http';
-        };                
+        $this->name = $name;
+        $this->peerid = $peerid;
+        $this->key = crypto::loadKey($keyfile);
+        //$this->peers = $peers;
+        //$this->users = $users;        
 
-        $app->register(new FormServiceProvider());
-        $app->register(new HttpCacheServiceProvider());
-        $app->register(new HttpFragmentServiceProvider());
-        $app->register(new ServiceControllerServiceProvider());
-        $app->register(new SessionServiceProvider());
-        $app->register(new ValidatorServiceProvider());
-
-        $app->register(new TranslationServiceProvider());
-        $app['translator'] = $app->extend('translator', function ($translator, $app) {
-            $translator->addLoader('yaml', new YamlFileLoader());
-            $translator->addResource('yaml', $this->rootDir.'resources/translations/fr.yml', 'fr');
-            return $translator;
-        });      
-
-        $app->register(new TwigServiceProvider(), array(
-            'twig.options' => array(
-                'cache' => $app['var_dir'].'/cache/twig',
-                'strict_variables' => true,
-            ),
-            'twig.path' => array($this->rootDir.'/resources/templates'),
-        ));
-        
-        $app['twig'] = $app->extend('twig', function ($twig, $app) {
-            // add custom globals, filters, tags, ...
-            return $twig;
-        });
+        //import configuration resources/config/prod.php file
+        $configFile = sprintf('%sresources/config/%s.php', $this->rootDir, $this->env);
+        if (!file_exists($configFile)) {
+            throw new \RuntimeException(sprintf('The configuration file "%s" does not exist.', $configFile));
+        }
+        require $configFile;     
        
 
-        //|-----------------|
-        //|      routes     |
-        //|-----------------|
+        //  |-----------------|
+        //  |      routes     |
+        //  |-----------------|
+
         $app->get('/', [$this, 'index'])->bind('index');
 
         $app->error(function (\Exception $e, Request $request, $code) use ($app) {
@@ -102,10 +59,13 @@ class Portal extends App
         });
     }
 
-    public function index (App $app) {
-        $name="obtain name from class";
+        //  |-----------------|
+        //  |    functions    |
+        //  |-----------------|
+
+    public function index (App $app) {        
         $title="titol";       
-        return $app['twig']->render('index.html.twig', array('title' => $title,'name' => $name));
+        return $app['twig']->render('index.html.twig', array('title' => $title,'name' => $this->name));
     }
 
 }
