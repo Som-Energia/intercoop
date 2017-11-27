@@ -14,9 +14,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 //Request::setTrustedProxies(array('127.0.0.1'));
 
 $app->get('/', function () use ($app) {
-    $title="titol";
-    $name="obtain this name from class";
-          
+    $name="obtain name from class";
+    $title="titol";       
     return $app['twig']->render('index.html.twig', array('title' => $title,'name' => $name));
 })
 ->bind('homepage')

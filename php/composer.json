@@ -46,7 +46,6 @@
         "phpunit/phpunit": "5.2.*"
     },
     "autoload": {
-        "psr-0": { "": "src/" },
         "psr-4": {
             "SomLabs\\Intercoop\\": "src/",
             "SomLabs\\Intercoop\\Test\\": "tests/"
