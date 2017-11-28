@@ -1,6 +1,9 @@
 vendor/
 var/
+
+# composer stuff
 composer.lock
+log-test.html
 
 # vim swaps
 *.sw?
