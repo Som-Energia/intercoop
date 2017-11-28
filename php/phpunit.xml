@@ -11,6 +11,7 @@
     processIsolation            = "false"
     stopOnFailure               = "false"
     syntaxCheck                 = "false"
+    printerClass                = "DiabloMedia\PHPUnit\Printer\PrettyPrinter"
     bootstrap                   = "vendor/autoload.php">
 
     <testsuites>

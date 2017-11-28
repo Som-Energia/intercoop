@@ -3,7 +3,7 @@ use SomLabs\Intercoop\Crypto as crypto;
 use SomLabs\Intercoop\Test\AssertThrows;
 use PHPUnit\Framework\TestCase;
 
-class CryptoTest extends PHPUnit_Framework_TestCase{
+class CryptoTest extends TestCase{
 
 	use AssertThrows;
 

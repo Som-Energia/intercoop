@@ -6,7 +6,7 @@ use SomLabs\Intercoop\Crypto as crypto;
 use SomLabs\Intercoop\KeyRing;
 use Symfony\Component\Yaml\Yaml;
 
-class PackagingTest extends PHPUnit_Framework_TestCase{
+class PackagingTest extends TestCase{
 
 	use AssertThrows;
 

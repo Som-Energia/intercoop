@@ -7,7 +7,7 @@ use SomLabs\Intercoop\Test\AssertThrows;
 use PHPUnit\Framework\TestCase;
 
 
-class KeyRing_Test extends PHPUnit_Framework_TestCase {
+class KeyRing_Test extends TestCase {
 
 	use AssertThrows;
 
