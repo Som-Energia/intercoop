@@ -1,2 +1,7 @@
-/vendor/
-/var/
+vendor/
+var/
+composer.lock
+
+# vim swaps
+*.sw?
+
