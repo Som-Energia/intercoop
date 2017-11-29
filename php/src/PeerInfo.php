@@ -1,4 +1,18 @@
 <?php 
+namespace SomLabs\Intercoop\PeerInfo;
+
+class MessageError extends \Exception {
+	public function __construct(...$args) {
+		$message = sprintf($this->message, ...$args);
+		parent::__construct($message);
+		$this->arguments = $args;
+	}
+}
+
+class DatadirNotExists extends MessageError {
+	protected $message = 'Given datadir not exists';
+}
+
 
 namespace SomLabs\Intercoop;
 
@@ -12,13 +26,13 @@ class PeerInfo {
 	
 	private $peers=array();
 
-	public function __construct($datadir){
+	public function __construct($datadir){		
 		if(file_exists($datadir)){
 			$peerFiles= scandir($datadir);
 			foreach ($peerFiles as $peer) {
-				if(is_file($this->datadir."/".$peer)){	
+				if(is_file($datadir.$peer)){	
 					try {
-						$temp=Yaml::parse(file_get_contents($this->datadir."/".$peer));				
+						$temp=Yaml::parse(file_get_contents($datadir."/".$peer));				
 					    $this->peers[$temp['peerid']] = $temp;
 					} catch (ParseException $e) {
 					    printf("Unable to parse YAML file: %s", $e->getMessage());
@@ -26,8 +40,12 @@ class PeerInfo {
 				}
 			}
 		}else{
-			throw new \Exception("The given datadir of peers doesn't exists");
+			throw new PeerInfo\DatadirNotExists("The given datadir of peers does not exists");
 		}
+	}
+
+	public function constructor($datadir){
+
 	}
 
 	//get array of all peers
