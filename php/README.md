@@ -1,10 +1,28 @@
 Intercoop protocol PHP implementation
 =====================================
 
-Install
+This is the PHP implementation of the intercoop protocol.
+This library allows social economy companies to share clients and services
+in a way that respects members privacy and will.
+
+
+Install:
 -------
 
  sudo apt-get install composer php7.0-mbstring
  composer install 
 
- alias phpunit='vendor/bin/phpunit'
+Testing
+-------
+
+ composer test
+
+
+Running examples
+----------------
+
+ composer runexampleapi
+
+ composer runexampleportal
+
+
