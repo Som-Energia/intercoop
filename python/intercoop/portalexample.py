@@ -239,6 +239,9 @@ class Portal(Perfume):
         self.key = crypto.loadKey(keyfile)
         self.peers = peers
         self.users = users
+        self.catalog = IntercoopCatalog(
+            peers = peers,
+            )
 
     @route('/intercoop.css', methods=['GET'])
     def css(self):
@@ -300,10 +303,7 @@ class Portal(Perfume):
         
 
     def requiredFields(self, peer, service):
-        catalog = IntercoopCatalog(
-            peers = self.peers,
-            )
-        return catalog.requiredFields(peer, service);
+        return self.catalog.requiredFields(peer, service);
 
 
     @route('/activateservice/<peer>/<service>', methods=['GET'])
