@@ -95,10 +95,13 @@ header= u"""\
 <html>
 <head>
 <meta encoding='utf-8' />
-<title>Example Portal</title>
+<title>Portal somillusio: Intercooperación</title>
 <link rel="stylesheet" type="text/css" href="/intercoop.css">
 </head>
 <body>
+<div class='head'>somillusio: \xc1rea de usuario
+<div class='loginTag'>Validado como myuser</div>
+</div>
 <h1>Intercooperación</h1>
 <ul>
 """
@@ -163,10 +166,13 @@ acmeExplosivesHeader = u"""\
 <html>
 <head>
 <meta encoding='utf-8' />
-<title>Activación del servicio 'Comprar explosivos' en 'Som Acme, SCCL'</title>
+<title>somillusio: Activación del servicio 'Comprar explosivos' en 'Som Acme, SCCL'</title>
 <link rel="stylesheet" type="text/css" href="/intercoop.css">
 </head>
 <body>
+<div class='head'>somillusio: \xc1rea de usuario
+<div class='loginTag'>Validado como myuser</div>
+</div>
 <h1>Autorización de transferencia de datos personales a <em>Som Acme, SCCL</em></h1>
 <div class='privacywarning'>
 Para activar el servicio <em>Comprar explosivos</em>

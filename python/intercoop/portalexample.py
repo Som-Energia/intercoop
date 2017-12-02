@@ -61,7 +61,7 @@ templateActivateService = u"""\
 </head>
 <body>
 <div class='head'>{company}: Área de usuario
-<div class='loginTag'>Logged as {login}</div>
+<div class='loginTag'>Validado como {login}</div>
 </div>
 <h1>Autorización de transferencia de datos personales a <em>{peer.name}</em></h1>
 <div class='privacywarning'>
