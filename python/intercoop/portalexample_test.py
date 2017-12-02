@@ -232,10 +232,10 @@ class IntercoopCatalog_Test(unittest.TestCase):
 
     def setupPortal(self):
         return portalexample.IntercoopCatalog(
-            peerid = self.peerid,
-            keyfile = self.keyfile,
+            #peerid = self.peerid,
+            #keyfile = self.keyfile,
             peers = self.peers,
-            users = self.users,
+            #users = self.users,
             )
 
     def tearDown(self):

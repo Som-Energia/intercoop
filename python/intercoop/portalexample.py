@@ -213,11 +213,8 @@ class IntercoopCatalog(object):
     services and activate them for a user.
     """
 
-    def __init__(self, peerid, keyfile, users=None, peers=None, peerdatadir=None, userdatadir=None):
-        self.peerid = peerid
-        self.key = crypto.loadKey(keyfile)
+    def __init__(self, peers=None):
         self.peers = peers
-        self.users = users
 
     def requiredFields(self, peer, service):
         peerData = self.peers.get(peer)
@@ -303,18 +300,10 @@ class Portal(Perfume):
         
 
     def requiredFields(self, peer, service):
-        _ = self._translator()
-        peerData = _(self.peers.get(peer))
-        serviceData = peerData.services[service]
-
-        if 'fields' in serviceData:
-            return list(serviceData.fields)
-
-        if 'fields' in peerData:
-            return list(peerData.fields)
-
-        raise Exception("Peer '{}' does not specify fields for service '{}'"
-            .format(peer, service))
+        catalog = IntercoopCatalog(
+            peers = self.peers,
+            )
+        return catalog.requiredFields(peer, service);
 
 
     @route('/activateservice/<peer>/<service>', methods=['GET'])
