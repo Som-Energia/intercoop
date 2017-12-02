@@ -70,13 +70,16 @@ class IntercoopApi(Perfume):
     @route('/activateService', methods=['POST'])
     @yaml_response
     def activateService_post(self):
-        """Registers personal data of a member of a source entity to get a given service.
+        """
+        Registers personal data of a member of a source entity to
+        get a given service.
         Return the uuid of the registation, and the url the member
         browser should redirect to fully activate the service.
         Data is signed by the source entity and should conform specs.
         """
         values = packaging.parse(self.keyring, request.data)
         uuid = self.storage.store(values)
+        # TODO: Validate fields for the service
         result = ns(uuid=uuid)
         if self.continuationUrlTmpl:
             result.update(
@@ -87,6 +90,7 @@ class IntercoopApi(Perfume):
     @route('/activateService/<uuid>', methods=['GET'])
     @yaml_response
     def activateService_get(self, uuid):
+        # TODO: Caducar tokens
         values = self.storage.retrieve(uuid)
         return values
 
@@ -98,8 +102,7 @@ class IntercoopApi(Perfume):
             """<p>This continuation page is part of the api,
             just for demo purposes. The usual scenario is to
             redirect to a form at the destination entity portal,
-            asking for missing the remaining information
-            that must be submitted to complete the service request.
+            to complete the service order.
             Transferred data could be presented for further edition.
             </p>
             """
