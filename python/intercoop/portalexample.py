@@ -207,6 +207,31 @@ h1 {
 
 """
 
+class IntercoopCatalog(object):
+    """
+    Provides common functionality to navigate peer
+    services and activate them for a user.
+    """
+
+    def __init__(self, peerid, keyfile, users=None, peers=None, peerdatadir=None, userdatadir=None):
+        self.peerid = peerid
+        self.key = crypto.loadKey(keyfile)
+        self.peers = peers
+        self.users = users
+
+    def requiredFields(self, peer, service):
+        peerData = self.peers.get(peer)
+        serviceData = peerData.services[service]
+
+        if 'fields' in serviceData:
+            return list(serviceData.fields)
+
+        if 'fields' in peerData:
+            return list(peerData.fields)
+
+        raise Exception("Peer '{}' does not specify fields for service '{}'"
+            .format(peer, service))
+
 
 class Portal(Perfume):
 
@@ -338,6 +363,7 @@ class Portal(Perfume):
         return redirect(continuationUrl, 302)
 
 
+    # ID related functions, not for intercoop
 
     def qrcode(self, format='svg'):
         fields = [

@@ -207,6 +207,83 @@ originField = u"""\
 </div>
 """
 
+class IntercoopCatalog_Test(unittest.TestCase):
+
+    def write(self, filename, content, folder=None):
+        fullname = os.path.join(folder or self.peerdatadir,filename)
+        with open(fullname, 'wb') as f:
+            try:
+                f.write(content.encode('utf-8'))
+            except UnicodeDecodeError:
+                f.write(content)
+
+    def setUp(self):
+        self.maxDiff=None
+        self.peerid= 'somillusio'
+        self.keyfile = 'testkey.pem'
+        self.peerdatadir='peerdatadir'
+        self.userdatadir='userdatadir'
+        self.cleanUp()
+        self.peers = peerinfo.PeerInfo(self.peerdatadir)
+        self.users = userinfo.UserInfo(self.userdatadir)
+        os.system("mkdir -p "+self.peerdatadir)
+        os.system("mkdir -p "+self.userdatadir)
+        self.write('myuser.yaml', myuseryaml, self.userdatadir)
+
+    def setupPortal(self):
+        return portalexample.IntercoopCatalog(
+            peerid = self.peerid,
+            keyfile = self.keyfile,
+            peers = self.peers,
+            users = self.users,
+            )
+
+    def tearDown(self):
+        self.cleanUp()
+
+    def cleanUp(self):
+        try: shutil.rmtree(self.peerdatadir)
+        except: pass
+        try: shutil.rmtree(self.userdatadir)
+        except: pass
+
+    def test_requiredFields_justInService_useService(self):
+        self.write("sombogus.yaml",sombogusyaml)
+        p = self.setupPortal()
+        self.assertEqual(
+            ['originpeer','name'],
+            p.requiredFields("sombogus","contract")
+        )
+
+    def test_requiredFields_justInPeer_usePeer(self):
+        self.write("somacme.yaml",somacmeyaml)
+        p = self.setupPortal()
+        self.assertEqual(
+            ['originpeer','nif'],
+            p.requiredFields("somacme","explosives")
+        )
+
+    def test_requiredFields_inServiceAndPeer_useService(self):
+        self.write("somacme.yaml",somacmeyaml)
+        p = self.setupPortal()
+        self.assertEqual(
+            ['originpeer', 'innerid'],
+            p.requiredFields("somacme","anvil")
+        )
+
+    def test_requiredFields_noFields(self):
+        bogus = ns.loads(sombogusyaml.encode('utf8'))
+        del bogus.services.contract.fields
+        self.write("sombogus.yaml",bogus.dump())
+        p = self.setupPortal()
+        with self.assertRaises(Exception) as ctx:
+            p.requiredFields("sombogus","contract")
+
+        self.assertEqual(str(ctx.exception),
+            "Peer 'sombogus' does not specify fields for service 'contract'")
+
+
+
 class Portal_Test(unittest.TestCase):
 
     def write(self, filename, content, folder=None):
