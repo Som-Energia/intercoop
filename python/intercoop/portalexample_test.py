@@ -423,41 +423,6 @@ class Portal_Test(unittest.TestCase):
             "</div>\n"
             )
 
-    def test_requiredFields_justInService_useService(self):
-        self.write("sombogus.yaml",sombogusyaml)
-        p = self.setupPortal()
-        self.assertEqual(
-            ['originpeer','name'],
-            p.requiredFields("sombogus","contract")
-        )
-
-    def test_requiredFields_justInPeer_usePeer(self):
-        self.write("somacme.yaml",somacmeyaml)
-        p = self.setupPortal()
-        self.assertEqual(
-            ['originpeer','nif'],
-            p.requiredFields("somacme","explosives")
-        )
-
-    def test_requiredFields_inServiceAndPeer_useService(self):
-        self.write("somacme.yaml",somacmeyaml)
-        p = self.setupPortal()
-        self.assertEqual(
-            ['originpeer', 'innerid'],
-            p.requiredFields("somacme","anvil")
-        )
-
-    def test_requiredFields_noFields(self):
-        bogus = ns.loads(sombogusyaml.encode('utf8'))
-        del bogus.services.contract.fields
-        self.write("sombogus.yaml",bogus.dump())
-        p = self.setupPortal()
-        with self.assertRaises(Exception) as ctx:
-            p.requiredFields("sombogus","contract")
-
-        self.assertEqual(str(ctx.exception),
-            "Peer 'sombogus' does not specify fields for service 'contract'")
-
     def test_activateService(self):
         self.setupApp()
         self.write("somacme.yaml",somacmeyaml)

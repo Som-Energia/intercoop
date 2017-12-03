@@ -305,11 +305,6 @@ class Portal(Perfume):
         lang = self.users.language(self._user())
         return translation.Translator(lang)
         
-
-    def requiredFields(self, peer, service):
-        return self.catalog.requiredFields(peer, service);
-
-
     @route('/activateservice/<peer>/<service>', methods=['GET'])
     def activateService(self, peer, service):
         # TODO: done twice, also in requiredFields
