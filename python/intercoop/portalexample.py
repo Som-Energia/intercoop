@@ -217,6 +217,10 @@ class IntercoopCatalog(object):
         self.peers = peers
 
     def requiredFields(self, peer, service):
+        """
+        Returns the keys of the required fields to transfer
+        the peer to activate the service
+        """
         peerData = self.peers.get(peer)
         serviceData = peerData.services[service]
 
