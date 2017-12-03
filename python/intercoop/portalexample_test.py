@@ -258,10 +258,10 @@ class IntercoopCatalog_Test(unittest.TestCase):
     def test_requiredFields_badService(self):
         self.write("somacme.yaml",somacmeyaml)
         p = self.setupPortal()
-        with self.assertRaises(KeyError) as ctx: # TODO: Maybe custom error
+        with self.assertRaises(Exception) as ctx: # TODO: Maybe custom error
             p.requiredFields("somacme","badservice")
         self.assertEqual(ctx.exception.message,
-            "badservice")
+            "Not such service 'badservice' in peer 'somacme'")
 
     def test_requiredFields_justInService_useService(self):
         self.write("sombogus.yaml",sombogusyaml)

@@ -222,6 +222,9 @@ class IntercoopCatalog(object):
         the peer to activate the service
         """
         peerData = self.peers.get(peer)
+        if service not in peerData.services:
+            raise Exception("Not such service '{service}' in peer '{peer}'"
+                .format(service=service, peer=peer))
         serviceData = peerData.services[service]
 
         if 'fields' in serviceData:
