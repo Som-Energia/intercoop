@@ -247,6 +247,22 @@ class IntercoopCatalog_Test(unittest.TestCase):
         try: shutil.rmtree(self.userdatadir)
         except: pass
 
+    def test_requiredFields_badPeer(self):
+        self.write("somacme.yaml",somacmeyaml)
+        p = self.setupPortal()
+        with self.assertRaises(Exception) as ctx: # TODO: Maybe custom error
+            p.requiredFields("badpeer","explosives")
+        self.assertEqual(ctx.exception.message,
+            "Not such peer 'badpeer'")
+
+    def test_requiredFields_badService(self):
+        self.write("somacme.yaml",somacmeyaml)
+        p = self.setupPortal()
+        with self.assertRaises(KeyError) as ctx: # TODO: Maybe custom error
+            p.requiredFields("somacme","badservice")
+        self.assertEqual(ctx.exception.message,
+            "badservice")
+
     def test_requiredFields_justInService_useService(self):
         self.write("sombogus.yaml",sombogusyaml)
         p = self.setupPortal()
@@ -279,25 +295,8 @@ class IntercoopCatalog_Test(unittest.TestCase):
         with self.assertRaises(Exception) as ctx:
             p.requiredFields("sombogus","contract")
 
-        self.assertEqual(str(ctx.exception),
+        self.assertEqual(ctx.exception.message,
             "Peer 'sombogus' does not specify fields for service 'contract'")
-
-    def test_requiredFields_badPeer(self):
-        self.write("somacme.yaml",somacmeyaml)
-        p = self.setupPortal()
-        with self.assertRaises(Exception) as ctx: # TODO: Maybe custom error
-            p.requiredFields("badpeer","explosives")
-        self.assertEqual(ctx.exception.message,
-            "Not such peer 'badpeer'")
-
-    def test_requiredFields_badService(self):
-        self.write("somacme.yaml",somacmeyaml)
-        p = self.setupPortal()
-        with self.assertRaises(KeyError) as ctx: # TODO: Maybe custom error
-            p.requiredFields("somacme","badservice")
-        self.assertEqual(ctx.exception.message,
-            "badservice")
-
 
 
 
