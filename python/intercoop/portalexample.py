@@ -236,6 +236,38 @@ class IntercoopCatalog(object):
         raise Exception("Peer '{}' does not specify fields for service '{}'"
             .format(peer, service))
 
+    def activate(self, peer, service, user):
+        """
+        Sends to the peer a request to activate the service for the user.
+        It returns the continuation url, where the user should be redirected
+        in order to complete the service activation.
+
+        IMPORTANT: Calling this function without an explicit consent
+        of the user to send the peer the personal information 
+        or without acceptance of the peer privacy policy
+        should be considered a privacy violation.
+        """
+        fields = self.requiredFields(peer, service)
+        peerData = self.peers.get(peer)
+        return
+
+        # code copied from Portal
+        # TODO: Not under test!!
+        _ = self._translator()
+        peerData = _(self.peers.get(peer))
+        serviceData = peerData.services[service]
+        data = self.users.getFields(self._user(), fields)
+        api = apiclient.ApiClient(peerData.targetUrl, self.key)
+        # TODO: augment personal data keys with source ones
+        # TODO: handle errors
+        try:
+            continuationUrl = api.activateService(service, data)
+        except Exception as e:
+            print(type(e).__name__, e) 
+            # TODO: Log the error
+            return "Error comunicando con la entidad"
+        return redirect(continuationUrl, 302)
+
 
 class Portal(Perfume):
 
