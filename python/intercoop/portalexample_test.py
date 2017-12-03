@@ -282,6 +282,23 @@ class IntercoopCatalog_Test(unittest.TestCase):
         self.assertEqual(str(ctx.exception),
             "Peer 'sombogus' does not specify fields for service 'contract'")
 
+    def test_requiredFields_badPeer(self):
+        self.write("somacme.yaml",somacmeyaml)
+        p = self.setupPortal()
+        with self.assertRaises(Exception) as ctx: # TODO: Maybe custom error
+            p.requiredFields("badpeer","explosives")
+        self.assertEqual(ctx.exception.message,
+            "Not such peer 'badpeer'")
+
+    def test_requiredFields_badService(self):
+        self.write("somacme.yaml",somacmeyaml)
+        p = self.setupPortal()
+        with self.assertRaises(KeyError) as ctx: # TODO: Maybe custom error
+            p.requiredFields("somacme","badservice")
+        self.assertEqual(ctx.exception.message,
+            "badservice")
+
+
 
 
 class Portal_Test(unittest.TestCase):
