@@ -316,7 +316,7 @@ class Portal(Perfume):
         _ = self._translator()
         peerData = _(self.peers.get(peer))
         serviceData = peerData.services[service]
-        fields = self.requiredFields(peer, service)
+        fields = self.catalog.requiredFields(peer, service)
         data = self.users.getFields(self._user(), fields)
         labels = _(self.users.fieldLabels(fields))
         response = templateActivateService.format(
@@ -342,7 +342,7 @@ class Portal(Perfume):
         _ = self._translator()
         peerData = _(self.peers.get(peer))
         serviceData = peerData.services[service]
-        fields = self.requiredFields(peer, service)
+        fields = self.catalog.requiredFields(peer, service)
         data = self.users.getFields(self._user(), fields)
         api = apiclient.ApiClient(peerData.targetUrl, self.key)
         # TODO: augment personal data keys with source ones
