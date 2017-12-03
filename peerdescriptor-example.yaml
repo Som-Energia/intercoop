@@ -17,6 +17,9 @@ url:
   gl: https://www.somenergia.coop/gl
 privacyPolicyUrl:
   es: https://www.somenergia.coop/es/politica-de-privacidad-cookies-y-aviso-legal/
+  ca: https://www.somenergia.coop/ca/politica-de-privacitat-cookies-i-avis-legal/
+  eu: https://www.somenergia.coop/eu/pribatutasun-politika-cookie-ak-eta-lege-oharra/
+  gl: https://www.somenergia.coop/gl/politica-de-privacidade-cookies-y-aviso-legal/
 info:
   es: >
     Som Energia es una cooperativa de consumo de energía verde sin ánimo de lucro.
