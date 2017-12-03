@@ -218,7 +218,9 @@ class Portal(Perfume):
         self.peers = peers
         self.users = users
         self.catalog = catalog.IntercoopCatalog(
+            keyfile = keyfile,
             peers = peers,
+            users = users,
             )
 
     @route('/intercoop.css', methods=['GET'])

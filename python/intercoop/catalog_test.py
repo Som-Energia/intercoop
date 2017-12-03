@@ -3,10 +3,11 @@
 import unittest
 import os
 import shutil
-from . import userinfo
 from . import catalog
+from . import userinfo
 from . import peerinfo
 from yamlns import namespace as ns
+import requests_mock
 
 myuseryaml=u"""\
 originpeer: somillusio
@@ -43,7 +44,7 @@ privacyPolicyUrl:
 description:
   es: >
     La cooperativa para atrapar correcaminos
-targetUrl: http://localhost:5001
+targetUrl: https://api.somacme.coop/intercoop
 services:
   explosives:
     name:
@@ -113,13 +114,29 @@ class IntercoopCatalog_Test(unittest.TestCase):
         os.system("mkdir -p "+self.peerdatadir)
         os.system("mkdir -p "+self.userdatadir)
         self.write('myuser.yaml', myuseryaml, self.userdatadir)
+        self.uuid = '01020304-0506-0708-090a-0b0c0d0e0f10'
+        self.apiurl = "https://api.somacme.coop/intercoop"
+        self.continuationUrl = 'https://somacme.coop/contract?token={}'.format(
+            self.uuid)
+
+    def respondToPost(self, status, text=None):
+        text = text or ns(
+            continuationUrl = self.continuationUrl
+            ).dump()
+        m = requests_mock.mock()
+        m.post(
+            self.apiurl+'/activateService',
+            text = text,
+            status_code = status,
+            )
+        return m
 
     def setupPortal(self):
         return catalog.IntercoopCatalog(
             #peerid = self.peerid,
-            #keyfile = self.keyfile,
+            keyfile = self.keyfile,
             peers = self.peers,
-            #users = self.users,
+            users = self.users,
             )
 
     def tearDown(self):
@@ -198,13 +215,12 @@ class IntercoopCatalog_Test(unittest.TestCase):
         self.assertEqual(ctx.exception.message,
             "Not such service 'badservice' in peer 'somacme'")
 
-    def test_activate(self):
+    def test_activate_returnsContinuation(self):
         self.write("somacme.yaml",somacmeyaml)
         p = self.setupPortal()
-        result = p.activate("somacme","explosives","myuser")
-        self.assertEqual(result,
-            "caca")
-
+        with self.respondToPost(200) as m:
+            url = p.activate("somacme","explosives","myuser")
+        self.assertEqual(url,self.continuationUrl)
 
 
 # vim: ts=4 sw=4 et

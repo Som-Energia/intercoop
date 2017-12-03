@@ -13,8 +13,10 @@ class IntercoopCatalog(object):
     services and activate them for a user.
     """
 
-    def __init__(self, peers=None):
+    def __init__(self, keyfile, peers, users):
         self.peers = peers
+        self.users = users
+        self.key = crypto.loadKey(keyfile)
 
     def requiredFields(self, peer, service):
         """
@@ -49,15 +51,16 @@ class IntercoopCatalog(object):
         """
         fields = self.requiredFields(peer, service)
         peerData = self.peers.get(peer)
-        return
+        serviceData = peerData.services[service]
+        data = self.users.getFields(user, fields)
+        api = apiclient.ApiClient(peerData.targetUrl, self.key)
+        return api.activateService(service, data)
+        return 'https://somacme.coop/contract?token=01020304-0506-0708-090a-0b0c0d0e0f10'
 
         # code copied from Portal
         # TODO: Not under test!!
         _ = self._translator()
         peerData = _(self.peers.get(peer))
-        serviceData = peerData.services[service]
-        data = self.users.getFields(self._user(), fields)
-        api = apiclient.ApiClient(peerData.targetUrl, self.key)
         # TODO: augment personal data keys with source ones
         # TODO: handle errors
         try:
