@@ -53,7 +53,6 @@ class IntercoopCatalog(object):
         peerData = self.peers.get(peer)
         serviceData = peerData.services[service]
         data = self.users.getFields(user, fields)
-        data = ns() # TODO: send the actual one
         api = apiclient.ApiClient(peerData.targetUrl, self.key)
         continuationUrl = api.activateService(service, data)
         return continuationUrl

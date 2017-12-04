@@ -222,5 +222,21 @@ class IntercoopCatalog_Test(unittest.TestCase):
             url = p.activate("somacme","explosives","myuser")
         self.assertEqual(url,self.continuationUrl)
 
+    def test_activate_doesPost(self):
+        self.write("somacme.yaml",somacmeyaml)
+        p = self.setupPortal()
+        with self.respondToPost(200) as m:
+            url = p.activate("somacme","explosives","myuser")
+        self.assertEqual([
+            (h.method, h.url, h.text)
+            for h in m.request_history], [
+            ('POST', 'https://api.somacme.coop/intercoop/activateService',
+
+                u"intercoopVersion: '1.0'\n"
+                u"payload: b3JpZ2lucGVlcjogc29taWxsdXNpbwpuaWY6IDEyMzQ1Njc4Wgo=\n"
+                u"signature: qlWZI8UbTaqzPwXsssPiVoaVTirrwuruFM3JjKiYofHSeZhn0B2vtIgXGBMUt15VzEH0__22QI9aeeSQF4AIHB_35QCq3bB85UMr8KS03BGbRXr36jVKYZ0M-csILl_uh9hGzCxFxlI5wzaOI82eYsYiu90MNOTdORyEKbqqt5meuMLcVKAemS_qfed85vUQAcX2_hf_CRZJo3QBRwjHOqUEZwzDoUd-EDFdHAm-ZbvukrKFPnnwGE0JldM30QNs1F0X-0iq-QwgV3fGlflAzTXIrLwkRPsM0RbMNEPWSmSrm_UjUtdPoYxd7HH7Qx1UhAHxU8_yXs5JIvD-63EN1A==\n"
+                )
+            ])
+
 
 # vim: ts=4 sw=4 et
