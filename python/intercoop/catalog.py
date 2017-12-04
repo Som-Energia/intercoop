@@ -53,23 +53,10 @@ class IntercoopCatalog(object):
         peerData = self.peers.get(peer)
         serviceData = peerData.services[service]
         data = self.users.getFields(user, fields)
+        data = ns() # TODO: send the actual one
         api = apiclient.ApiClient(peerData.targetUrl, self.key)
-        return api.activateService(service, data)
-        return 'https://somacme.coop/contract?token=01020304-0506-0708-090a-0b0c0d0e0f10'
-
-        # code copied from Portal
-        # TODO: Not under test!!
-        _ = self._translator()
-        peerData = _(self.peers.get(peer))
-        # TODO: augment personal data keys with source ones
-        # TODO: handle errors
-        try:
-            continuationUrl = api.activateService(service, data)
-        except Exception as e:
-            print(type(e).__name__, e) 
-            # TODO: Log the error
-            return "Error comunicando con la entidad"
-        return redirect(continuationUrl, 302)
+        continuationUrl = api.activateService(service, data)
+        return continuationUrl
 
 
 

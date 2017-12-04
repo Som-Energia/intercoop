@@ -310,16 +310,10 @@ class Portal(Perfume):
     @route('/confirmactivateservice/<peer>/<service>', methods=['GET'])
     def confirmActivateService(self, peer, service):
         # TODO: Not under test!!
-        _ = self._translator()
-        peerData = _(self.peers.get(peer))
-        serviceData = peerData.services[service]
-        fields = self.catalog.requiredFields(peer, service)
-        data = self.users.getFields(self._user(), fields)
-        api = apiclient.ApiClient(peerData.targetUrl, self.key)
         # TODO: augment personal data keys with source ones
         # TODO: handle errors
         try:
-            continuationUrl = api.activateService(service, data)
+            continuationUrl = self.catalog.activate(peer, service, self._user())
         except Exception as e:
             print(type(e).__name__, e) 
             # TODO: Log the error
