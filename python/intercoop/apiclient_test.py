@@ -35,15 +35,18 @@ country: ES
             key=self.key,
         )
 
-    def respondToPost(self, status, text=None):
+    def respondToPost(self, status, text=None, mimetype='application/yaml'):
         text = text or ns(
             continuationUrl = self.continuationUrl
             ).dump()
         m = requests_mock.mock()
         m.post(
             self.apiurl+'/activateService',
-            text = text,
             status_code = status,
+            text = text,
+            headers = dict(
+                content_type = mimetype,
+            ),
             )
         return m
 

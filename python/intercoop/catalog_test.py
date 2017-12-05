@@ -119,7 +119,7 @@ class IntercoopCatalog_Test(unittest.TestCase):
         self.continuationUrl = 'https://somacme.coop/contract?token={}'.format(
             self.uuid)
 
-    def respondToPost(self, status, text=None):
+    def respondToPost(self, status, text=None, mime='application/yaml'):
         text = text or ns(
             continuationUrl = self.continuationUrl
             ).dump()
@@ -128,6 +128,9 @@ class IntercoopCatalog_Test(unittest.TestCase):
             self.apiurl+'/activateService',
             text = text,
             status_code = status,
+            headers=dict(
+                content_type=mime,
+                ),
             )
         return m
 

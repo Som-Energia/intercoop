@@ -95,6 +95,7 @@ country: ES
         r = self.client.post('activateService', data=package)
 
         self.assertEqual(r.status_code, 403)
+        self.assertEqual(r.headers.get('Content-Type'), 'application/yaml')
         self.assertEqual(ns.loads(r.data), ns(
             error = 'BadPeer',
             message = "The entity 'badpeer' is not a recognized one",
