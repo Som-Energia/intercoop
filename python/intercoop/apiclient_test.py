@@ -77,21 +77,36 @@ country: ES
                 )
             ])
 
-    def test_activateService_badPeer(self):
-        error = ns()
-        error.type='BadPeer'
-        error.message="The entity 'badpeer' is not a recognized one"
-        error.arguments=['badpeer']
+    def test_activateService_nonYamlResponseMime(self):
+        with self.respondToPost(200, text='lala', mimetype='text/html') as m:
+            with self.assertRaises(apiclient.BackendError) as ctx:
+                self.client.activateService(
+                    service=self.service,
+                    personalData=self.personalData,
+                    )
+            self.assertEqual(unicode(ctx.exception),
+                "Error comunicating with the other entity\n"
+                "Wrong mime type received: text/html")
+
+    def test_activateService_missingField(self):
+        error = ns(
+            error = 'MissingField',
+            message = "Required field 'originpeer' missing on the payload",
+            arguments = ['originpeer']
+        )
+
+        data = ns(self.personalData)
+        del data.originpeer
 
         with self.respondToPost(403,error.dump()) as m:
-            with self.assertRaises(packaging.BadPeer) as ctx:
+            with self.assertRaises(packaging.MissingField) as ctx:
                 url=self.client.activateService(
                     service=self.service,
                     personalData=self.personalData,
                     )
 
-        self.assertEqual(str(ctx.exception),
-            "The entity 'badpeer' is not a recognized one",
+        self.assertEqual(ctx.exception.message,
+            "Required field 'originpeer' missing on the payload",
             )
 
 

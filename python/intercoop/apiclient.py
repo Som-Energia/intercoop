@@ -16,12 +16,15 @@ class ApiClient(object):
     def activateService(self, service, personalData):
         package = packaging.generate(self.key,personalData)
         response = requests.post(self.apiurl+'/activateService', data=package)
+        mime = response.headers.get('content_type', None) or 'Unspecified'
+        if mime != 'application/yaml':
+            raise BackendError("Wrong mime type received: {}".format(mime))
         r = ns.loads(response.text)
         if response.status_code == 200:
             return r.continuationUrl
         print ("API call failed\n{}".format(response.text))
-        if 'type' in r and 'arguments' in r:
-            raise packaging.error(r.type, *r.arguments)
+        if 'error' in r and 'arguments' in r:
+            raise packaging.error(r.error, *r.arguments)
         raise BackendError(response.text)
 
 
