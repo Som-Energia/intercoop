@@ -241,5 +241,19 @@ class IntercoopCatalog_Test(unittest.TestCase):
                 )
             ])
 
+    def test_activate_badUser(self):
+        self.skipTest("TODO: Not yet implemented")
+
+    def test_activate_remoteFailure(self):
+        self.skipTest("TODO: Not yet implemented")
+        self.write("somacme.yaml",somacmeyaml)
+        p = self.setupPortal()
+        response = 'caca'
+        with self.respondToPost(200, response) as m:
+            with self.assertRaises(Exception) as ctx: # TODO: Maybe custom error
+                p.activate("somacme","explosives","myuser")
+        self.assertEqual(ctx.exception.message,
+            "CACa")
+
 
 # vim: ts=4 sw=4 et

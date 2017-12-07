@@ -84,9 +84,39 @@ country: ES
                     service=self.service,
                     personalData=self.personalData,
                     )
-            self.assertEqual(unicode(ctx.exception),
-                "Error comunicating with the other entity\n"
+            self.assertEqual(unicode(ctx.exception.arguments[0]),
                 "Wrong mime type received: text/html")
+
+    def test_activateService_badYaml(self):
+        with self.respondToPost(200, text='\tlala', mimetype='application/yaml') as m:
+            with self.assertRaises(apiclient.BackendError) as ctx:
+                self.client.activateService(
+                    service=self.service,
+                    personalData=self.personalData,
+                    )
+            self.assertIn(
+                "Bad yaml response",
+                unicode(ctx.exception.arguments[0]))
+
+    def test_activateService_notADict(self):
+        with self.respondToPost(200, text='lala', mimetype='application/yaml') as m:
+            with self.assertRaises(apiclient.BackendError) as ctx:
+                self.client.activateService(
+                    service=self.service,
+                    personalData=self.personalData,
+                    )
+            self.assertEqual(unicode(ctx.exception.arguments[0]),
+                "Wrong content format")
+
+    def test_activateService_noContinuationUrl(self):
+        with self.respondToPost(200, text='{}', mimetype='application/yaml') as m:
+            with self.assertRaises(apiclient.BackendError) as ctx:
+                self.client.activateService(
+                    service=self.service,
+                    personalData=self.personalData,
+                    )
+            self.assertEqual(unicode(ctx.exception.arguments[0]),
+                "Wrong content format")
 
     def test_activateService_missingField(self):
         error = ns(

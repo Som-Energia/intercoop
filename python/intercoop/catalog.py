@@ -44,10 +44,10 @@ class IntercoopCatalog(object):
         It returns the continuation url, where the user should be redirected
         in order to complete the service activation.
 
-        IMPORTANT: Calling this function without an explicit consent
+        IMPORTANT: Calling this function requires an explicit consent
         of the user to send the peer the personal information 
         or without acceptance of the peer privacy policy
-        should be considered a privacy violation.
+        or it would be a privacy violation.
         """
         fields = self.requiredFields(peer, service)
         peerData = self.peers.get(peer)
