@@ -84,7 +84,7 @@ country: ES
                     service=self.service,
                     personalData=self.personalData,
                     )
-            self.assertEqual(unicode(ctx.exception.arguments[0]),
+            self.assertEqual(format(ctx.exception.arguments[0]),
                 "Wrong mime type received: text/html")
 
     def test_activateService_badYaml(self):
@@ -96,7 +96,7 @@ country: ES
                     )
             self.assertIn(
                 "Bad yaml response",
-                unicode(ctx.exception.arguments[0]))
+                format(ctx.exception.arguments[0]))
 
     def test_activateService_notADict(self):
         with self.respondToPost(200, text='lala', mimetype='application/yaml') as m:
@@ -105,7 +105,7 @@ country: ES
                     service=self.service,
                     personalData=self.personalData,
                     )
-            self.assertEqual(unicode(ctx.exception.arguments[0]),
+            self.assertEqual(format(ctx.exception.arguments[0]),
                 "Wrong content format")
 
     def test_activateService_noContinuationUrl(self):
@@ -115,7 +115,7 @@ country: ES
                     service=self.service,
                     personalData=self.personalData,
                     )
-            self.assertEqual(unicode(ctx.exception.arguments[0]),
+            self.assertEqual(format(ctx.exception.arguments[0]),
                 "Wrong content format")
 
     def test_activateService_missingField(self):
@@ -135,7 +135,7 @@ country: ES
                     personalData=self.personalData,
                     )
 
-        self.assertEqual(ctx.exception.message,
+        self.assertEqual(format(ctx.exception),
             "Required field 'originpeer' missing on the payload",
             )
 

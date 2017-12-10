@@ -156,7 +156,7 @@ class IntercoopCatalog_Test(unittest.TestCase):
         p = self.setupPortal()
         with self.assertRaises(Exception) as ctx: # TODO: Maybe custom error
             p.requiredFields("badpeer","explosives")
-        self.assertEqual(ctx.exception.message,
+        self.assertEqual(format(ctx.exception),
             "Not such peer 'badpeer'")
 
     def test_requiredFields_badService(self):
@@ -164,7 +164,7 @@ class IntercoopCatalog_Test(unittest.TestCase):
         p = self.setupPortal()
         with self.assertRaises(Exception) as ctx: # TODO: Maybe custom error
             p.requiredFields("somacme","badservice")
-        self.assertEqual(ctx.exception.message,
+        self.assertEqual(format(ctx.exception),
             "Not such service 'badservice' in peer 'somacme'")
 
     def test_requiredFields_justInService_useService(self):
@@ -199,7 +199,7 @@ class IntercoopCatalog_Test(unittest.TestCase):
         with self.assertRaises(Exception) as ctx:
             p.requiredFields("sombogus","contract")
 
-        self.assertEqual(ctx.exception.message,
+        self.assertEqual(format(ctx.exception),
             "Peer 'sombogus' does not specify fields for service 'contract'")
 
     def test_activate_badPeer(self):
@@ -207,7 +207,7 @@ class IntercoopCatalog_Test(unittest.TestCase):
         p = self.setupPortal()
         with self.assertRaises(Exception) as ctx: # TODO: Maybe custom error
             p.activate("badpeer","explosives","myuser")
-        self.assertEqual(ctx.exception.message,
+        self.assertEqual(format(ctx.exception),
             "Not such peer 'badpeer'")
 
     def test_activate_badService(self):
@@ -215,7 +215,7 @@ class IntercoopCatalog_Test(unittest.TestCase):
         p = self.setupPortal()
         with self.assertRaises(Exception) as ctx: # TODO: Maybe custom error
             p.activate("somacme","badservice","myuser")
-        self.assertEqual(ctx.exception.message,
+        self.assertEqual(format(ctx.exception),
             "Not such service 'badservice' in peer 'somacme'")
 
     def test_activate_returnsContinuation(self):
@@ -252,7 +252,7 @@ class IntercoopCatalog_Test(unittest.TestCase):
         with self.respondToPost(200, response) as m:
             with self.assertRaises(Exception) as ctx: # TODO: Maybe custom error
                 p.activate("somacme","explosives","myuser")
-        self.assertEqual(ctx.exception.message,
+        self.assertEqual(format(ctx.exception),
             "CACa")
 
 

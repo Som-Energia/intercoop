@@ -16,7 +16,7 @@ from functools import wraps
 def handle(e, status_code):
     response = make_response(ns(
         error=type(e).__name__,
-        message=unicode(e),
+        message=format(e),
         arguments=e.arguments if hasattr(e,'arguments') else []
         ).dump())
     response.mimetype='application/yaml'
