@@ -255,7 +255,7 @@ class Portal(Perfume):
             company=self.peerid,
             content="".join(
                 self.peerDescription(peer)
-                for peer in self.peers
+                for peer in self.catalog
                 )
             )
         return response
@@ -275,6 +275,7 @@ class Portal(Perfume):
             )
 
     def _user(self):
+        # Simulates a logged in user
         return 'myuser' # TODO: take it from login info
 
     def _translator(self):

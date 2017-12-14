@@ -38,6 +38,10 @@ class IntercoopCatalog(object):
         raise Exception("Peer '{}' does not specify fields for service '{}'"
             .format(peer, service))
 
+    def __iter__(self):
+        # TODO: Untested
+        return self.peers.__iter__()
+
     def activate(self, peer, service, user):
         """
         Sends to the peer a request to activate the service for the user.
