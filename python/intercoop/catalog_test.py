@@ -255,5 +255,15 @@ class IntercoopCatalog_Test(unittest.TestCase):
         self.assertEqual(format(ctx.exception),
             "CACa")
 
+    def test_peers(self):
+        self.write("sombogus.yaml",sombogusyaml)
+        self.write("somacme.yaml",somacmeyaml)
+        p = self.setupPortal()
+        self.assertMultiLineEqual(ns(data=list(p)).dump(),ns(data=[
+                ns.loads(somacmeyaml.encode('utf8')),
+                ns.loads(sombogusyaml.encode('utf8')),
+            ]).dump()
+        )
+
 
 # vim: ts=4 sw=4 et
