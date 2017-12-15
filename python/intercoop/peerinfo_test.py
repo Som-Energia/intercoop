@@ -61,7 +61,7 @@ class PeerInfo_Test(unittest.TestCase):
         with self.assertRaises(Exception) as ctx:
             peerData = s.get("badpeer")
 
-        self.assertEqual(str(ctx.exception),
+        self.assertEqual(format(ctx.exception),
             "Not such peer 'badpeer'")
  
     def test_get_invalidpeer(self):
@@ -69,7 +69,7 @@ class PeerInfo_Test(unittest.TestCase):
         with self.assertRaises(Exception) as ctx:
             peerData = s.get("../../etc/passwd")
 
-        self.assertEqual(str(ctx.exception),
+        self.assertEqual(format(ctx.exception),
             "Invalid peer '../../etc/passwd'")
  
     def test_iter(self):
