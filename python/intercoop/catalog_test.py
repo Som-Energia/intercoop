@@ -9,6 +9,12 @@ from . import peerinfo
 from yamlns import namespace as ns
 import requests_mock
 
+def assertNsEqual(self, result, expected):
+    return self.assertMultiLineEqual(
+        result.dump(),
+        ns.loads(expected).dump(),
+        )
+
 myuseryaml=u"""\
 originpeer: somillusio
 lang: es
@@ -94,6 +100,9 @@ services:
 
 class IntercoopCatalog_Test(unittest.TestCase):
 
+
+    assertNsEqual = assertNsEqual
+
     def write(self, filename, content, folder=None):
         fullname = os.path.join(folder or self.peerdatadir,filename)
         with open(fullname, 'wb') as f:
@@ -155,11 +164,64 @@ class IntercoopCatalog_Test(unittest.TestCase):
         self.write("sombogus.yaml",sombogusyaml)
         self.write("somacme.yaml",somacmeyaml)
         p = self.setupPortal()
+        self.assertNsEqual(ns(data=list(p)),ns(data=[
+                ns.loads(somacmeyaml.encode('utf8')),
+                ns.loads(sombogusyaml.encode('utf8')),
+            ]).dump()
+        )
+
+    def test_peerInfo(self):
+        self.write("sombogus.yaml",sombogusyaml)
+        self.write("somacme.yaml",somacmeyaml)
+        p = self.setupPortal()
+        info = p.peerInfo(somacme)
+        self.assertMultiLineEqual().dump(),ns(data=[
+                ns.loads(somacmeyaml.encode('utf8')),
+                ns.loads(sombogusyaml.encode('utf8')),
+            ]).dump()
+        )
+
+    def test_peers(self):
+        self.write("sombogus.yaml",sombogusyaml)
+        self.write("somacme.yaml",somacmeyaml)
+        p = self.setupPortal()
         self.assertMultiLineEqual(ns(data=list(p)).dump(),ns(data=[
                 ns.loads(somacmeyaml.encode('utf8')),
                 ns.loads(sombogusyaml.encode('utf8')),
             ]).dump()
         )
+
+    def test_fieldValues(self):
+        self.write("sombogus.yaml",sombogusyaml)
+        self.write("somacme.yaml",somacmeyaml)
+        p = self.setupPortal()
+        values = p.fieldValues('myuser', ['originpeer'])
+        self.assertNsEqual(values, """\
+            originpeer: somillusio
+            """)
+
+    def test_fieldValues_badUser(self): self.skipTest("Not yet implemented")
+    def test_fieldValues_badField(self): self.skipTest("Not yet implemented")
+
+    def test_fieldLabels(self):
+        self.write("sombogus.yaml",sombogusyaml)
+        self.write("somacme.yaml",somacmeyaml)
+        p = self.setupPortal()
+        labels = p.fieldLabels(['originpeer'], 'ca')
+        self.assertNsEqual(labels, """\
+            originpeer: Entitat de provinença
+            """)
+
+    def test_fieldLabels_langNotFoundTakesEs(self):
+        self.write("sombogus.yaml",sombogusyaml)
+        self.write("somacme.yaml",somacmeyaml)
+        p = self.setupPortal()
+        labels = p.fieldLabels(['originpeer'], 'qu')
+        self.assertNsEqual(labels, """\
+            originpeer: Entidad de procedencia
+            """)
+
+    def test_fieldLabels_badField(self): self.skipTest("Not yet implemented")
 
     def test_requiredFields_badPeer(self):
         self.write("somacme.yaml",somacmeyaml)

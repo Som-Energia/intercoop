@@ -285,12 +285,13 @@ class Portal(Perfume):
     @route('/activateservice/<peer>/<service>', methods=['GET'])
     def activateService(self, peer, service):
         # TODO: done twice, also in requiredFields
-        _ = self._translator()
+        lang = self.users.language(self._user())
+        _ = translation.Translator(lang)
         peerData = _(self.peers.get(peer))
         serviceData = peerData.services[service]
         fields = self.catalog.requiredFields(peer, service)
-        data = self.users.getFields(self._user(), fields)
-        labels = _(self.users.fieldLabels(fields))
+        values = self.catalog.fieldValues(self._user(),fields)
+        labels = self.catalog.fieldLabels(fields, lang)
         response = templateActivateService.format(
             login=self._user(),
             company=self.peerid,
@@ -301,9 +302,9 @@ class Portal(Perfume):
             fields="".join(
                 self.renderField(
                     field = labels[field],
-                    value = value,
+                    value = values[field],
                     )
-                for field, value in data.items()
+                for field in fields
                 )
             )
         return response

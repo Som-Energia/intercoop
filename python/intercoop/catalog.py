@@ -38,6 +38,13 @@ class IntercoopCatalog(object):
         raise Exception("Peer '{}' does not specify fields for service '{}'"
             .format(peer, service))
 
+    def fieldValues(self, user, fields):
+        return self.users.getFields(user, fields)
+
+    def fieldLabels(self, fields, lang):
+        _ = translation.Translator(lang)
+        return _(self.users.fieldLabels(fields))
+
     def __iter__(self):
         # TODO: Untested
         return self.peers.__iter__()
