@@ -45,8 +45,10 @@ class IntercoopCatalog(object):
         _ = translation.Translator(lang)
         return _(self.users.fieldLabels(fields))
 
+    def peerInfo(self, peer, lang=None):
+        return self.peers.get(peer)
+
     def __iter__(self):
-        # TODO: Untested
         return self.peers.__iter__()
 
     def activate(self, peer, service, user):

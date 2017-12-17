@@ -174,11 +174,10 @@ class IntercoopCatalog_Test(unittest.TestCase):
         self.write("sombogus.yaml",sombogusyaml)
         self.write("somacme.yaml",somacmeyaml)
         p = self.setupPortal()
-        info = p.peerInfo(somacme)
-        self.assertMultiLineEqual().dump(),ns(data=[
-                ns.loads(somacmeyaml.encode('utf8')),
-                ns.loads(sombogusyaml.encode('utf8')),
-            ]).dump()
+        info = p.peerInfo('somacme')
+        self.assertNsEqual(info,
+                ns.loads(somacmeyaml.encode('utf8'))
+            .dump()
         )
 
     def test_peers(self):
