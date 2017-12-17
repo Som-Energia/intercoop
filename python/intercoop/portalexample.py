@@ -215,7 +215,6 @@ class Portal(Perfume):
         self.name = name
         self.peerid = peerid
         self.key = crypto.loadKey(keyfile)
-        self.peers = peers
         self.users = users
         self.catalog = catalog.IntercoopCatalog(
             keyfile = keyfile,
