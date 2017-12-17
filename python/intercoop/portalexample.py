@@ -286,8 +286,7 @@ class Portal(Perfume):
     def activateService(self, peer, service):
         # TODO: done twice, also in requiredFields
         lang = self.users.language(self._user())
-        _ = translation.Translator(lang)
-        peerData = _(self.peers.get(peer))
+        peerData = self.catalog.peerInfo(peer,lang)
         serviceData = peerData.services[service]
         fields = self.catalog.requiredFields(peer, service)
         values = self.catalog.fieldValues(self._user(),fields)
