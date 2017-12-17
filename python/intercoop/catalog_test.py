@@ -176,9 +176,16 @@ class IntercoopCatalog_Test(unittest.TestCase):
         p = self.setupPortal()
         info = p.peerInfo('somacme')
         self.assertNsEqual(info,
-                ns.loads(somacmeyaml.encode('utf8'))
-            .dump()
+            somacmeyaml.encode('utf8')
         )
+
+    def test_peerInfo_translated(self):
+        self.write("sombogus.yaml",sombogusyaml)
+        self.write("somacme.yaml",somacmeyaml)
+        p = self.setupPortal()
+        info = p.peerInfo('sombogus', 'es')
+        self.assertEqual(info.description,
+            u"Productos inútiles pero muy éticos\n")
 
     def test_peers(self):
         self.write("sombogus.yaml",sombogusyaml)

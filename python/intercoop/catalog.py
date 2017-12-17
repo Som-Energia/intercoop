@@ -46,6 +46,9 @@ class IntercoopCatalog(object):
         return _(self.users.fieldLabels(fields))
 
     def peerInfo(self, peer, lang=None):
+        if lang:
+            _ = translation.Translator(lang)
+            return _(self.peerInfo(peer))
         return self.peers.get(peer)
 
     def __iter__(self):
