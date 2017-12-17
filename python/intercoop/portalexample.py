@@ -247,6 +247,7 @@ class Portal(Perfume):
                 for service in peer.services
                 ),
             )
+
     @route('/', methods=['GET'])
     def index(self):
         response = template.format(
@@ -332,7 +333,7 @@ class Portal(Perfume):
             'nif',
             'innerid',
             ]
-        data = self.users.getFields(self._user(), fields)
+        data = self.catalog.fieldValues(self._user(), fields)
         signed = packaging.Generator(self.key).produce(data)
         print (signed)
         import qrcode
