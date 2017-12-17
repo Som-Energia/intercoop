@@ -284,13 +284,15 @@ class Portal(Perfume):
         
     @route('/activateservice/<peer>/<service>', methods=['GET'])
     def activateService(self, peer, service):
-        # TODO: done twice, also in requiredFields
-        lang = self.users.language(self._user())
+        fields = self.catalog.requiredFields(peer, service)
+        queriedFields = list(fields)
+        if 'lang' not in fields:
+            queriedFields.append('lang')
+        values = self.catalog.fieldValues(self._user(),queriedFields)
+        lang = values['lang']
+        labels = self.catalog.fieldLabels(fields, lang)
         peerData = self.catalog.peerInfo(peer,lang)
         serviceData = peerData.services[service]
-        fields = self.catalog.requiredFields(peer, service)
-        values = self.catalog.fieldValues(self._user(),fields)
-        labels = self.catalog.fieldLabels(fields, lang)
         response = templateActivateService.format(
             login=self._user(),
             company=self.peerid,
