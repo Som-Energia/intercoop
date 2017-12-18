@@ -8,12 +8,7 @@ from . import userinfo
 from . import peerinfo
 from yamlns import namespace as ns
 import requests_mock
-
-def assertNsEqual(self, result, expected):
-    return self.assertMultiLineEqual(
-        result.dump(),
-        ns.loads(expected).dump(),
-        )
+from .testutils import assertNsEqual
 
 myuseryaml=u"""\
 originpeer: somillusio
@@ -99,7 +94,6 @@ services:
 """
 
 class IntercoopCatalog_Test(unittest.TestCase):
-
 
     assertNsEqual = assertNsEqual
 
