@@ -50,7 +50,7 @@ class UserInfo(object):
             ])
 
     def fieldLabels(self, fields):
-        userdata = ns.loads(labelsyaml.encode('utf8'))
+        userdata = ns.loads(labelsyaml)
         
         for field in fields:
             if field not in userdata:

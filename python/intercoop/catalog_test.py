@@ -165,8 +165,8 @@ class IntercoopCatalog_Test(unittest.TestCase):
         self.write("somacme.yaml",somacmeyaml)
         p = self.setupPortal()
         self.assertNsEqual(ns(data=list(p)),ns(data=[
-                ns.loads(somacmeyaml.encode('utf8')),
-                ns.loads(sombogusyaml.encode('utf8')),
+                ns.loads(somacmeyaml),
+                ns.loads(sombogusyaml),
             ]).dump()
         )
 
@@ -175,9 +175,7 @@ class IntercoopCatalog_Test(unittest.TestCase):
         self.write("somacme.yaml",somacmeyaml)
         p = self.setupPortal()
         info = p.peerInfo('somacme')
-        self.assertNsEqual(info,
-            somacmeyaml.encode('utf8')
-        )
+        self.assertNsEqual(info, somacmeyaml)
 
     def test_peerInfo_translated(self):
         self.write("sombogus.yaml",sombogusyaml)
@@ -192,8 +190,8 @@ class IntercoopCatalog_Test(unittest.TestCase):
         self.write("somacme.yaml",somacmeyaml)
         p = self.setupPortal()
         self.assertMultiLineEqual(ns(data=list(p)).dump(),ns(data=[
-                ns.loads(somacmeyaml.encode('utf8')),
-                ns.loads(sombogusyaml.encode('utf8')),
+                ns.loads(somacmeyaml),
+                ns.loads(sombogusyaml),
             ]).dump()
         )
 
@@ -270,7 +268,7 @@ class IntercoopCatalog_Test(unittest.TestCase):
         )
 
     def test_requiredFields_noFields(self):
-        bogus = ns.loads(sombogusyaml.encode('utf8'))
+        bogus = ns.loads(sombogusyaml)
         del bogus.services.contract.fields
         self.write("sombogus.yaml",bogus.dump())
         p = self.setupPortal()

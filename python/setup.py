@@ -20,7 +20,7 @@ setup(
 		],
 	install_requires=[
 		'pycrypto',
-		'yamlns>=0.3', # earlier are not Py2 compatible
+		'yamlns>=0.6',
 		'requests',
 		'requests-mock',
 		'flask',
