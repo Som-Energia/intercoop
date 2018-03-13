@@ -17,6 +17,7 @@ setup(
 	scripts=[
 		'api-example-somacme.py',
 		'portal-example-somillusio.py',
+		'validate-intercoop.py',
 		],
 	install_requires=[
 		'pycrypto',
@@ -24,6 +25,7 @@ setup(
 		'requests',
 		'requests-mock',
 		'flask',
+		'jsonschema',
 #		'qrcode',
 #		'lxml',
 #		'qrtools',
