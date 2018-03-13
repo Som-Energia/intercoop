@@ -11,7 +11,7 @@ def local(filename):
 	return os.path.join(os.path.dirname(os.path.abspath(__file__)),filename)
 
 step("Loading schema")
-schema = ns.load(local("../peerinfo-jsonschema.yaml"))
+schema = ns.load(local("../peerdescriptor-schema.yaml"))
 for data in sys.argv[1:]:
 	step("Validating {}", data)
 	try:
