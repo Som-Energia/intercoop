@@ -26,7 +26,11 @@ except: pass
 with open('../peerdescriptor-example.yaml','rb') as some:
 	somenergiayaml = some.read().decode('utf8')
 
+with open('../mesopcions.yaml','rb') as some:
+	mesopcionsyaml = some.read().decode('utf8')
+
 write('instance/somillusio/peers/somenergia.yaml', somenergiayaml)
+write('instance/somillusio/peers/mesopcions.yaml', mesopcionsyaml)
 write('instance/somillusio/peers/sombogus.yaml', portalexample_test.sombogusyaml)
 write('instance/somillusio/peers/somacme.yaml', portalexample_test.somacmeyaml)
 write('instance/somillusio/users/myuser.yaml', portalexample_test.myuseryaml)

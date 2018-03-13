@@ -1,0 +1,57 @@
+# This is an example of a descriptor for a peer entity
+# Describes how users of portal can access services of the peer entity
+# and how to present it.
+
+intercoopVersion: "1.0"  # Version of the protocol
+peerVersion: 1 # Version of the descriptor data
+peerid: mesopcions # readable text identifier for the 
+name: Més Opcions SCCL
+logo: https://www.mesopcions.coop/images/logo-mes-opcions.png
+description: 
+  es: Cooperativa integral de consumos y servicios. Para un consumo transformador
+  ca: Cooperativa integral de consum i serveis. Per un consum transformador
+url:
+  es: https://www.mesopcions.coop
+  ca: https://www.mesopcions.coop
+privacyPolicyUrl:
+  ca: https://www.mesopcions.coop/docpdf/politica_dades.pdf
+  es: https://www.mesopcions.coop/docpdf/politica_dades.pdf # TODO: real 'es'
+info:
+  es: >
+    mésOPCIONS es la marca de Opcions de Consum Responsable, SCCL, 
+    una cooperativa integral de consumo y servicios que se construye 
+    des de la sostenibilidad personal, social y ecológica, desarrollando el mercado social y 
+    contribuyendo a la articulación y visibilización de la economía social y solidaria.
+  ca: >
+    mésOPCIONS és la marca d'Opcions de Consum Responsable, SCCL, 
+    una cooperativa integral de consum i serveis que es construeix 
+    des de la sostenibilitat personal, social i ecològica, desenvolupant el mercat social i 
+    contribuint a l'articulació i la visibilització de l'economia social i solidària.
+services:
+  becomemember:
+    name:
+      es: Hazte socio/a
+      ca: Fes-te soci/a
+    description:
+      es: Hazte socio/a de mésOPCIONS para participar en nuestros eventos, hacer compras conjuntas y acceder al mercado social.
+      ca: Fes-te soci/a de mésOPCIONS per participar als nostres esdeveniments, fer compres conjuntes i accedir al mercat social.
+targetUrl: http://intercoop.mesopcions.coop/api/intercoop
+dataFormat: yaml
+fields:
+- innerid # serial number within the source entity
+- nif
+- lang #ca es en
+- name
+- email
+- phone
+- address
+- postalcode
+- city
+- state
+publickey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDYYz6ImPatDXxnxujJyMqfc1zz2cgXLYSNZTYilFhIuzur51O06v4ff0+XXiC2c+o9zKFRHAXZBCDuhHLTqeEIrvfoBnCGHvNWq+QiHNRA28oG/bVNDTHqvNUGa3IjU66efXnpGTfod2aTQWYMVCT2wvmhi9y5UKlEjQkijoH1M4SK4JECzGl+NTgzHSHBK72VCPGGqDHcpiR0Q28aFkKnSdXQjNip1ASTirymskybjqfLmNFmfUgmjCxC0GjN6877Tbh0VkNBVCHBSV+vjtE3RtpyWBMHcA3HACebiPrx/LA8EanJbu4ZASemPB0QAD3D+JuCixxzvR//oIIQiADV mad@iMac02
+
+
+
+
+
+
