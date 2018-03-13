@@ -31,7 +31,7 @@ proxyname:
 """
 
 somacmeyaml=u"""\
-intercoopVersion: 1.0
+intercoopVersion: "1.0"
 peerVersion: 1
 peerid: somacme
 name: Som Acme, SCCL
@@ -66,7 +66,7 @@ fields:
 """
 
 sombogusyaml=u"""\
-intercoopVersion: 1.0
+intercoopVersion: "1.0"
 peerVersion: 1
 peerid: sombogus
 name: Som Bogus, SCCL

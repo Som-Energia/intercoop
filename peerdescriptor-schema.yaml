@@ -1,0 +1,107 @@
+$schema: http://json-schema.org/draft-06/schema#
+id: http://intercoop.somenergia.coop/peerinfo-schema#
+title: Information to describe catalog and api info for a intercooperation peer
+definitions:
+  availableFields:
+    type: string
+    enum:
+    - innerid # serial number within the source entity
+    - originpeer # peer id
+    - peerroles # list of roles within the source entity (member, worker, customer...)
+    - nif
+    - name
+    - address
+    - lang
+    - langs
+    - postalcode
+    - city
+    - state
+    - country
+    - phone
+    - email
+    - proxynif
+    - proxyname
+  translatable:
+    type: object
+    required:
+    - es
+    properties:
+      es:
+        type: string
+      ca:
+        type: string
+      eu:
+        type: string
+      gl:
+        type: string
+  service:
+    type: object
+    required:
+    - name
+    - description
+    properties:
+      name:
+        $ref: "#/definitions/translatable"
+      description:
+        $ref: "#/definitions/translatable"
+      fields:
+        type: array
+        items:
+          $ref: "#/definitions/availableFields"
+type: object
+required:
+- intercoopVersion
+- peerVersion
+- peerid
+- name
+- logo
+- description
+- url
+- privacyPolicyUrl
+- services
+- targetUrl
+properties:
+  intercoopVersion:
+    type: string
+    enum:
+    - "1.0"
+  peerVersion:
+    type: integer
+  peerid:
+    type: string
+  name:
+    type: string
+  logo:
+    type: string
+  description:
+    $ref: "#/definitions/translatable"
+  url:
+    $ref: "#/definitions/translatable"
+  privacyPolicyUrl:
+    $ref: "#/definitions/translatable"
+  info:
+    $ref: "#/definitions/translatable"
+  services:
+    type: object
+    patternProperties:
+      "^[a-z]+$": 
+        $ref: "#/definitions/service"
+  targetUrl:
+    type: string
+  dataFormat:
+    type: string
+    enum:
+    - yaml
+    - json
+    - xml
+    default: yaml
+  fields:
+    type: array
+    items:
+      $ref: "#/definitions/availableFields"
+  publickey:
+    type: string
+
+
+
+# vim: et ts=2 sw=2
