@@ -17,7 +17,13 @@ for data in sys.argv[1:]:
 	try:
 		validate(ns.load(data), schema)
 	except ValidationError as e:
-		error("Validation error:\n{}",e)
+		error(
+			"Validation error at {path}:\n"
+			"{msg}",
+			path='/'.join(format(x) for x in e.path),
+			msg=e.message,
+			)
+
 
 
 
