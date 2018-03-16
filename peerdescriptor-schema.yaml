@@ -36,19 +36,15 @@ definitions:
       or they can contain a map of translations with the
       2-letters of the lang ISO code.
     anyOf:
-    - type: string
-    - type: object
+    - description: optionally untranslated string
+      type: string
+    - description: a map of translations including at least 'es'
+      type: object
       required:
       - es
       additionalProperties: false
-      properties:
-        es:
-          type: string
-        ca:
-          type: string
-        eu:
-          type: string
-        gl:
+      patternProperties:
+        (es|ca|gl|eu|ar): # [a-z]{2} is too general
           type: string
   service:
     type: object
