@@ -7,7 +7,7 @@ description: >
   It includes information to be able to display a catalog
   of services and how to activate them via an intercoop api.
 definitions:
-  availableFields:
+  transferFields:
     title: fields that a service could request to share
     type: array
     items:
@@ -62,7 +62,8 @@ definitions:
       description:
         $ref: "#/definitions/translatable"
       fields:
-        $ref: "#/definitions/availableFields"
+        description: Fields which are transferred to activate the service
+        $ref: "#/definitions/transferFields"
 type: object
 required:
 - intercoopVersion
@@ -128,7 +129,11 @@ properties:
   targetUrl:
     type: string
   fields:
-    $ref: "#/definitions/availableFields"
+    title: Transferred fields for any service not specifying it
+    default:
+    - peerid
+    - nif
+    $ref: "#/definitions/transferFields"
 
 
 
