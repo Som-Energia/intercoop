@@ -1,5 +1,5 @@
 $schema: http://json-schema.org/draft-06/schema#
-id: http://intercoop.somenergia.coop/peerinfo-schema#
+id: http://intercoop.somenergia.coop/peerinfo-schema/1.0/#
 title: Peer catalog and api information for intercooperation
 description: >
   This schema defines a format to describe a peer entity 
