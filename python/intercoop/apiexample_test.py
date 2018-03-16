@@ -18,16 +18,16 @@ class KeyRingMock(object):
 class ExampleApi_Test(unittest.TestCase):
 
     yaml=u"""\
-intercoopVersion: '1.0'
-originpeer: testpeer
-origincode: 666
-name: Perico de los Palotes
-address: Percebe, 13
-city: Villarriba del Alcornoque
-state: Albacete
-postalcode: '01001'
-country: ES
-"""
+        intercoopVersion: '1.0'
+        originpeer: testpeer
+        origincode: 666
+        name: Perico de los Palotes
+        address: Percebe, 13
+        city: Villarriba del Alcornoque
+        state: Albacete
+        postalcode: '01001'
+        country: ES
+        """
     service="contract"
     def setUp(self):
         self.keyfile = 'testkey.pem'
