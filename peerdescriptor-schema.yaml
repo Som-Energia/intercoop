@@ -1,53 +1,68 @@
 $schema: http://json-schema.org/draft-06/schema#
 id: http://intercoop.somenergia.coop/peerinfo-schema#
-title: Information to describe catalog and api info for a intercooperation peer
+title: Peer catalog and api information for intercooperation
+description: >
+  This schema defines a format to describe a peer entity 
+  in a intercooperation context using the intercoop protocol.
+  It includes information to be able to display a catalog
+  of services and how to activate them via an intercoop api.
 definitions:
   availableFields:
-    type: string
-    enum:
-    - innerid # serial number within the source entity
-    - originpeer # peer id
-    - peerroles # list of roles within the source entity (member, worker, customer...)
-    - nif
-    - name
-    - address
-    - lang
-    - langs
-    - postalcode
-    - city
-    - state
-    - country
-    - phone
-    - email
-    - proxynif
-    - proxyname
+    title: fields that a service could request to share
+    type: array
+    items:
+      type: string
+      enum:
+      - originpeer # slug id of the source entity (required)
+      - innerid # serial number within the source entity
+      - peerroles # list of roles within the source entity (member, worker, customer...)
+      - nif # includes dni, cie and cif
+      - name # "surname, fistname" for physical persons, 
+      - address
+      - postalcode
+      - city
+      - state
+      - country # ISO code
+      - phone # Preferred contact phone
+      - email # Preferred contact email
+      - lang # Language preferred by the user (ISO code)
+      - langs # Languages accepted by the user sorted by preference (ISO code)
+      - proxynif # For legal persons, the proxy phisical person nif (see nif)
+      - proxyname # For legal persons, the proxy phisical person name (see name)
   translatable:
-    type: object
-    required:
-    - es
-    properties:
-      es:
-        type: string
-      ca:
-        type: string
-      eu:
-        type: string
-      gl:
-        type: string
+    title: strings that can be optionally translated
+    description: >
+      Translatable strings may have plain string values
+      or they can contain a map of translations with the
+      2-letters of the lang ISO code.
+    anyOf:
+    - type: string
+    - type: object
+      required:
+      - es
+      additionalProperties: false
+      properties:
+        es:
+          type: string
+        ca:
+          type: string
+        eu:
+          type: string
+        gl:
+          type: string
   service:
     type: object
     required:
     - name
     - description
+    additionalProperties: false
     properties:
       name:
         $ref: "#/definitions/translatable"
       description:
         $ref: "#/definitions/translatable"
       fields:
-        type: array
-        items:
-          $ref: "#/definitions/availableFields"
+        $ref: "#/definitions/availableFields"
 type: object
 required:
 - intercoopVersion
@@ -60,47 +75,60 @@ required:
 - privacyPolicyUrl
 - services
 - targetUrl
+additionalProperties: false
 properties:
   intercoopVersion:
     type: string
+    pattern: '[0-9]+(\.[0-9]+)*'
     enum:
-    - "1.0"
+    - "1.0" # Force current version
   peerVersion:
     type: integer
   peerid:
     type: string
+    pattern: '^[a-z]+$'
   name:
+    title: Entity name
     type: string
   logo:
+    title: Url to the entity logo
     type: string
+  publickey:
+    title: Public key used to sign messages as source entity
+    type: string
+    contentEncoding: base64
+    # TODO: Which content type
+    #contentMediaType: 
   description:
+    title: Single line entity description
     $ref: "#/definitions/translatable"
   url:
+    title: Url to entity's web page
     $ref: "#/definitions/translatable"
   privacyPolicyUrl:
+    title: A link to the entity privacy policy
     $ref: "#/definitions/translatable"
   info:
+    title: Extended information in markdown format
     $ref: "#/definitions/translatable"
   services:
+    title: Services that the entity offers
     type: object
     patternProperties:
       "^[a-z]+$": 
         $ref: "#/definitions/service"
-  targetUrl:
-    type: string
+    additionalProperties: false
   dataFormat:
     type: string
+    default: yaml
     enum:
     - yaml
     - json
     - xml
-    default: yaml
-  fields:
-    type: array
-    items:
-      $ref: "#/definitions/availableFields"
-  publickey:
+  targetUrl:
     type: string
+  fields:
+    $ref: "#/definitions/availableFields"
 
 
 
