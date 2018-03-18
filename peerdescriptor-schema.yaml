@@ -58,7 +58,7 @@ definitions:
       description:
         $ref: "#/definitions/translatable"
       fields:
-        description: Fields which are transferred to activate the service
+        description: Fields to be transferred to activate the service
         $ref: "#/definitions/transferFields"
 type: object
 required:
@@ -123,6 +123,7 @@ properties:
     - json
     - xml
   targetUrl:
+    title: base Url to redirect services
     type: string
   fields:
     title: Transferred fields for any service not specifying it
