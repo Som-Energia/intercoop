@@ -10,15 +10,15 @@ from yamlns import namespace as ns
 class ApiClient_Test(unittest.TestCase):
 
     yaml=u"""\
-originpeer: somillusio
-origincode: 666
-name: Perico de los Palotes
-address: Percebe, 13
-city: Villarriba del Alcornoque
-state: Albacete
-postalcode: '01001'
-country: ES
-"""
+        originpeer: somillusio
+        origincode: 666
+        name: Perico de los Palotes
+        address: Percebe, 13
+        city: Villarriba del Alcornoque
+        state: Albacete
+        postalcode: '01001'
+        country: ES
+        """
 
     def setUp(self):
         self.keyfile = 'testkey.pem'
@@ -46,7 +46,7 @@ country: ES
             text = text,
             headers = dict(
                 content_type = mimetype,
-            ),
+                ),
             )
         return m
 
