@@ -12,14 +12,15 @@ def local(filename):
 
 step("Loading schema")
 schema = ns.load(local("../peerdescriptor-schema.yaml"))
-for data in sys.argv[1:]:
-	step("Validating {}", data)
+for yamlfile in sys.argv[1:]:
+	step("Validating {}", yamlfile)
 	try:
-		validate(ns.load(data), schema)
+		validate(ns.load(yamlfile), schema)
 	except ValidationError as e:
 		error(
-			"Validation error at {path}:\n"
+			"Validation error at {filename}#/{path}:\n"
 			"{msg}",
+			filename=yamlfile,
 			path='/'.join(format(x) for x in e.path),
 			msg=e.message,
 			)
