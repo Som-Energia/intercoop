@@ -44,7 +44,7 @@ definitions:
       - es
       additionalProperties: false
       patternProperties:
-        (es|ca|gl|eu|ar): # [a-z]{2} is too general
+        (es|ca|gl|eu|an|ast|oc):
           type: string
   service:
     type: object
