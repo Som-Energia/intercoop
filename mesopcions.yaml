@@ -39,6 +39,7 @@ targetUrl: http://intercoop.mesopcions.coop/api/intercoop
 dataFormat: yaml
 fields:
 - innerid # serial number within the source entity
+- originpeer
 - nif
 - lang #ca es en
 - name
