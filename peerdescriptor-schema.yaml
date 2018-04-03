@@ -79,6 +79,7 @@ properties:
     $ref: "#/definitions/transferFields"
 
 definitions:
+
   transferFields:
     title: fields that a service could request to share
     type: array
@@ -101,6 +102,7 @@ definitions:
       - langs # Languages accepted by the user sorted by preference (ISO code)
       - proxynif # For legal persons, the proxy phisical person nif (see nif)
       - proxyname # For legal persons, the proxy phisical person name (see name)
+
   translatable:
     title: strings that can be optionally translated
     description: >
@@ -118,6 +120,7 @@ definitions:
       patternProperties:
         (es|ca|gl|eu|an|ast|oc):
           type: string
+
   service:
     type: object
     required:
