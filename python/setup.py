@@ -10,7 +10,7 @@ setup(
 		"Intercooperation library",
 	author = "Som Energia SCCL",
 	author_email = "info@somenergia.coop",
-	url = 'https://github.com/Som-Energia/somenergia-generationkwh',
+	url = 'https://github.com/Som-Energia/intercoop',
 	long_description = readme,
 	license = 'GNU Affero General Public License v3 or later (AGPLv3+)',
 	packages=find_packages(exclude=['*[tT]est*']),
