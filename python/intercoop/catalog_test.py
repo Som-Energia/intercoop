@@ -219,6 +219,18 @@ class IntercoopCatalog_Test(unittest.TestCase):
             originpeer: Entidad de procedencia
             """)
 
+    def test_fieldLabels_noLanguage_returnsUntranslated(self):
+        self.write("sombogus.yaml",sombogusyaml)
+        self.write("somacme.yaml",somacmeyaml)
+        p = self.setupPortal()
+        labels = p.fieldLabels(['proxyname'])
+        self.assertNsEqual(labels, """\
+            proxyname:
+                es: Nombre del representante
+                ca: Nom del representant
+                en: Proxy name
+            """)
+
     def test_fieldLabels_badField(self): self.skipTest("Not yet implemented")
 
     def test_requiredFields_badPeer(self):

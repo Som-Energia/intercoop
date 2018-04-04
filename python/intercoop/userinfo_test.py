@@ -90,21 +90,5 @@ class UserInfo_Test(unittest.TestCase):
         lang = storage.language('myuser')
         self.assertEqual(lang, 'es')
 
-    def test_fieldLabels(self):
-        storage = userinfo.UserInfo(self.datadir)
-        data = storage.fieldLabels([
-            'proxyname',
-            ])
-
-        self.assertEqual(data, ns.loads(u"""\
-            proxyname:
-                es: Nombre del representante
-                ca: Nom del representant
-                en: Proxy name
-            """
-            ))
-
-        
-
 
 # vim: ts=4 sw=4 et

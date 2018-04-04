@@ -5,7 +5,6 @@ import os
 from .catalog import (
     BadUser,
     BadField,
-    labelsyaml,
     )
 
 class UserInfo(object):
@@ -33,19 +32,6 @@ class UserInfo(object):
     def getFields(self, user, fields):
         userdata = self._userData(user)
 
-        for field in fields:
-            if field not in userdata:
-                raise BadField(field)
-
-        return ns([
-            (key, value)
-            for key,value in userdata.items()
-            if key in fields
-            ])
-
-    def fieldLabels(self, fields):
-        userdata = ns.loads(labelsyaml)
-        
         for field in fields:
             if field not in userdata:
                 raise BadField(field)

@@ -114,9 +114,24 @@ class IntercoopCatalog(object):
     def fieldValues(self, user, fields):
         return self.users.getFields(user, fields)
 
-    def fieldLabels(self, fields, lang):
-        _ = translation.Translator(lang)
-        return _(self.users.fieldLabels(fields))
+    def fieldLabels(self, fields, lang=None):
+        if lang:
+            _ = translation.Translator(lang)
+            return _(self.fieldLabels(fields))
+
+        labels = ns.loads(labelsyaml)
+
+        for field in fields:
+            if field not in labels:
+                raise BadField(field)
+
+        return ns([
+            (key, value)
+            for key,value in labels.items()
+            if key in fields
+            ])
+
+        return self.users.fieldLabels(fields)
 
     def peerInfo(self, peer, lang=None):
         if lang:
