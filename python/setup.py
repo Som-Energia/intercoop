@@ -33,7 +33,6 @@ setup(
 	],
 	include_package_data = True,
 	test_suite = 'intercoop',
-#	test_runner = 'colour_runner.runner.ColourTextTestRunner',
 	classifiers = [
 		'Programming Language :: Python',
 		'Programming Language :: Python :: 3',
