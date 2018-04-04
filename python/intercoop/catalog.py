@@ -6,6 +6,79 @@ from . import translation
 from . import packaging
 from yamlns import namespace as ns
 
+class BadUser(Exception):
+    def __init__(self, user):
+        super(BadUser, self).__init__(
+            "User not found '{}'".format(user))
+
+class BadField(Exception):
+    def __init__(self, field):
+        super(BadField, self).__init__(
+            "Unrecognized user field '{}'".format(field))
+
+labelsyaml=u"""\
+originpeer:
+    es: Entidad de procedencia
+    ca: Entitat de provinença
+    en: Source entity
+lang:
+    es: Idioma preferente
+    ca: Idioma preferent
+    en: Preferred language
+nif:
+    es: NIF
+    ca: NIF
+    en: NIF
+name:
+    es: Nombre
+    ca: Nom
+    en: Name
+peerroles:
+    es: Roles
+    ca: Rols
+    en: Roles
+innerid:
+    es: Número de socio/a
+    ca: Número de soci/a
+    en: Member number
+address:
+    es: Dirección
+    ca: Adreça
+    en: Address
+city:
+    es: Municipio
+    ca: Municipi
+    en: City
+state:
+    es: Província
+    ca: Provincia
+    en: State
+postalcode:
+    es: Código postal
+    ca: Codi postal
+    en: Postal code
+country:
+    es: Nacionalidad
+    ca: Nacionalitat
+    en: Country
+email:
+    es: Correo electrónico
+    ca: Correu electrònic
+    en: e-mail
+phone:
+    es: Teléfono
+    ca: Telèfon
+    en: Phone
+proxynif:
+    es: NIF del representante
+    ca: NIF del representant
+    en: Proxy NIF
+proxyname:
+    es: Nombre del representante
+    ca: Nom del representant
+    en: Proxy name
+"""
+
 
 class IntercoopCatalog(object):
     """
