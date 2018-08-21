@@ -10,7 +10,7 @@ env:
 - PHPENV_VERSION="7.1"
 - PHPENV_VERSION="7.2"
 before_install:
-- phpenv local $PHPENV_VERSION
+- phpenv install php-$PHPENV_VERSION && phpenv local $PHPENV_VERSION
 - php --version
 - sudo apt-get -qq update
 - sudo apt-get install -y libzbar-dev
