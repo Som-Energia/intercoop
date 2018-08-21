@@ -6,6 +6,7 @@ python:
 - "3.5"
 env:
 - PHPENV_VERSION="7.0"
+- PHPENV_VERSION="7.1"
 before_install:
 - sudo apt-get -qq update
 - sudo apt-get install -y php5-cli
@@ -14,7 +15,7 @@ before_install:
 install:
 - pip install coveralls
 script:
-- find /home/travis/.phpenv
+- ls /home/travis/.phpenv/versions
 - cd python; coverage run --source . ./setup.py test
 - cd ../php; composer install; composer test
 after_success:
