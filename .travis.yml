@@ -7,9 +7,12 @@ python:
 before_install:
 - sudo apt-get -qq update
 - sudo apt-get install -y libzbar-dev
+- sudo apt-get install -y composer
 install:
 - pip install coveralls
-script: cd python; coverage run --source . ./setup.py test
+script:
+- cd python; coverage run --source . ./setup.py test
+- cd php; composer test
 after_success:
 - coveralls
 
