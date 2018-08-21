@@ -13,7 +13,7 @@ install:
 - pip install coveralls
 script:
 - cd python; coverage run --source . ./setup.py test
-- cd php; composer install; composer test
+- cd ../php; composer install; composer test
 after_success:
 - coveralls
 
