@@ -131,9 +131,7 @@ class IntercoopCatalog_Test(unittest.TestCase):
             self.apiurl+'/activateService',
             text = text,
             status_code = status,
-            headers=dict(
-                content_type=mime,
-                ),
+            headers = {'content-type': mime},
             )
         return m
 

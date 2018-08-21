@@ -44,9 +44,7 @@ class ApiClient_Test(unittest.TestCase):
             self.apiurl+'/activateService',
             status_code = status,
             text = text,
-            headers = dict(
-                content_type = mimetype,
-                ),
+            headers = {'content-type': mimetype},
             )
         return m
 
