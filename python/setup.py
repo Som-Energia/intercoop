@@ -25,7 +25,7 @@ setup(
 		'requests',
 		'requests-mock',
 		'flask',
-		'jsonschema',
+		'jsonschema<3',
 #		'qrcode',
 #		'lxml',
 #		'qrtools',
