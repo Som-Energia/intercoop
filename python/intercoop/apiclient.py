@@ -17,7 +17,7 @@ class ApiClient(object):
         package = packaging.generate(self.key,personalData)
         response = requests.post(self.apiurl+'/activateService', data=package)
 
-        mime = response.headers.get('content_type', None) or 'Unspecified'
+        mime = response.headers.get('content-type', None) or 'Unspecified'
         if mime != 'application/yaml':
             raise BackendError("Wrong mime type received: {}".format(mime))
 
