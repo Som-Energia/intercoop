@@ -23,10 +23,10 @@ except: pass
 try: os.makedirs('instance/somillusio/peers')
 except: pass
 
-with open('../peerdescriptor-example.yaml','rb') as some:
+with open('../peerdescriptor-example-somenergia.yaml','rb') as some:
 	somenergiayaml = some.read().decode('utf8')
 
-with open('../mesopcions.yaml','rb') as some:
+with open('../peerdescriptor-example-mesopcions.yaml','rb') as some:
 	mesopcionsyaml = some.read().decode('utf8')
 
 write('instance/somillusio/peers/somenergia.yaml', somenergiayaml)

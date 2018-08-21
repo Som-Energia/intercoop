@@ -72,7 +72,7 @@ peerid: sombogus
 name: Som Bogus, SCCL
 url:
   es: https://es.sombogus.coop
-logo: http://www.linpictures.com/images/indevimgs/acme.jpg
+logo: http://xes.cat/wp-content/uploads/2017/05/logotip-xes.png
 privacyPolicyUrl:
     es: http://www.wallpapersonly.net/wallpapers/thats-all-folks-1680x1050.jpg
 description:
@@ -141,7 +141,7 @@ acmeService2 = u"""\
 
 bogusPeerHeader = u"""\
 <div class='peer'>
-<div class='peerlogo'><img src='http://www.linpictures.com/images/indevimgs/acme.jpg' /></div>
+<div class='peerlogo'><img src='http://xes.cat/wp-content/uploads/2017/05/logotip-xes.png' /></div>
 <div class='peerheader'><a href='https://es.sombogus.coop'>Som Bogus, SCCL</a></div>
 <div class='peerdescription'>Productos inútiles pero muy éticos
 </div>
