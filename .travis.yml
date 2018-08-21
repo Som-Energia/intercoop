@@ -9,13 +9,14 @@ env:
 - PHPENV_VERSION="7.1"
 before_install:
 - sudo apt-get -qq update
-- sudo apt-get install -y php5-cli
 - sudo apt-get install -y libzbar-dev
-#- sudo apt-get install -y composer
 install:
 - pip install coveralls
 script:
 - ls /home/travis/.phpenv/versions
+- php --version
+- phpenv local $PHPENV_VERSION
+- php --version
 - cd python; coverage run --source . ./setup.py test
 - cd ../php; composer install; composer test
 after_success:
