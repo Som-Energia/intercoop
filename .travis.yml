@@ -4,11 +4,14 @@ python:
 - "3.3"
 - "3.4"
 - "3.5"
+- "3.6"
 env:
 - PHPENV_VERSION="7.0"
 - PHPENV_VERSION="7.1"
+- PHPENV_VERSION="7.2"
 before_install:
 - phpenv local $PHPENV_VERSION
+- php --version
 - sudo apt-get -qq update
 - sudo apt-get install -y libzbar-dev
 install:
