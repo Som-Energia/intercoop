@@ -11,7 +11,7 @@ try: os.makedirs('instance/somacme/remoteusers')
 except: pass
 
 
-from intercoop.apiexample_test import KeyRingMock as KeyRing
+from intercoop.packaging import KeyRingMock as KeyRing
 
 
 p = apiexample.IntercoopApi(

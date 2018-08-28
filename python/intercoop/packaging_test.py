@@ -6,11 +6,7 @@ from . import crypto
 import os
 from yamlns import namespace as ns
 
-class KeyRingMock(object):
-    def __init__(self, keys):
-        self.keys = keys
-    def get(self, key):
-        return self.keys[key]
+from intercoop.packaging import KeyRingMock
 
 class IntercoopMessage_Test(unittest.TestCase):
 

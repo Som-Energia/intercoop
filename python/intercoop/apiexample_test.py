@@ -9,11 +9,7 @@ from . import apiexample
 from . import packaging
 from . import remoteuserinfo
 
-class KeyRingMock(object):
-    def __init__(self, keys):
-        self.keys = keys
-    def get(self, key):
-        return self.keys[key]
+from intercoop.packaging import KeyRingMock
 
 class ExampleApi_Test(unittest.TestCase):
 
