@@ -3,7 +3,6 @@
 from intercoop.catalog import labelsyaml, BadField, BadUser
 from erppeek import Client
 from yamlns import namespace as ns
-import dbconfig
 
 class UserInfo(object):
 
@@ -42,7 +41,7 @@ class UserInfo(object):
             lang=partner.lang[:2],
             name=partner.name,
             innerid=partner.www_soci,
-            peerroles=['member'] if partner.www_soci != '---------' else [], # TODO: Untested
+            peerroles=['member'] if partner.www_soci != '---------' else [],
             address=partner.www_street,
             city=partner.www_municipi.ine,
             state=partner.www_provincia.code,
