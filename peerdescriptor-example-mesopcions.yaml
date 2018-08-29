@@ -49,10 +49,15 @@ fields:
 - postalcode
 - city
 - state
-publickey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDYYz6ImPatDXxnxujJyMqfc1zz2cgXLYSNZTYilFhIuzur51O06v4ff0+XXiC2c+o9zKFRHAXZBCDuhHLTqeEIrvfoBnCGHvNWq+QiHNRA28oG/bVNDTHqvNUGa3IjU66efXnpGTfod2aTQWYMVCT2wvmhi9y5UKlEjQkijoH1M4SK4JECzGl+NTgzHSHBK72VCPGGqDHcpiR0Q28aFkKnSdXQjNip1ASTirymskybjqfLmNFmfUgmjCxC0GjN6877Tbh0VkNBVCHBSV+vjtE3RtpyWBMHcA3HACebiPrx/LA8EanJbu4ZASemPB0QAD3D+JuCixxzvR//oIIQiADV mad@iMac02
-
-
-
+publickey: |
+  -----BEGIN RSA PUBLIC KEY-----
+  MIIBCgKCAQEA2GM+iJj2rQ18Z8boycjKn3Nc89nIFy2EjWU2IpRYSLs7q+dTtOr+
+  H39Pl14gtnPqPcyhURwF2QQg7oRy06nhCK736AZwhh7zVqvkIhzUQNvKBv21TQ0x
+  6rzVBmtyI1Ounn156Rk36Hdmk0FmDFQk9sL5oYvcuVCpRI0JIo6B9TOEiuCRAsxp
+  fjU4Mx0hwSu9lQjxhqgx3KYkdENvGhZCp0nV0IzYqdQEk4q8prJMm46ny5jRZn1I
+  JowsQtBozevO+024dFZDQVQhwUlfr47RN0baclgTB3ANxwAnm4j68fywPBGpyW7u
+  GQEnpjwdEAA9w/ibgoscc70f/6CCEIgA1QIDAQAB
+  -----END RSA PUBLIC KEY-----
 
 
 # vim: et ts=2 sw=2
