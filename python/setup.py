@@ -26,6 +26,7 @@ setup(
 		'requests-mock',
 		'flask',
 		'jsonschema<3',
+		'erppeek',
 #		'qrcode',
 #		'lxml',
 #		'qrtools',

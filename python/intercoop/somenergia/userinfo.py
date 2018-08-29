@@ -21,7 +21,7 @@ class UserInfo(object):
                     raise BadField(field)
             return ns((
                 (key, value)
-                for key, value in self.getFields(user).iteritems()
+                for key, value in self.getFields(user).items()
                 if key in fields
             ))
 

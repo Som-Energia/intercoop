@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-from userinfo import UserInfo, BadUser, BadField
+from .userinfo import UserInfo, BadUser, BadField
 
 import unittest
 from yamlns import namespace as ns

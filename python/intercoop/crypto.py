@@ -77,7 +77,7 @@ def exportPublicKey(key, filename):
         f.write(public.exportKey('PEM'))
 
 def exportString(key):
-    return key.exportKey('PEM')
+    return u'{}'.format(key.exportKey('PEM'))
 
 def loadKey(filename):
     """
