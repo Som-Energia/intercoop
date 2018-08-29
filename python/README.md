@@ -41,19 +41,20 @@ $ pip install .
 
 - Fully reusable modules:
 
+    - `catalog`: functions to manage a service catalog in a portal
+    - `apiclient`: encapsulates remote acces to the target API
+    - `package`: encapsulates package marshalling/umarshalling, signing/verification
     - `crypto`: cryptography primitives:
         - hides actual algorithms compexity under simple action names
-    - `package`: encapsulates package marshalling/umarshalling, signing/verification
-    - `apiclient`: encapsulates remote acces to the target API
 
 - Data sources: You normally want to rewrite those, for example to take data from a database or similar. Reference implementation use a directory full of YAML files.
 
     - Source Portal:
         - `peerinfo`: access yaml info provided by the available targets
-        - `userinfo`: access source user personal dataa
+        - `userinfo`: access source user personal data
 
     - Target API:
-        - `keyring`: provided a peer 
+		- `keyring`: gives access to peers public keys (relies on `peerinfo`)
         - `remoteuserinfo`: temporary stores the transferred data
 
 - Utilities:
@@ -63,9 +64,13 @@ $ pip install .
 
 ## Example scripts
 
-- portal-example.py: _somillusio_ portal
-- api-example.py: _somacme_ api
+- `portal-example-somillusio.py`: _somillusio_ portal
+- `api-example-somacme.py`: _somacme_ api and service form
 
+
+## Other scripts
+
+- `validate-intercoop.py`: Validates a peer info yaml
 
 
 
