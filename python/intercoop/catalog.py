@@ -84,9 +84,19 @@ class IntercoopCatalog(object):
     """
     Provides common functionality to navigate peer
     services and activate them for a user.
+
+    The constructor receives the following objects
+    you may want to implement your own custom implementation.
     """
 
     def __init__(self, keyfile, peers, users):
+        """
+        - keyfile: file path to private key file in pem format
+        - peers: an object following the PeerInfo interface
+        - users: an object following the UserInfo interface
+
+        Library just provides Implementation
+        """
         self.peers = peers
         self.users = users
         self.key = crypto.loadKey(keyfile)

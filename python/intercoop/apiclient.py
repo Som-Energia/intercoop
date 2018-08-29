@@ -8,6 +8,7 @@ class BackendError(packaging.MessageError):
     "Error comunicating with the other entity\n{}"
 
 class ApiClient(object):
+    """Proxies the web API of a remote service provider"""
 
     def __init__(self, apiurl, key):
         self.apiurl = apiurl
