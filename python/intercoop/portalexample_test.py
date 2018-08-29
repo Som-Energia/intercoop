@@ -7,7 +7,7 @@ from . import userinfo
 from . import portalexample
 from . import peerinfo
 from yamlns import namespace as ns
-from .test_fixtures import (
+from .fixtures import (
     myuseryaml,
     somacmeyaml,
     sombogusyaml,

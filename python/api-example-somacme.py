@@ -6,17 +6,17 @@ from intercoop import remoteuserinfo
 from intercoop import crypto
 from intercoop import keyring
 from intercoop import peerinfo
-from intercoop import test_fixtures
-from intercoop.test_fixtures import write, mkdir
+from intercoop import fixtures
+from intercoop.fixtures import write, mkdir
 
 import os
 
 mkdir('instance/somacme/remoteusers')
-write('instance/somacme/peers/somillusio.yaml', test_fixtures.somillusioyaml)
-write('instance/somacme/peers/somenergia.yaml', test_fixtures.somenergiayaml)
-write('instance/somacme/peers/mesopcions.yaml', test_fixtures.mesopcionsyaml)
-write('instance/somacme/peers/sombogus.yaml', test_fixtures.sombogusyaml)
-write('instance/somacme/peers/somacme.yaml', test_fixtures.somacmeyaml)
+write('instance/somacme/peers/somillusio.yaml', fixtures.somillusioyaml)
+write('instance/somacme/peers/somenergia.yaml', fixtures.somenergiayaml)
+write('instance/somacme/peers/mesopcions.yaml', fixtures.mesopcionsyaml)
+write('instance/somacme/peers/sombogus.yaml', fixtures.sombogusyaml)
+write('instance/somacme/peers/somacme.yaml', fixtures.somacmeyaml)
 
 p = apiexample.IntercoopApi(
     'somacme',

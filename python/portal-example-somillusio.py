@@ -9,14 +9,14 @@ users should log-in.
 from intercoop import portalexample
 from intercoop import peerinfo
 from intercoop import userinfo
-from intercoop import test_fixtures
-from intercoop.test_fixtures import write
+from intercoop import fixtures
+from intercoop.fixtures import write
 
-write('instance/somillusio/users/myuser.yaml', test_fixtures.myuseryaml)
-write('instance/somillusio/peers/somenergia.yaml', test_fixtures.somenergiayaml)
-write('instance/somillusio/peers/mesopcions.yaml', test_fixtures.mesopcionsyaml)
-write('instance/somillusio/peers/sombogus.yaml', test_fixtures.sombogusyaml)
-write('instance/somillusio/peers/somacme.yaml', test_fixtures.somacmeyaml)
+write('instance/somillusio/users/myuser.yaml', fixtures.myuseryaml)
+write('instance/somillusio/peers/somenergia.yaml', fixtures.somenergiayaml)
+write('instance/somillusio/peers/mesopcions.yaml', fixtures.mesopcionsyaml)
+write('instance/somillusio/peers/sombogus.yaml', fixtures.sombogusyaml)
+write('instance/somillusio/peers/somacme.yaml', fixtures.somacmeyaml)
 
 p = portalexample.Portal(
     'intercoop',
