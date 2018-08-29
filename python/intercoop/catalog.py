@@ -156,7 +156,12 @@ class IntercoopCatalog(object):
         fields = self.requiredFields(peer, service)
         peerData = self.peers.get(peer)
         serviceData = peerData.services[service]
-        data = self.users.getFields(user, fields)
+
+        if isinstance(user, ns):
+            data = user
+        else:
+            data = self.users.getFields(user, fields)
+
         api = apiclient.ApiClient(peerData.targetUrl, self.key)
         continuationUrl = api.activateService(service, data)
         return continuationUrl
