@@ -1,3 +1,7 @@
+# 0.2.1
+
+- Minor documentation changes
+
 # 0.2
 
 ## Common: Protocol and Docs
