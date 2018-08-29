@@ -5,7 +5,7 @@ readme = open("README.rst").read()
 
 setup(
 	name = "intercoop",
-	version = "0.2",
+	version = "0.2.1",
 	description =
 		"Intercooperation library",
 	author = "Som Energia SCCL",
