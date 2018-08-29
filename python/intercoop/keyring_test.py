@@ -89,7 +89,30 @@ class KeyRing_Test(unittest.TestCase):
 
         self.assertEqual(format(ctx.exception),
             "Invalid peer '../../etc/passwd'")
- 
+
+    def test_get_noPublicKeyInYaml(self):
+        # TODO: Some other exception should be raised
+        self.write('sombogus.yaml', sombogusyaml)
+
+        s = peerinfo.PeerInfo(self.peerdatadir)
+        ring = keyring.KeyRing(s)
+        with self.assertRaises(AttributeError) as ctx:
+            key = ring.get("sombogus")
+        self.assertEqual(format(ctx.exception),
+            "publickey")
+
+    def test_get_invalidKeyFormat(self):
+        # TODO: Some other exception should be raised
+        self.write('sombogus.yaml', sombogusyaml+
+            "publickey: caca\n"
+        )
+
+        s = peerinfo.PeerInfo(self.peerdatadir)
+        ring = keyring.KeyRing(s)
+        with self.assertRaises(Exception) as ctx:
+            key = ring.get("sombogus")
+        self.assertEqual(format(ctx.exception),
+            "RSA key format is not supported")
 
 
 # vim: ts=4 sw=4 et
