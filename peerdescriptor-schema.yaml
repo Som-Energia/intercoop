@@ -37,11 +37,8 @@ properties:
     title: Url to the entity logo
     type: string
   publickey:
-    title: Public key used to sign messages as source entity
+    title: Public RSA key in PEM format that others peers can use to validate signed messages from the entity
     type: string
-    contentEncoding: base64
-    # TODO: Which content type
-    #contentMediaType: 
   description:
     title: Single line entity description
     $ref: "#/definitions/translatable"

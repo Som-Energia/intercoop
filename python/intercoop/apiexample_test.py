@@ -8,8 +8,7 @@ from . import crypto
 from . import apiexample
 from . import packaging
 from . import remoteuserinfo
-
-from intercoop.packaging import KeyRingMock
+from .packaging_test import KeyRingMock
 
 class ExampleApi_Test(unittest.TestCase):
 

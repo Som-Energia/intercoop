@@ -7,89 +7,11 @@ from . import userinfo
 from . import portalexample
 from . import peerinfo
 from yamlns import namespace as ns
-
-myuseryaml=u"""\
-originpeer: somillusio
-lang: es
-nif: 12345678Z
-name: Bunny, Bugs
-peerroles:
-- member
-- worker
-innerid: 666
-address: Golf Club, 5th hole
-city: Murcia
-state: Murcia
-postalcode: '01022'
-country: ES
-email:
-- bugsbunny@loonietoons.com
-phone:
-- '555121232'
-proxynif:
-proxyname:
-"""
-
-somacmeyaml=u"""\
-intercoopVersion: "1.0"
-peerVersion: 1
-peerid: somacme
-name: Som Acme, SCCL
-url:
-  es: http://somacme.coop/es
-logo: http://www.linpictures.com/images/indevimgs/acme.jpg
-privacyPolicyUrl:
-  es: http://www.wallpapersonly.net/wallpapers/thats-all-folks-1680x1050.jpg
-description:
-  es: >
-    La cooperativa para atrapar correcaminos
-targetUrl: http://localhost:5001
-services:
-  explosives:
-    name:
-      es: Comprar explosivos
-    description:
-      es: >
-        Puedes comprar explosivos éticos de la mejor calidad.
-  anvil:
-    name:
-      es: Comprar yunques
-    description:
-      es: >
-        Yunques garantizados, siempre caen en una cabeza
-    fields:
-    - originpeer
-    - innerid
-fields:
-- originpeer
-- nif
-"""
-
-sombogusyaml=u"""\
-intercoopVersion: "1.0"
-peerVersion: 1
-peerid: sombogus
-name: Som Bogus, SCCL
-url:
-  es: https://es.sombogus.coop
-logo: http://xes.cat/wp-content/uploads/2017/05/logotip-xes.png
-privacyPolicyUrl:
-    es: http://www.wallpapersonly.net/wallpapers/thats-all-folks-1680x1050.jpg
-description:
-    es: >
-      Productos inútiles pero muy éticos
-targetUrl: http://localhost:5002/intercoop
-services:
-  contract:
-    name:
-        es: Contrata
-    description:
-        es: >
-          Productos con marcas tipo Panone, Grifons, Pas Natural, Reacciona...
-    fields:
-    - originpeer
-    - name
-"""
+from .fixtures import (
+    myuseryaml,
+    somacmeyaml,
+    sombogusyaml,
+)
 
 header= u"""\
 <html>

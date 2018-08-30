@@ -4,11 +4,6 @@ from . import peerinfo
 from yamlns import namespace as ns
 import os
 
-"""
-# TODO's
-
-"""
-
 somacmeyaml=u"""\
 intercoopVersion: 1.0
 peerVersion: 1
