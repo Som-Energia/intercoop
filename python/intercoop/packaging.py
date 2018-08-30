@@ -5,6 +5,12 @@ from yamlns import namespace as ns
 
 protocolVersion = u'1.0'
 
+class KeyRingMock(object):
+    def __init__(self, keys):
+        self.keys = keys
+    def get(self, key):
+        return self.keys[key]
+
 class MessageError(Exception):
     def __init__(self, *args, **kwds):
         super(MessageError,self).__init__(
