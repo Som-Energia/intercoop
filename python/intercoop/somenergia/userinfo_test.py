@@ -9,7 +9,7 @@ except ImportError:
 
 @unittest.skipIf(not dbconfig, "This requires erp access")
 class UserInfo_Test(unittest.TestCase):
-    def setup(self):
+    def setUp(self):
         self.personaldata = ns(dbconfig.personaldata)
 
     from intercoop.testutils import assertNsEqual
