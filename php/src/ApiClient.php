@@ -1,12 +1,10 @@
 <?php
-// namespace SomLabs\Intercoop\ApiClient;
+namespace SomLabs\Intercoop\ApiClient;
 
-// namespace SomLabs\Intercoop;
+namespace SomLabs\Intercoop;
 
-require_once('Crypto.php');
-require_once('Packaging.php');
-// use SomLabs\Intercoop\Crypto;
-// use SomLabs\Intercoop\Packaging;
+use SomLabs\Intercoop\Crypto;
+use SomLabs\Intercoop\Packaging;
 
 function post_request($url, $params) {
     // $query_content = http_build_query($params);

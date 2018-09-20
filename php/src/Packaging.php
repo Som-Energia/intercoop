@@ -1,13 +1,13 @@
 <?php 
-// namespace SomLabs\Intercoop\Packaging;
+namespace SomLabs\Intercoop\Packaging;
 
-// class MessageError extends \Exception {
-// 	public function __construct(...$args) {
-// 		$message = sprintf($this->message, ...$args);
-// 		parent::__construct($message);
-// 		$this->arguments = $args;
-// 	}
-// }
+class MessageError extends \Exception {
+	public function __construct(...$args) {
+		$message = sprintf($this->message, ...$args);
+		parent::__construct($message);
+		$this->arguments = $args;
+	}
+}
 
 class BadSignature extends MessageError {
 	protected $message = 'Signature verification failed, untrusted content';
@@ -29,10 +29,9 @@ class WrongVersion extends MessageError {
 }
 
 
-// namespace SomLabs\Intercoop;
+namespace SomLabs\Intercoop;
 
-require_once('Crypto.php');
-// use SomLabs\Intercoop\Crypto as crypto;
+use SomLabs\Intercoop\Crypto as crypto;
 use SomLabs\Intercoop\KeyRing;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Exception as YamlException;

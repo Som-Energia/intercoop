@@ -1,5 +1,5 @@
 <?php 
-// namespace SomLabs\Intercoop\KeyRing;
+namespace SomLabs\Intercoop\KeyRing;
 
 class MessageError extends \Exception {
 	public function __construct(...$args) {
@@ -24,7 +24,7 @@ interface KeyRingInterface {
 	public function get(string $key) : RSA;
 }
 
-// namespace SomLabs\Intercoop;
+namespace SomLabs\Intercoop;
 
 class KeyRing implements KeyRing\KeyRingInterface{
 

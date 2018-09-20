@@ -1,19 +1,19 @@
 <?php 
-// namespace SomLabs\Intercoop\Crypto;
+namespace SomLabs\Intercoop\Crypto;
 
-// class MessageError extends \Exception {
-// 	public function __construct(...$args) {
-// 		$message = sprintf($this->message, ...$args);
-// 		parent::__construct($message);
-// 		$this->arguments = $args;
-// 	}
-// }
+class MessageError extends \Exception {
+	public function __construct(...$args) {
+		$message = sprintf($this->message, ...$args);
+		parent::__construct($message);
+		$this->arguments = $args;
+	}
+}
 
 class UnicodeError extends MessageError {
 	protected $message = 'Bad UTF-8 stream';
 }
 
-// namespace SomLabs\Intercoop;
+namespace SomLabs\Intercoop;
 
 use phpseclib\Crypt\RSA;
 use Ramsey\Uuid\Uuid;

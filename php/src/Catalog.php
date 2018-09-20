@@ -1,5 +1,5 @@
 <?php
-// namespace SomLabs\Intercoop\Catalog;
+namespace SomLabs\Intercoop\Catalog;
 
 class MessageError extends \Exception {
 	public function __construct(...$args) {
@@ -13,10 +13,9 @@ class KeyNotExists extends MessageError {
 	protected $message = 'Given key not exists';
 }
 
-// namespace SomLabs\Intercoop;
+namespace SomLabs\Intercoop;
 
-require_once('ApiClient.php');
-// use SomLabs\Intercoop\ApiClient;
+use SomLabs\Intercoop\ApiClient;
 
 class Catalog {
     public $peers_obj;
