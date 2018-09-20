@@ -6,6 +6,10 @@ use PHPUnit\Framework\TestCase;
 class PortalExampleTest extends TestCase{
 
 	use AssertThrows;
+    
+    public function test(){			
+		//
+	}
 
 }
 

@@ -5,7 +5,11 @@ use PHPUnit\Framework\TestCase;
 
 class ApiClientTest extends TestCase{
 
-	use AssertThrows;
+    use AssertThrows;
+    
+    public function test(){			
+		//
+	}
 
 }
 
