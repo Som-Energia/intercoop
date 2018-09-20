@@ -1,26 +1,25 @@
 <?php 
-namespace SomLabs\Intercoop\PeerInfo;
+// namespace SomLabs\Intercoop\PeerInfo;
 
-class MessageError extends \Exception {
-	public function __construct(...$args) {
-		$message = sprintf($this->message, ...$args);
-		parent::__construct($message);
-		$this->arguments = $args;
-	}
-}
+// class MessageError extends \Exception {
+// 	public function __construct(...$args) {
+// 		$message = sprintf($this->message, ...$args);
+// 		parent::__construct($message);
+// 		$this->arguments = $args;
+// 	}
+// }
 
 class DatadirNotExists extends MessageError {
 	protected $message = 'Given datadir not exists';
 }
 
+// namespace SomLabs\Intercoop;
 
-namespace SomLabs\Intercoop;
-
-use SomLabs\Intercoop\Crypto as crypto;
-use SomLabs\Intercoop\KeyRing;
+require_once('Crypto.php');
+// use SomLabs\Intercoop\Crypto as crypto;
+// use SomLabs\Intercoop\KeyRing;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Exception as YamlException;
-
 
 class PeerInfo {
 	
@@ -30,7 +29,7 @@ class PeerInfo {
 		if(file_exists($datadir)){
 			$peerFiles= scandir($datadir);
 			foreach ($peerFiles as $peer) {
-				if(is_file($datadir.$peer)){	
+				if(is_file($datadir.'/'.$peer)){	
 					try {
 						$temp=Yaml::parse(file_get_contents($datadir."/".$peer));				
 					    $this->peers[$temp['peerid']] = $temp;
