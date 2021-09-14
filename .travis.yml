@@ -6,8 +6,7 @@ python:
 - "3.5"
 - "3.6"
 env:
-- PHPENV_VERSION="7.4"
-- PHPENV_VERSION="8.0"
+- PHPENV_VERSION="7.2"
 before_install:
 - phpenv local $PHPENV_VERSION || (phpenv versions && false)
 - php --version
