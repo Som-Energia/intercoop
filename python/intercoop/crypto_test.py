@@ -93,6 +93,7 @@ class Crypto_Test(unittest.TestCase):
         self.assertIn(ctx.exception.args[0], [
             "No private key", #  Py3
             "Private key not available in this object", # Py2
+            "This is not a private key", # pycryptodome
             ])
 
     def test_isAuthentic_whenOk(self):

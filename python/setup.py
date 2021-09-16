@@ -20,7 +20,7 @@ setup(
 		'validate-intercoop.py',
 		],
 	install_requires=[
-		'pycrypto',
+		'pycryptodome',
 		'yamlns>=0.6',
 		'requests',
 		'requests-mock',
