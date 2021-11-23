@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from setuptools import setup, find_packages
 
-readme = open("README.rst").read()
+readme = open("README.md").read()
 
 setup(
 	name = "intercoop",
@@ -12,6 +12,7 @@ setup(
 	author_email = "info@somenergia.coop",
 	url = 'https://github.com/Som-Energia/intercoop',
 	long_description = readme,
+	long_description_content_type = 'text/markdown',
 	license = 'GNU Affero General Public License v3 or later (AGPLv3+)',
 	packages=find_packages(exclude=['*[tT]est*']),
 	scripts=[
