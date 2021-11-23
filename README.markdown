@@ -1,6 +1,6 @@
 # Intercoop
 
-[![Build Status](https://travis-ci.org/Som-Energia/intercoop.svg?branch=master)](https://travis-ci.org/Som-Energia/intercoop)
+[![CI Status](https://github.com/Som-Energia/intercoop/actions/workflows/main.yml/badge.svg)](https://github.com/Som-Energia/intercoop/actions/workflows/main.yml)
 
 ## Purpose
 
