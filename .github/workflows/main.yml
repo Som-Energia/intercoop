@@ -25,7 +25,7 @@ jobs:
           - '3.9'
         php-version:
           - '7.2'
-          - '8.0'
+          #- '8.0'
     name: Python ${{ matrix.python-version }} PHP ${{ matrix.php-version }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
