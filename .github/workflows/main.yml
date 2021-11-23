@@ -23,7 +23,7 @@ jobs:
         python-version:
           - '3.8'
           - '3.9'
-        php-versions:
+        php-version:
           - '7.2'
           - '8.0'
     name: Python ${{ matrix.python-version }} PHP ${{ matrix.php-version }}
