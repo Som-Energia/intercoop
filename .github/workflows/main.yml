@@ -54,6 +54,7 @@ jobs:
       - name: Python dependencies
         working-directory: python
         run: |
+          pip install requests
           ./setup.py develop
       - uses: BSFishy/pip-action@v1
         with:
