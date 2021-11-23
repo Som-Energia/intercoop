@@ -35,10 +35,13 @@ jobs:
         run: |
           sudo apt install -y libzbar-dev
 
+      - name: PHP setup
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
       - name: PHP dependencies
         working-directory: php
         run: |
-          phpenv local ${{ matrix.php-version }}
           composer install
       - name: PHP tests
         working-directory: php
