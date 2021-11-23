@@ -31,33 +31,34 @@ jobs:
     steps:
       - name: Cloning repository
         uses: actions/checkout@v2
-      - name: PHP environment and dependencies
-        working-directory: php
-        uses: php-actions/composer@v6
-        with:
-          php_version: ${{ matrix.php-version }}
-      - name: PHP implementation tests
-        working-directory: php
-        run: composer test
+      - name: Install system dependencies
+        run: |
+          sudo apt install -y libzbar-dev
 
-      - name: Python environment
-        working-directory: python
-        uses: actions/setup-python@v2
+      - name: PHP dependencies
+        working-directory: php
+        run: |
+          phpenv local ${{ matrix.php-version }}
+          composer install
+      - name: PHP tests
+        working-directory: php
+        run: |
+          composer test
+
+      - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Python implementation tests
-        working-directory: python
-        run: coverage run --source . ./setup.py test
-      - name: Install dependencies
+      - name: Python dependencies
         run: |
           ./setup.py develop
       - uses: BSFishy/pip-action@v1
         with:
           packages: |
             coveralls
-      - name: Unit tests
+      - name: Python tests
+        working-directory: python
         run: |
-          coverage run --source tomatic ./setup.py test
+          coverage run ./setup.py test
 
       - name: Coveralls
         uses: AndreMiras/coveralls-python-action@develop
