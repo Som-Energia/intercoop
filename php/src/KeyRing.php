@@ -25,9 +25,7 @@ interface KeyRingInterface {
 }
 
 namespace SomLabs\Intercoop;
-
 use phpseclib\Crypt\RSA;
-
 
 class KeyRing implements KeyRing\KeyRingInterface{
 
