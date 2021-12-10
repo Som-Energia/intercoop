@@ -61,10 +61,11 @@ jobs:
         with:
           packages: |
             coveralls
+            pytest-cov
       - name: Python tests
         working-directory: python
         run: |
-          coverage run ./setup.py test
+          pytest --cov intercoop intercoop
 
       - name: Coveralls
         uses: AndreMiras/coveralls-python-action@develop
