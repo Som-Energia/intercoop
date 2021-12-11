@@ -67,7 +67,6 @@ jobs:
         working-directory: python
         run: |
           pytest --cov intercoop intercoop
-          mv .coverage ..
 
       - name: Coveralls
         uses: AndreMiras/coveralls-python-action@develop
@@ -83,3 +82,4 @@ jobs:
       uses: AndreMiras/coveralls-python-action@develop
       with:
         parallel-finished: true
+        base-path: python
