@@ -7,6 +7,7 @@ on:
   # Triggers the workflow on push or pull request events
   push:
   pull_request:
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -66,6 +67,7 @@ jobs:
         working-directory: python
         run: |
           pytest --cov intercoop intercoop
+          mv .coverage ..
 
       - name: Coveralls
         uses: AndreMiras/coveralls-python-action@develop
