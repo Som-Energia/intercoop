@@ -73,6 +73,7 @@ jobs:
         with:
           parallel: true
           flag-name: Unit tests
+          base-path: python/
 
   coveralls_finish:
     needs: build
