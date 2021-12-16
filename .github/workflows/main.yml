@@ -2,7 +2,7 @@
 
 name: CI
 
-on: [
+on:
   - push # git push
   - pull_request # PR from other clones
   - workflow_dispatch # Explicit launch
