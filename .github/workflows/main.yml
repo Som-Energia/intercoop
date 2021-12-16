@@ -2,20 +2,14 @@
 
 name: CI
 
-# Controls when the action will run. 
-on:
-  # Triggers the workflow on push or pull request events
-  push:
-  pull_request:
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+on: [
+  - push # git push
+  - pull_request # PR from other clones
+  - workflow_dispatch # Explicit launch
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  build-python:
     runs-on: ubuntu-latest
     env:
       TRAVIS: 'true' # Skip tests requiring data
@@ -24,31 +18,10 @@ jobs:
         python-version:
           - '3.8'
           - '3.9'
-        php-version:
-          - '7.2'
-          - '7'
-          #- '8.0'
-    name: Python ${{ matrix.python-version }} PHP ${{ matrix.php-version }}
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    name: Python ${{ matrix.python-version }}
     steps:
       - name: Cloning repository
         uses: actions/checkout@v2
-      - name: Install system dependencies
-        run: |
-          sudo apt install -y libzbar-dev
-
-      - name: PHP setup
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-version }}
-      - name: PHP dependencies
-        working-directory: php
-        run: |
-          composer install
-      - name: PHP tests
-        working-directory: php
-        run: |
-          composer test
 
       - uses: actions/setup-python@v2
         with:
@@ -75,8 +48,39 @@ jobs:
           flag-name: Unit tests
           base-path: python/
 
+  build-php:
+    runs-on: ubuntu-latest
+    env:
+      TRAVIS: 'true' # Skip tests requiring data
+    strategy:
+      matrix:
+        php-version:
+          - '7.2'
+          - '7'
+          #- '8.0'
+    name: PHP ${{ matrix.php-version }}
+    steps:
+      - name: Cloning repository
+        uses: actions/checkout@v2
+      - name: Install system dependencies
+        run: |
+          sudo apt install -y libzbar-dev
+
+      - name: PHP setup
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+      - name: PHP dependencies
+        working-directory: php
+        run: |
+          composer install
+      - name: PHP tests
+        working-directory: php
+        run: |
+          composer test
+
   coveralls_finish:
-    needs: build
+    needs: build-python
     runs-on: ubuntu-latest
     steps:
     - name: Coveralls Finished
