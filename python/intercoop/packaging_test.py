@@ -117,7 +117,7 @@ country: ES
             packaging.BadFormat,
             "Error while parsing message as YAML:\n"
             "while scanning for the next token\n"
-            "found character '\\t' that cannot start any token\n"
+            "found character that cannot start any token\n"
             "  in \"<file>\", line 1, column 1"
             )
 
@@ -162,7 +162,7 @@ country: ES
             packaging.BadMessage,
             "Malformed message: Bad message YAML format\n"
             "while scanning for the next token\n"
-            "found character '\\t' that cannot start any token\n"
+            "found character that cannot start any token\n"
             "  in \"<file>\", line 1, column 1"
             )
 
