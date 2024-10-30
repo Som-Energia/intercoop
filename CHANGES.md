@@ -1,3 +1,11 @@
+# 0.2.2 - 2024-10-30
+
+## Python
+
+- Continuous integration
+- pyproject based project
+- crypto dependency is now obsolete, using cryptodome
+
 # 0.2.1
 
 - Minor documentation changes
