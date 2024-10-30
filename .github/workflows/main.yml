@@ -38,6 +38,13 @@ jobs:
         run: |
           pytest --cov intercoop intercoop
 
+      - name: Notify
+        uses: Som-Energia/ghactions-notify@main
+        if: always()
+        with:
+          webhook: ${{ secrets.WEBHOOK_ALERTES_WEBAPPS }}
+
+
       - name: Coveralls
         uses: AndreMiras/coveralls-python-action@develop
         with:
@@ -75,6 +82,11 @@ jobs:
         working-directory: php
         run: |
           composer test
+      - name: Notify
+        uses: Som-Energia/ghactions-notify@main
+        if: always()
+        with:
+          webhook: ${{ secrets.WEBHOOK_ALERTES_WEBAPPS }}
 
   coveralls_finish:
     needs: build-python
