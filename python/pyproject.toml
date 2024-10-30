@@ -1,0 +1,70 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+
+[project]
+name = "intercoop"
+version="0.2.1"
+description = "Intercooperation library"
+authors = [
+    { name="Som Energia", email="info@somenergia.coop" },
+]
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file="LICENSE"}
+keywords = ["crossed services", "gprd", "crossed users"]
+
+classifiers = [
+    'Topic :: Office/Business',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+    'Intended Audience :: Developers',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
+    'Framework :: Flask',
+    'Environment :: Web Environment',
+    'Natural Language :: Basque',
+    'Natural Language :: Catalan',
+    'Natural Language :: Galician',
+    'Natural Language :: Spanish',
+    'Development Status :: 4 - Beta',
+    'License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)',
+    'Operating System :: OS Independent',
+]
+dependencies = [
+    'pycryptodome',
+    'yamlns>=0.6',
+    'requests',
+    'requests-mock',
+    'flask',
+    'jsonschema<3',
+    'erppeek',
+    #'qrcode',
+    #'lxml',
+    #'qrtools',
+    #'zbar',
+]
+
+[tool.setuptools]
+script-files=[
+    'api-example-somacme.py',
+    'portal-example-somillusio.py',
+    'validate-intercoop.py',
+]
+
+[project.urls]
+Homepage = "https://somenergia.coop"
+Documentation = "https://github.com/som-energia/intercoop"
+Repository = "https://github.com/som-energia/intercoop"
+Changelog = "https://github.com/som-energia/intercoop/blob/master/CHANGELOG.md"
+
+[tool.setuptools.packages]
+find = {}
+
+[tool.coverage.run]
+relative_files = true
+branch = true
+omit = ["**/*test.py"]
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules --cov=intercoop"
+
+
